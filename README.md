@@ -1,27 +1,15 @@
-# Simplyservers
+# Simply Servers Panel ![Website](https://img.shields.io/website-up-down-green-red/http/simplyservers.io.svg?label=server-panel)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
+Simply Servers Panel: Manage your Simply Servers servers via an Angular6 app.
 
-## Development server
+Take a look at  [simplyservers.io](https://simplyservers.io) for FREE server hosting! 🎉
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+<pre>
+       .__               .__                                                             .__        
+  _____|__| _____ ______ |  | ___.__.   ______ ______________  __ ___________  ______    |__| ____  
+ /  ___/  |/     \\____ \|  |<   |  |  /  ___// __ \_  __ \  \/ // __ \_  __ \/  ___/    |  |/  _ \ 
+ \___ \|  |  Y Y  \  |_> >  |_\___  |  \___ \\  ___/|  | \/\   /\  ___/|  | \/\___ \     |  (  <_> )
+/____  >__|__|_|  /   __/|____/ ____| /____  >\___  >__|    \_/  \___  >__|  /____  > /\ |__|\____/ 
+     \/         \/|__|        \/           \/     \/                 \/           \/  \/            
+</pre>
