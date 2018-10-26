@@ -1,0 +1,50 @@
+.details{
+  hr{
+    border:none;
+    color:#fff;
+    height:1px;
+    background: #414144;
+    margin: 10% 0 10% 0;
+
+  }
+
+  @media(max-width: 34em) {
+    margin-top: 0 !important;
+    .marketing{
+      .topic{
+        text-align: center;
+        padding-top: 2rem;
+      }
+    }
+    h2{
+      margin-left: 0 !important;
+    }
+  }
+  margin-top: 5vh;
+  h1{
+    font-size: 1.8rem !important;
+    color: #950740;
+  }
+  h2{
+    font-size: 1.1rem;
+    margin-left: 2rem;
+  }
+}
+
+#hero{
+  background-size: cover;
+  background: url("/assets/bg.png") no-repeat 0 20%;
+
+  .pb-lg-6{
+    padding-bottom: 9rem !important;
+  }
+
+}
+
+/* Change the navbar css to be transparent*/
+:host ::ng-deep .navbar{
+  background: transparent !important;
+  @media(max-width: 34em) {
+    background: black !important;
+  }
+}

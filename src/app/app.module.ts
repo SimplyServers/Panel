@@ -8,6 +8,8 @@ import { HomeComponent } from './controllers/home/home.component';
 import { NavbarComponent } from './controllers/navbar/navbar.component';
 import { LoginComponent } from './controllers/login/login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { RegisterComponent } from './controllers/register/register.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -15,13 +17,15 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     NotfoundComponent,
     HomeComponent,
     NavbarComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
