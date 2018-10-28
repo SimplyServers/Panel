@@ -43,15 +43,9 @@ export class LoginComponent implements OnInit {
     this.credentials.email = this.loginForm.controls.email.value;
     this.credentials.password = this.loginForm.controls.password.value;
     this.auth.login(this.credentials).subscribe((data) => {
-
-      console.log(data.status);
-
-      //this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
+      this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
     }, (err) => {
-      if(err.error.error) { //lol i love http
-        this.error = err.error.msg;
-      }
-      this.loading = false;
+      this.error = err.error.msg;
     });
 
   }

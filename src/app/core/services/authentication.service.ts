@@ -12,12 +12,18 @@ export class AuthenticationService{
 
   login(token: TokenPayload) {
     return this.http.post<any>(this.config.getAPIURL() + "login", token)
-      .pipe(map(user => {
-        if (user && user.token) {
-          console.log(user);
-          localStorage.setItem('session', JSON.stringify(user));
+      .pipe(map(data => {
+        if (data && data.user.token) {
+          localStorage.setItem('session', JSON.stringify(data.user));
         }
-        return user;
+        return data.user;
+      }));
+  }
+
+  register(newUser: TokenPayload){
+    return this.http.post<any>(this.config.getAPIURL() + "register", newUser)
+      .pipe(map(data => {
+        return data.user;
       }));
   }
 
@@ -25,18 +31,21 @@ export class AuthenticationService{
     if (!this.user) { //Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');
     }
-    return this.user;
+    return JSON.parse(this.user);
   }
 
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('session');
+    this.user = undefined;
   }
 
   isLoggedIn(){ //Checks for session token. Then validates it.
     const user = this.getUser(); //Maybe a lil overkill
     if (user) {
-      return user.exp > Date.now() / 1000;
+      let payload = user.token.split('.')[1]; //Get the data out of the stored JWT payload and read it.
+      payload = JSON.parse(window.atob(payload));
+      return payload.exp > Date.now() / 1000;
     } else {
       return false;
     }

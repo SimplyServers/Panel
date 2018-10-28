@@ -7,10 +7,6 @@ import {Router} from "@angular/router";
 })
 export class DeauthGuardService {
 
-  /*
- * This file is middleware. It makes sure that the user is NOT authenticated before they go to the route that it is applied on.
- */
-
   constructor(private auth: AuthenticationService, private router: Router) { }
 
   canActivate() {
