@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +15,12 @@ import {HttpClientModule} from "@angular/common/http";
 import { LogoutComponent } from './controllers/logout/logout.component';
 import { APIInterceptor } from "./core/apiinterceptor";
 import {AuthenticationService} from "./core/services/authentication.service";
+import {SSAnalyticsService} from "./core/services/ssanalytics.service";
+import { PanelHomeComponent } from './controllers/panel/panel-home/panel-home.component';
+
+export function init_app(onLoad: SSAnalyticsService) {
+  return () => onLoad.onLoad();
+}
 
 @NgModule({
   declarations: [
@@ -25,6 +31,7 @@ import {AuthenticationService} from "./core/services/authentication.service";
     LoginComponent,
     RegisterComponent,
     LogoutComponent,
+    PanelHomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +42,7 @@ import {AuthenticationService} from "./core/services/authentication.service";
     HttpModule,
     HttpClientModule
   ],
-  providers: [AuthenticationService, APIInterceptor],
+  providers: [AuthenticationService, APIInterceptor, { provide: APP_INITIALIZER, useFactory: init_app, deps: [SSAnalyticsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

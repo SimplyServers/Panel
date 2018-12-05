@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthenticationService} from "../../core/services/authentication.service";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  login: boolean;
+  currentUrl: string;
+
+  constructor(private auth: AuthenticationService, private router: Router) {
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationEnd) {
+        this.currentUrl = e.url;
+        this.login = this.auth.isLoggedIn();
+      }
+    });
+  }
 
   ngOnInit() {
   }

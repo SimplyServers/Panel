@@ -3,6 +3,9 @@
   <h2>Login</h2>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
+      <div *ngIf="returnUrlSet" class="invalid-feedback">
+        <div class="invalid bigerror">You must be logged in to view that page.</div>
+      </div>
       <div *ngIf="error" class="invalid-feedback">
         <div class="invalid bigerror">Failed to login; {{ error }}</div>
       </div>

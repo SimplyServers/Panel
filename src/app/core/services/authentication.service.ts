@@ -11,7 +11,7 @@ export class AuthenticationService{
   constructor(private http: HttpClient, private config: ConfigService) { }
 
   login(token: TokenPayload) {
-    return this.http.post<any>(this.config.getAPIURL() + "login", token)
+    return this.http.post<any>(this.config.getAPIURL() + "auth/login", token)
       .pipe(map(data => {
         if (data && data.user.token) {
           localStorage.setItem('session', JSON.stringify(data.user));
@@ -21,7 +21,7 @@ export class AuthenticationService{
   }
 
   register(newUser: TokenPayload){
-    return this.http.post<any>(this.config.getAPIURL() + "register", newUser)
+    return this.http.post<any>(this.config.getAPIURL() + "auth/register", newUser)
       .pipe(map(data => {
         return data.user;
       }));
