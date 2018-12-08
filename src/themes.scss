@@ -48,3 +48,17 @@ body{
   color: #fff;
 }
 
+.breadcrumb{
+  background-color: #333333 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.show > .btn-secondary.dropdown-toggle, .btn-secondary {
+  color: #fff;
+  background-color: #1A1A1D !important;
+  border-color: #1A1A1D !important;
+}
+
+.btn-secondary:focus, .btn-secondary.focus {
+  box-shadow: none !important;
+}

@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      password: ['', Validators.required]
+      email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
+      password: ['', Validators.compose([Validators.required, Validators.maxLength(50)])]
     });
     if(this.route.snapshot.queryParams['returnUrl'])
       this.returnUrlSet = true;
@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
       this.submitted = false;
       this.error = err.error.msg;
     });
-
   }
 
 }

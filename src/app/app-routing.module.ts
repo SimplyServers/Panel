@@ -8,6 +8,7 @@ import {DeauthGuardService} from "./core/services/deauth-guard.service";
 import {AuthGuardService} from "./core/services/auth-guard.service";
 import {LogoutComponent} from "./controllers/logout/logout.component";
 import {PanelHomeComponent} from "./controllers/panel/panel-home/panel-home.component";
+import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,12 @@ const routes: Routes = [
     path: 'panel',
     component: PanelHomeComponent,
     data: {title: "Your Servers"},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'panel/create',
+    component: PanelCreateComponent,
+    data: {title: "Create Server"},
     canActivate: [AuthGuardService]
   },
   {

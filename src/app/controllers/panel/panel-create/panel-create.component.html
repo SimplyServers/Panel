@@ -1,0 +1,36 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <h2>Create your server...</h2>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <div *ngIf="error" class="invalid-feedback">
+        <div class="invalid bigerror">Failed to create your server; {{ error }}</div>
+      </div>
+      <label for="name">Server name</label>
+      <input id="name" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && createForm.controls['name'].errors }" />
+      <div *ngIf="submitted && createForm.controls['name'].errors" class="invalid-feedback">
+        <div class="invalid" *ngIf="createForm.controls['name'].errors.required">Server name is required</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="preset">Server type</label>
+      <select id="preset" type="preset" formControlName="preset" class="form-control" [ngClass]="{ 'is-invalid': submitted && createForm.controls['preset'].errors }">
+        <option *ngFor="let preset of serverPlans" [ngValue]="preset._id">{{ preset.name }}</option>
+      </select>
+
+      <div *ngIf="submitted && createForm.controls['preset'].errors" class="invalid-feedback">
+        <div class="invalid" *ngIf="createForm.controls['preset'].errors.required">Type is required</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="motd">Server description</label>
+      <input id="motd" formControlName="motd" class="form-control" [ngClass]="{ 'is-invalid': submitted && createForm.controls['motd'].errors }" />
+      <div *ngIf="submitted && createForm.controls['motd'].errors" class="invalid-feedback">
+        <div class="invalid" *ngIf="createForm.controls['motd'].errors.required">Server description is required</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <button [disabled]="loading" class="btn btn-primary">Create your server</button>
+    </div>
+  </form>
+</div>

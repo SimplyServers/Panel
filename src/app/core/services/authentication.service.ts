@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import {ConfigService} from "../../config.service";
 import {TokenPayload} from "../models/token-payload";
+import {ServerDetails} from '../models/server-details';
 
 @Injectable()
 export class AuthenticationService{
@@ -27,7 +28,23 @@ export class AuthenticationService{
       }));
   }
 
-  getUser() {
+  getPresets(){
+    console.log(this.getUser());
+    return this.http.get<any>(this.config.getAPIURL() + "user/getPresets", {headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data.presets;
+      }));
+  }
+
+  createServer(server: ServerDetails){
+    console.log(server);
+    return this.http.post<any>(this.config.getAPIURL() + "server/create", server,{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data.server;
+      }));
+  }
+
+  private getUser() {
     if (!this.user) { //Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');
     }
@@ -51,3 +68,5 @@ export class AuthenticationService{
     }
   }
 }
+
+
