@@ -1,0 +1,9 @@
+<div id="heading">
+  <div id="server">
+    <div class="dropdown">
+      <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
+        <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}">{{ server.name }}</option>
+      </select>
+    </div>
+  </div>
+</div>

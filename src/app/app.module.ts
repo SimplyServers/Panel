@@ -18,6 +18,8 @@ import {AuthenticationService} from "./core/services/authentication.service";
 import {SSAnalyticsService} from "./core/services/ssanalytics.service";
 import { PanelHomeComponent } from './controllers/panel/panel-home/panel-home.component';
 import { PanelCreateComponent } from './controllers/panel/panel-create/panel-create.component';
+import { PanelSidebarComponent } from './controllers/panel/panel-sidebar/panel-sidebar.component';
+import { PanelServerselectorComponent } from './controllers/panel/panel-serverselector/panel-serverselector.component';
 
 export function init_app(onLoad: SSAnalyticsService) {
   return () => onLoad.onLoad();
@@ -34,6 +36,8 @@ export function init_app(onLoad: SSAnalyticsService) {
     LogoutComponent,
     PanelHomeComponent,
     PanelCreateComponent,
+    PanelSidebarComponent,
+    PanelServerselectorComponent,
   ],
   imports: [
     BrowserModule,
