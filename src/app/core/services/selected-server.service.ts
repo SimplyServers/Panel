@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {AuthenticationService} from './authentication.service';
-import {map} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '../../config.service';
+import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServerControlService {
+export class SelectedServerService {
 
   private currentServer;
   public serverObservable = new Subject<String>();
@@ -23,7 +23,7 @@ export class ServerControlService {
         this.currentServer = this.servers[0]._id;
         callback(this.currentServer);
       });
-    }else {
+    }else{
       callback(this.currentServer);
     }
   }

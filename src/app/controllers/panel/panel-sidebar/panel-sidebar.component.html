@@ -1,13 +1,15 @@
 <div id="sidebar">
+  <div class="dropdown">
+    <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
+      <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}">{{ server.name }}</option>
+    </select>
+  </div>
   <ul class="sidebar-content">
     <li class="title">
       <span>Manage:</span>
     </li>
     <li class="srv-mgt">
-      <a href="#"><i class="material-icons">code</i>Console</a>
-    </li>
-    <li class="srv-mgt">
-      <a href="#"><i class="material-icons">reorder</i>Properties</a>
+      <a routerLink="/panel"><i class="material-icons">code</i>Console</a>
     </li>
     <li class="srv-mgt">
       <a href="#"><i class="material-icons">file_copy</i>Files</a>
@@ -22,10 +24,13 @@
       <a href="#"><i class="material-icons">person</i>Players</a>
     </li>
     <li class="srv-mgt">
-      <a href="#"><i class="material-icons">developer_board</i>Plugins</a>
+      <a routerLink="/panel/minecraft/plugins"><i class="material-icons">developer_board</i>Plugins</a>
     </li>
     <li class="srv-mgt">
       <a href="#"><i class="material-icons">link</i>Domain</a>
+    </li>
+    <li class="srv-mgt">
+      <a href="#"><i class="material-icons">reorder</i>Properties</a>
     </li>
   </ul>
 </div>

@@ -1,0 +1,5 @@
+<div id="heading">
+  <div id="server">
+    <span id="status"><span class="bold">Status: </span>{{status}}  <span class='dot' [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[status]"></span> </span>
+  </div>
+</div>

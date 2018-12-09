@@ -11,6 +11,21 @@ $sidebar-width: 22vh;
   background: #101010;
   box-shadow: 0 1rem 2rem rgba(0,0,0,.175)!important;
 
+  .dropdown {
+    margin-top: 0.5rem;
+    margin-left: .3rem;
+    margin-right: .3rem;
+    select {
+      color: #fff !important;
+      background-color: #1A1A1D !important;
+      border-color: #1A1A1D !important;
+
+      option {
+        color: #fff !important;
+      }
+    }
+  }
+
   ul{
     margin-top: 7rem;
     display: flex;
@@ -55,6 +70,7 @@ $sidebar-width: 22vh;
 
     .title{
       color: #fff;
+      font-weight: bold;
     }
 
     .title-upper{

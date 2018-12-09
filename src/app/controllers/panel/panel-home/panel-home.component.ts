@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ConsoleSocketService} from '../../../core/services/console-socket.service';
-import {ServerControlService} from '../../../core/services/server-control.service';
 import {Subject} from 'rxjs';
-
-import { filter, map } from 'rxjs/operators';
+import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
+import {SelectedServerService} from '../../../core/services/selected-server.service';
 
 @Component({
   selector: 'app-panel-home',
@@ -12,24 +10,19 @@ import { filter, map } from 'rxjs/operators';
 })
 export class PanelHomeComponent implements OnInit {
 
-  consoleSocket: Subject<any>;
-  consoleHistory: string;
+  consoleHistory = '';
 
-  constructor(private consoleWs: ConsoleSocketService, serverControl: ServerControlService) {
-    serverControl.getCurrentServer((server) => {
-      this.consoleSocket = <Subject<any>>consoleWs.connect(server).pipe(map(response => {
-        return response;
-      }));
-
-      this.consoleSocket.subscribe(data => {
-        this.consoleHistory = this.consoleHistory + data.line;
-      })
-
-    });
-    
-  }
+  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService) {}
 
   ngOnInit() {
+    this.selectedServer.getCurrentServer(server => {
+      console.log("got current server");
+
+      this.serverSocket.getSocket(server);
+      this.serverSocket.consoleEmitter.subscribe(data => {
+        this.consoleHistory = this.consoleHistory + data;
+      })
+    });
   }
 
 }

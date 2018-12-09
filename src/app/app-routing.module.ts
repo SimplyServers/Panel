@@ -9,6 +9,7 @@ import {AuthGuardService} from "./core/services/auth-guard.service";
 import {LogoutComponent} from "./controllers/logout/logout.component";
 import {PanelHomeComponent} from "./controllers/panel/panel-home/panel-home.component";
 import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
+import {PanelMinecraftPluginsComponent} from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,12 @@ const routes: Routes = [
     path: 'panel/create',
     component: PanelCreateComponent,
     data: {title: "Create Server"},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'panel/minecraft/plugins',
+    component: PanelMinecraftPluginsComponent,
+    data: {title: "Browse plugins"},
     canActivate: [AuthGuardService]
   },
   {
