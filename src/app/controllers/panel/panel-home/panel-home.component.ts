@@ -32,11 +32,11 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.updateServer();
     this.serverSocket.consoleEmitter.subscribe(data => {
       this.consoleHistory = this.consoleHistory + data;
-      this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight;
+      this.scroll();
     });
     this.serverSocket.announceEmitter.subscribe(data => {
-      this.consoleHistory = this.consoleHistory + "\n[SS MANAGER] " + data + "\n";
-      this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight;
+      this.consoleHistory = this.consoleHistory + "\n**\n[SS MANAGER] " + data + "\n**\n";
+      this.scroll();
     });
 
     //On server update
@@ -47,9 +47,16 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
+  scroll(){
+    console.log("scroll top: " + this.textAreaElement.nativeElement.scrollTop);
+    console.log("scroll height: " + this.textAreaElement.nativeElement.scrollHeight);
+
+    this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
+  }
+
   ngAfterViewInit() {
     if(this.textAreaElement) {
-      this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight; //This is so the console will scroll
+      this.scroll(); //This is so the console will scroll
     }
   }
 

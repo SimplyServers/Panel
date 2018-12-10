@@ -1,47 +1,41 @@
-<app-navbar></app-navbar>
-<div id="panel">
-  <app-panel-sidebar></app-panel-sidebar>
-  <div id="panel-content">
-    <app-panel-serverselector></app-panel-serverselector>
-    <div *ngIf="loading" id="loading">
-      <div class="spinner"></div>
-    </div>
-    <notifier-container></notifier-container>
-    <div class="row" id="console" *ngIf="!loading">
-      <div class="col-md-9 col-sm-12">
-        <div class="card">
-          <div class="card-header">
-            Server Console
-          </div>
-          <div class="card-block">
-            <textarea readonly class="form-control" rows="30" #textAreaElement >{{ consoleHistory }}</textarea>
-          </div>
-          <div class="card-footer text-muted">
-            <form [formGroup]="commandForm" (ngSubmit)="onCommand()">
-              <div class="row">
-                <div class="col-sm-10" id="commandField">
-                  <input id="command" placeholder="Type command here..." formControlName="command" class="form-control" [ngClass]="{ 'is-invalid': commandSubmitted && commandForm.controls['command'].errors }" />
-                </div>
-                <div class="col-sm-2" id="sendField">
-                  <button [disabled]="commandLoading" class="btn btn-primary">Send</button>
-                </div>
+<app-panel-frame>
+  <div *ngIf="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
+  <div class="row" id="console" *ngIf="!loading">
+    <div class="col-md-9 col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          Server Console
+        </div>
+        <div class="card-block">
+          <textarea readonly class="form-control" rows="30" #textAreaElement >{{ consoleHistory }}</textarea>
+        </div>
+        <div class="card-footer text-muted">
+          <form [formGroup]="commandForm" (ngSubmit)="onCommand()">
+            <div class="row">
+              <div class="col-sm-10" id="commandField">
+                <input id="command" placeholder="Type command here..." formControlName="command" class="form-control" [ngClass]="{ 'is-invalid': commandSubmitted && commandForm.controls['command'].errors }" />
               </div>
-            </form>
-          </div>
+              <div class="col-sm-2" id="sendField">
+                <button [disabled]="commandLoading" class="btn btn-primary">Send</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-      <div class="col-md-3 col-sm-12">
-        <div class="card">
-          <div class="card-header">
-            Controls
-          </div>
-          <div class="card-block">
-            <button (click)="serverOn()" type="button" class="btn btn-success btn-lg btn-block server-action">Start Server</button>
-            <button (click)="serverOff()" type="button" class="btn btn-warning btn-stop btn-lg btn-block server-action">Stop Server</button>
-            <button (click)="serverKill()" type="button" class="btn btn-danger btn-forcekill btn-lg btn-block server-action">Force kill server</button>
-          </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          Server Controls
+        </div>
+        <div class="card-block">
+          <button (click)="serverOn()" type="button" class="btn btn-success btn-lg btn-block server-action">Start Server</button>
+          <button (click)="serverOff()" type="button" class="btn btn-warning btn-stop btn-lg btn-block server-action">Stop Server</button>
+          <button (click)="serverKill()" type="button" class="btn btn-danger btn-forcekill btn-lg btn-block server-action">Force kill server</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+</app-panel-frame>

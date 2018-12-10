@@ -42,6 +42,7 @@ export class ServerSocketManagerService {
   }
 
   private handleStatus(data) {
+    console.log("doing handle status");
     switch (data) {
       case 0:
         this.lastStatus = 'Starting';
@@ -82,18 +83,19 @@ export class ServerSocketManagerService {
       this.socket.emit('authenticate', {token: this.auth.getUser().token}).on('authenticated', () => {
         console.log('ws connected');
 
+          console.log("generating event emitters");
+          this.socket.on('initialStatus', (data) => {
+            this.handleStatus(data);
+          }).on('statusUpdate', (data) => {
+            this.handleStatus(data);
+          }).on('console', (data) => {
+            this.consoleEmitter.emit(data.line);
+          }).on('announcement', data => {
+            this.announceEmitter.emit(data);
+          });
+
         if(callback)
           callback();
-
-        this.socket.on('initialStatus', (data) => {
-          this.handleStatus(data);
-        }).on('statusUpdate', (data) => {
-          this.handleStatus(data);
-        }).on('console', (data) => {
-          this.consoleEmitter.emit(data.line);
-        }).on('announcement', data => {
-          this.announceEmitter.emit(data);
-        });
       });
     });
   }

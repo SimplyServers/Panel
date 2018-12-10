@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PanelServerstatusComponent } from './panel-serverstatus.component';
+import { PanelFrameComponent } from './panel-frame.component';
 
-describe('PanelServerstatusComponent', () => {
-  let component: PanelServerstatusComponent;
-  let fixture: ComponentFixture<PanelServerstatusComponent>;
+describe('PanelFrameComponent', () => {
+  let component: PanelFrameComponent;
+  let fixture: ComponentFixture<PanelFrameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PanelServerstatusComponent ]
+      declarations: [ PanelFrameComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PanelServerstatusComponent);
+    fixture = TestBed.createComponent(PanelFrameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

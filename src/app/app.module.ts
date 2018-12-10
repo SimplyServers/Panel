@@ -18,10 +18,9 @@ import {AuthenticationService} from "./core/services/authentication.service";
 import {SSAnalyticsService} from "./core/services/ssanalytics.service";
 import { PanelHomeComponent } from './controllers/panel/panel-home/panel-home.component';
 import { PanelCreateComponent } from './controllers/panel/panel-create/panel-create.component';
-import { PanelSidebarComponent } from './controllers/panel/panel-sidebar/panel-sidebar.component';
-import { PanelServerstatusComponent } from './controllers/panel/panel-serverselector/panel-serverstatus.component';
 import { PanelMinecraftPluginsComponent } from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 import {NotifierModule, NotifierOptions} from 'angular-notifier';
+import { PanelFrameComponent } from './controllers/panel/panel-frame/panel-frame.component';
 
 export function init_app(onLoad: SSAnalyticsService) {
   return () => onLoad.onLoad();
@@ -79,9 +78,8 @@ const customNotifierOptions: NotifierOptions = {
     LogoutComponent,
     PanelHomeComponent,
     PanelCreateComponent,
-    PanelSidebarComponent,
-    PanelServerstatusComponent,
     PanelMinecraftPluginsComponent,
+    PanelFrameComponent,
   ],
   imports: [
     NotifierModule.withConfig(customNotifierOptions),

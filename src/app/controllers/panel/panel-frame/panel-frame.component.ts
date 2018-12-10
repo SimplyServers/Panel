@@ -1,19 +1,18 @@
-import {Component, Injectable, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
 @Component({
-  selector: 'app-panel-serverselector',
-  templateUrl: './panel-serverstatus.component.html',
-  styleUrls: ['./panel-serverstatus.component.scss']
+  selector: 'app-panel-frame',
+  templateUrl: './panel-frame.component.html',
+  styleUrls: ['./panel-frame.component.scss']
 })
-export class PanelServerstatusComponent implements OnInit {
+export class PanelFrameComponent implements OnInit {
 
+  sidebarDisplayed = true;
   status: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
+  servers: object;
+  currentServer: string;
 
   constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService) {}
 
@@ -24,16 +23,38 @@ export class PanelServerstatusComponent implements OnInit {
       console.log("status: ct: " + server);
       this.serverSocket.getSocket(server);
     });
+  }
+
+  ngOnInit() {
+    this.selectedServer.getServers(servers => {
+      this.servers = servers;
+      this.selectedServer.getCurrentServer((server) => {
+        this.currentServer = server;
+      });
+      console.log("servers:"  + servers)
+    });
+
+    this.updateStatus();
+
     this.serverSocket.statusEmitter.subscribe(data => {
       console.log("Got new status from event emitter: " + data);
       this.status = data;
     });
-  }
 
-  ngOnInit() {
-    this.updateStatus();
     this.selectedServer.serverEmitter.subscribe(() => {
       this.updateStatus();
     });
   }
+
+  update(server) {
+    console.log("updating server to: " + server);
+    this.selectedServer.setCurrentServer(server);
+    this.currentServer = server;
+  }
+
+  toggleSidebar(){
+    this.sidebarDisplayed = !this.sidebarDisplayed;
+    console.log("sidebar: " + this.sidebarDisplayed);
+  }
+
 }
