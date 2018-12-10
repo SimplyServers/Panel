@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {AuthenticationService} from './authentication.service';
 import {ConfigService} from '../../config.service';
 import {HttpClient} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
 export class SelectedServerService {
 
   private currentServer;
-  public serverObservable = new Subject<String>();
+  public serverEmitter = new EventEmitter();
   public servers: any;
 
   constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient) {
@@ -29,8 +29,9 @@ export class SelectedServerService {
   }
 
   setCurrentServer(server) {
-    this.serverObservable.next(server);
+    console.log("I've updated the current server @ ss to " + server);
     this.currentServer = server;
+    this.serverEmitter.emit();
   }
 
   updateCache(callback) {

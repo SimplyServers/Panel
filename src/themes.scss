@@ -62,3 +62,14 @@ body{
 .btn-secondary:focus, .btn-secondary.focus {
   box-shadow: none !important;
 }
+
+.card{
+  color: #fff;
+  background-color: #27272b;
+}
+
+.card-header, .card-footer{
+  background-color: #0a0a0a40;
+}
+
+@import "../node_modules/angular-notifier/styles";

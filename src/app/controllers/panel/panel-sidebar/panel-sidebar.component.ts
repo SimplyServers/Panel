@@ -9,6 +9,7 @@ import {SelectedServerService} from '../../../core/services/selected-server.serv
 export class PanelSidebarComponent implements OnInit {
 
   servers: object;
+  currentServer: string;
 
   constructor(private selectedServer: SelectedServerService) {
   }
@@ -16,12 +17,17 @@ export class PanelSidebarComponent implements OnInit {
   ngOnInit() {
     this.selectedServer.getServers(servers => {
       this.servers = servers;
+      this.selectedServer.getCurrentServer((server) => {
+        this.currentServer = server;
+      });
       console.log("servers:"  + servers)
     });
   }
 
   update(server) {
+    console.log("updating server to: " + server);
     this.selectedServer.setCurrentServer(server);
+    this.currentServer = server;
   }
 
 }

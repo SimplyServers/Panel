@@ -2,6 +2,11 @@
   width: 100%;
   background: black;
 
+  @media (max-width: 34em) {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
   .navbar-brand{
     text-transform: uppercase;
   }

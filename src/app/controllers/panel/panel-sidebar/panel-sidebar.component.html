@@ -1,7 +1,7 @@
 <div id="sidebar">
   <div class="dropdown">
     <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
-      <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}">{{ server.name }}</option>
+      <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}" [selected]="server._id === currentServer">{{ server.name }}</option>
     </select>
   </div>
   <ul class="sidebar-content">

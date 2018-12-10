@@ -41,20 +41,14 @@ export class PanelCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("hey!");
-
     this.submitted = true;
     if(this.createForm.invalid){
-      console.log(this.createForm);
       return;
     }
     this.loading = true;
     this.server.preset = this.createForm.controls.preset.value;
     this.server.name = this.createForm.controls.name.value;
     this.server.motd = this.createForm.controls.motd.value;
-
-    console.log("passed");
-
 
     this.auth.createServer(this.server).subscribe(() => {
       this.router.navigateByUrl('/panel');

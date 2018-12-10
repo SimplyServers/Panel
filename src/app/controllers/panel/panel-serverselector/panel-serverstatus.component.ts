@@ -11,25 +11,29 @@ import {SelectedServerService} from '../../../core/services/selected-server.serv
   templateUrl: './panel-serverstatus.component.html',
   styleUrls: ['./panel-serverstatus.component.scss']
 })
-export class PanelServerstatusComponent implements OnInit, OnDestroy {
+export class PanelServerstatusComponent implements OnInit {
 
   status: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
 
-  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService) {
-  }
+  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService) {}
 
-  ngOnDestroy() {
+  updateStatus(){
+    console.log("using default status: " + this.serverSocket.lastStatus);
+    this.status = this.serverSocket.lastStatus;
+    this.selectedServer.getCurrentServer(server => {
+      console.log("status: ct: " + server);
+      this.serverSocket.getSocket(server);
+    });
+    this.serverSocket.statusEmitter.subscribe(data => {
+      console.log("Got new status from event emitter: " + data);
+      this.status = data;
+    });
   }
 
   ngOnInit() {
-    this.status = this.serverSocket.lastStatus;
-    this.selectedServer.getCurrentServer(server => {
-      console.log('got current server');
-      this.serverSocket.getSocket(server);
-      this.serverSocket.statusEmitter.subscribe(data => {
-        console.log("emitted! " + data);
-        this.status = data;
-      });
+    this.updateStatus();
+    this.selectedServer.serverEmitter.subscribe(() => {
+      this.updateStatus();
     });
   }
 }

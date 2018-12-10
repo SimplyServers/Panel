@@ -29,7 +29,6 @@ export class AuthenticationService{
   }
 
   getPresets(){
-    console.log(this.getUser());
     return this.http.get<any>(this.config.getAPIURL() + "user/getPresets", {headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {
         return data.presets;
@@ -37,10 +36,35 @@ export class AuthenticationService{
   }
 
   createServer(server: ServerDetails){
-    console.log(server);
     return this.http.post<any>(this.config.getAPIURL() + "server/create", server,{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {
         return data.server;
+      }));
+  }
+
+  submitCommand(server: string, command: string){
+    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/control/command", {command: command},{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
+  killServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/kill",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+  startServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/on",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+  stopServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/off",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
       }));
   }
 

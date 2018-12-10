@@ -8,20 +8,37 @@ import * as io from 'socket.io-client';
 })
 export class ServerSocketManagerService {
 
-  currentSocketServer: string;
+  currentSocketServer = '';
   private socket;
   lastStatus: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
   statusEmitter = new EventEmitter();
   consoleEmitter = new EventEmitter();
+  announceEmitter = new EventEmitter();
+  private cachedConsole = '';
 
   constructor(private config: ConfigService, private auth: AuthenticationService) {
   }
 
-  getSocket(server) {
-    console.log("getting socket: status rn: " + this.lastStatus);
+  getSocket(server, callback?) {
     if (server !== this.currentSocketServer) {
-      this.updateSocket(server);
+      console.log("reloading socket due to server change");
+      if(callback){
+        this.updateSocket(server, callback);
+      }else{
+        this.updateSocket(server);
+      }
+    }else{
+      if(callback)
+        callback();
     }
+  }
+
+  cacheConsole(consoleText){
+    this.cachedConsole = consoleText;
+  }
+
+  getConsole(){
+    return this.cachedConsole;
   }
 
   private handleStatus(data) {
@@ -46,25 +63,36 @@ export class ServerSocketManagerService {
         this.lastStatus = 'Loading';
         break;
     }
-    console.log("emitted status: " + this.lastStatus);
+    console.log("Emitting status: " + this.lastStatus);
     this.statusEmitter.emit(this.lastStatus);
   }
 
-  private updateSocket(server) {
+  private updateSocket(server, callback?) {
     this.currentSocketServer = server;
+    console.log("updating socket server to: " + server);
+
+    if(this.socket !== undefined){
+      console.log("closing old socket");
+      this.socket.disconnect();
+      this.socket = undefined;
+    }
+
     this.socket = io(this.config.socketEndpoint + 'console', {path: '/s/', query: {server: server}});
     this.socket.on('connect', () => {
       this.socket.emit('authenticate', {token: this.auth.getUser().token}).on('authenticated', () => {
         console.log('ws connected');
+
+        if(callback)
+          callback();
+
         this.socket.on('initialStatus', (data) => {
-          console.log('got initial status (' + JSON.stringify(data));
           this.handleStatus(data);
         }).on('statusUpdate', (data) => {
-          console.log('on status update: ' + JSON.stringify(data));
           this.handleStatus(data);
         }).on('console', (data) => {
-          console.log('on console: ' + JSON.stringify(data));
           this.consoleEmitter.emit(data.line);
+        }).on('announcement', data => {
+          this.announceEmitter.emit(data);
         });
       });
     });
