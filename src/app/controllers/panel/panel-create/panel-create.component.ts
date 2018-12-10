@@ -3,6 +3,7 @@ import {AuthenticationService} from '../../../core/services/authentication.servi
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ServerPayload} from '../../../core/models/server-payload';
+import {SelectedServerService} from '../../../core/services/selected-server.service';
 
 @Component({
   selector: 'app-panel-create',
@@ -24,7 +25,7 @@ export class PanelCreateComponent implements OnInit {
     motd: ''
   };
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
   }
 
   ngOnInit() {
@@ -50,7 +51,9 @@ export class PanelCreateComponent implements OnInit {
     this.server.motd = this.createForm.controls.motd.value;
 
     this.auth.createServer(this.server).subscribe(() => {
-      this.router.navigateByUrl('/panel');
+      this.selectedServer.updateCache(() => {
+        this.router.navigateByUrl('/panel');
+      });
     }, (err) => {
       this.loading = false;
       this.submitted = false;
