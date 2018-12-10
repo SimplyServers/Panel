@@ -21,9 +21,15 @@ import { PanelCreateComponent } from './controllers/panel/panel-create/panel-cre
 import { PanelMinecraftPluginsComponent } from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 import {NotifierModule, NotifierOptions} from 'angular-notifier';
 import { PanelFrameComponent } from './controllers/panel/panel-frame/panel-frame.component';
+import {AppLoadService} from './core/services/app-load.service';
+import {Router} from '@angular/router';
 
-export function init_app(onLoad: SSAnalyticsService) {
-  return () => onLoad.onLoad();
+export function init_any(ssAny: SSAnalyticsService) {
+  return () => ssAny.onLoad();
+}
+
+export function init_servers(appLoad: AppLoadService) {
+  return () => appLoad.initializeApp();
 }
 
 const customNotifierOptions: NotifierOptions = {
@@ -91,7 +97,7 @@ const customNotifierOptions: NotifierOptions = {
     HttpModule,
     HttpClientModule
   ],
-  providers: [AuthenticationService, APIInterceptor, { provide: APP_INITIALIZER, useFactory: init_app, deps: [SSAnalyticsService], multi: true }],
+  providers: [AuthenticationService, APIInterceptor, { provide: APP_INITIALIZER, useFactory: init_any, deps: [SSAnalyticsService], multi: true }, { provide: APP_INITIALIZER, useFactory: init_servers, deps: [AppLoadService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

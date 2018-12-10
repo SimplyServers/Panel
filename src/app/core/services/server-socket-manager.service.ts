@@ -21,7 +21,6 @@ export class ServerSocketManagerService {
 
   getSocket(server, callback?) {
     if (server !== this.currentSocketServer) {
-      console.log("reloading socket due to server change");
       if(callback){
         this.updateSocket(server, callback);
       }else{
@@ -42,7 +41,6 @@ export class ServerSocketManagerService {
   }
 
   private handleStatus(data) {
-    console.log("doing handle status");
     switch (data) {
       case 0:
         this.lastStatus = 'Starting';
@@ -64,16 +62,13 @@ export class ServerSocketManagerService {
         this.lastStatus = 'Loading';
         break;
     }
-    console.log("Emitting status: " + this.lastStatus);
     this.statusEmitter.emit(this.lastStatus);
   }
 
   private updateSocket(server, callback?) {
     this.currentSocketServer = server;
-    console.log("updating socket server to: " + server);
 
     if(this.socket !== undefined){
-      console.log("closing old socket");
       this.socket.disconnect();
       this.socket = undefined;
     }
@@ -81,9 +76,6 @@ export class ServerSocketManagerService {
     this.socket = io(this.config.socketEndpoint + 'console', {path: '/s/', query: {server: server}});
     this.socket.on('connect', () => {
       this.socket.emit('authenticate', {token: this.auth.getUser().token}).on('authenticated', () => {
-        console.log('ws connected');
-
-          console.log("generating event emitters");
           this.socket.on('initialStatus', (data) => {
             this.handleStatus(data);
           }).on('statusUpdate', (data) => {

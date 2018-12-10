@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import {ConfigService} from "../../config.service";
 import {TokenPayload} from "../models/token-payload";
 import {ServerDetails} from '../models/server-details';
+import {ServerPayload} from '../models/server-payload';
 
 @Injectable()
 export class AuthenticationService{
@@ -35,7 +36,7 @@ export class AuthenticationService{
       }));
   }
 
-  createServer(server: ServerDetails){
+  createServer(server: ServerPayload){
     return this.http.post<any>(this.config.getAPIURL() + "server/create", server,{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {
         return data.server;
@@ -59,6 +60,12 @@ export class AuthenticationService{
     return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/on",{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {
         return data;
+      }));
+  }
+  getServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data.server;
       }));
   }
   stopServer(server: string){

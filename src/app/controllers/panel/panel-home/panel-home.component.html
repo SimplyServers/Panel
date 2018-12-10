@@ -36,6 +36,15 @@
           <button (click)="serverKill()" type="button" class="btn btn-danger btn-forcekill btn-lg btn-block server-action">Force kill server</button>
         </div>
       </div>
+      <div class="card" id="usage">
+        <div class="card-header">
+          Server Details
+        </div>
+        <div class="card-block">
+          <p><span class="value">Credits/day: </span>0</p>
+          <p><span class="value">Plan name: </span>{{ currentServer.preset.name }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </app-panel-frame>

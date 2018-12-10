@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../core/services/authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {TokenPayload} from '../../../core/models/token-payload';
-import {ServerDetails} from '../../../core/models/server-details';
 import {Router} from '@angular/router';
+import {ServerPayload} from '../../../core/models/server-payload';
 
 @Component({
   selector: 'app-panel-create',
@@ -19,7 +18,7 @@ export class PanelCreateComponent implements OnInit {
   submitted = false;
   error: string;
 
-  server: ServerDetails = {
+  server: ServerPayload = {
     preset: '',
     name: '',
     motd: ''

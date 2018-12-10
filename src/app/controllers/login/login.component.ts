@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {TokenPayload} from "../../core/models/token-payload";
 import {AuthenticationService} from "../../core/services/authentication.service";
+import {SelectedServerService} from '../../core/services/selected-server.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
   returnUrlSet = false;
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
-              private router: Router, private auth: AuthenticationService) {
+              private router: Router, private auth: AuthenticationService, private selectedServer: SelectedServerService) {
   }
 
   ngOnInit() {
@@ -54,7 +55,9 @@ export class LoginComponent implements OnInit {
     this.credentials.email = this.loginForm.controls.email.value;
     this.credentials.password = this.loginForm.controls.password.value;
     this.auth.login(this.credentials).subscribe((data) => {
-      this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
+      this.selectedServer.updateCache((err) => {
+        this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
+      });
     }, (err) => {
       this.loading = false;
       this.submitted = false;

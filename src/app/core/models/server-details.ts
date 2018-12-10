@@ -1,14 +1,17 @@
+import {PresetDetails} from './preset-details';
+
 export interface ServerDetails {
-  owner?: string,
-  sub_owners?: object,
-  preset: string,
+  owner: string,
+  sub_owners: object,
+  preset: PresetDetails,
   timeOnline?: number,
   motd: string,
-  nodeInstalled?: string,
+  nodeInstalled: string,
   online?: boolean,
   name: string,
-  port?: number,
-  special?: {
-    minecraftPlugins?: object
+  port: number,
+  special: {
+    minecraftPlugins: object
   }
+  _id: string
 }

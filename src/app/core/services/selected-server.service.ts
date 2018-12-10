@@ -2,7 +2,6 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {AuthenticationService} from './authentication.service';
 import {ConfigService} from '../../config.service';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 @Injectable({
@@ -12,24 +11,22 @@ export class SelectedServerService {
 
   private currentServer;
   public serverEmitter = new EventEmitter();
-  public servers: any;
+  public servers: object;
 
   constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient) {
   }
 
-  getCurrentServer(callback) {
+  getCurrentServer() {
     if (this.currentServer === undefined) {
-      this.updateCache(() => {
-        this.currentServer = this.servers[0]._id;
-        callback(this.currentServer);
-      });
-    }else{
-      callback(this.currentServer);
+      if(Object.keys(this.servers).length >= 1){
+        this.currentServer = this.servers[0];
+      }else {
+      }
     }
+    return this.currentServer;
   }
 
   setCurrentServer(server) {
-    console.log("I've updated the current server @ ss to " + server);
     this.currentServer = server;
     this.serverEmitter.emit();
   }
@@ -44,13 +41,7 @@ export class SelectedServerService {
     });
   }
 
-  getServers(callback) {
-    if (this.servers === undefined) {
-      this.updateCache(() => {
-        callback(this.servers);
-      });
-    }else {
-      callback(this.servers);
-    }
+  getServers() {
+    return this.servers;
   }
 }

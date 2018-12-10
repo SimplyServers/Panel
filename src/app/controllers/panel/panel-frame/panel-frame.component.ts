@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
+import {ServerDetails} from '../../../core/models/server-details';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-panel-frame',
@@ -12,32 +14,26 @@ export class PanelFrameComponent implements OnInit {
   sidebarDisplayed = true;
   status: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
   servers: object;
-  currentServer: string;
+  currentServer: ServerDetails;
 
-  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService) {}
+  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService, private router: Router) {}
 
   updateStatus(){
-    console.log("using default status: " + this.serverSocket.lastStatus);
+    this.currentServer = this.selectedServer.getCurrentServer();
+    this.servers = this.selectedServer.getServers();
     this.status = this.serverSocket.lastStatus;
-    this.selectedServer.getCurrentServer(server => {
-      console.log("status: ct: " + server);
-      this.serverSocket.getSocket(server);
-    });
+    this.serverSocket.getSocket(this.currentServer._id);
   }
 
   ngOnInit() {
-    this.selectedServer.getServers(servers => {
-      this.servers = servers;
-      this.selectedServer.getCurrentServer((server) => {
-        this.currentServer = server;
-      });
-      console.log("servers:"  + servers)
-    });
+    if(Object.keys(this.selectedServer.servers).length < 1){
+      this.router.navigateByUrl('/panel/create');
+    }else{
+    }
 
     this.updateStatus();
 
     this.serverSocket.statusEmitter.subscribe(data => {
-      console.log("Got new status from event emitter: " + data);
       this.status = data;
     });
 
@@ -47,14 +43,12 @@ export class PanelFrameComponent implements OnInit {
   }
 
   update(server) {
-    console.log("updating server to: " + server);
     this.selectedServer.setCurrentServer(server);
     this.currentServer = server;
   }
 
   toggleSidebar(){
     this.sidebarDisplayed = !this.sidebarDisplayed;
-    console.log("sidebar: " + this.sidebarDisplayed);
   }
 
 }
