@@ -10,6 +10,7 @@ import {NavigationEnd, Router} from "@angular/router";
 export class NavbarComponent implements OnInit {
 
   login: boolean;
+  username: string;
   currentUrl: string;
 
   constructor(private auth: AuthenticationService, private router: Router) {
@@ -17,6 +18,7 @@ export class NavbarComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         this.currentUrl = e.url;
         this.login = this.auth.isLoggedIn();
+        this.username = this.auth.getUser().username;
       }
     });
   }

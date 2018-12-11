@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Subject} from 'rxjs';
+import {interval, Subject} from 'rxjs';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -23,7 +23,10 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   commandLoading = false;
   commandSubmitted = false;
 
-  constructor(private serverSocket: ServerSocketManagerService,
+  groupAnnounce = false;
+  update = false;
+
+  constructor(public serverSocket: ServerSocketManagerService,
               private selectedServer: SelectedServerService,
               private formBuilder: FormBuilder,
               private auth: AuthenticationService,
@@ -34,11 +37,21 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if(this.selectedServer.getCurrentServer() !== undefined) {
       this.updateServer();
       this.serverSocket.consoleEmitter.subscribe(data => {
-        this.consoleHistory = this.consoleHistory + data;
+        if(this.groupAnnounce) {
+          this.consoleHistory = this.consoleHistory + '\n\n------------\n\n' + data;
+        }else{
+          this.consoleHistory = this.consoleHistory + data;
+        }
+        this.groupAnnounce = false;
         this.scroll();
       });
       this.serverSocket.announceEmitter.subscribe(data => {
-        this.consoleHistory = this.consoleHistory + '\n**\n[SS MANAGER] ' + data + '\n**\n';
+        if(!this.groupAnnounce && this.consoleHistory !== ''){
+          this.consoleHistory = this.consoleHistory + '\n\n------------\n\n[SS MANAGER] ' + data + "\n";
+        }else{
+          this.consoleHistory = this.consoleHistory + '\n[SS MANAGER] ' + data;
+        }
+        this.groupAnnounce = true;
         this.scroll();
       });
 
@@ -48,10 +61,21 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.updateServer();
       });
     }
+
+    //Read scroll() todo.
+    interval(500).subscribe(() => {
+      if(this.update){
+        this.update = false;
+        this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
+      }
+    })
   }
 
   scroll() {
-    this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
+    //TODO: this could be better. Basically instead of doing this every time the console is updated, constantly check every .5 seconds to see if there is new text, if there is, scroll down.
+    //this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
+    //console.log(this.textAreaElement.nativeElement.scrollHeight);
+    this.update = true;
   }
 
   ngAfterViewInit() {
@@ -104,6 +128,26 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }, (err) => {
       this.notify.notify('error', 'Failed to kill server; ' + err.error.msg);
+    });
+  }
+
+  installServer() {
+    if (this.serverSocket.lastStatus !== 'Stopped')
+      return;
+    this.auth.installServer(this.currentServer._id).subscribe(() => {
+
+    }, (err) => {
+      this.notify.notify('error', 'Failed to install server; ' + err.error.msg);
+    });
+  }
+
+  reinstallServer() {
+    if (this.serverSocket.lastStatus !== 'Stopped')
+      return;
+    this.auth.reinstallServer(this.currentServer._id).subscribe(() => {
+
+    }, (err) => {
+      this.notify.notify('error', 'Failed to reinstall server; ' + err.error.msg);
     });
   }
 

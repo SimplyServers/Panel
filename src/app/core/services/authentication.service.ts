@@ -74,7 +74,18 @@ export class AuthenticationService{
         return data;
       }));
   }
-
+  installServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/install",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+  reinstallServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/reinstall",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
   getUser() {
     if (!this.user) { //Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');

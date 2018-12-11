@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {NotifierService} from 'angular-notifier';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +20,10 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private notify: NotifierService) { }
 
   ngOnInit() {
+    this.notify.notify('info', "Hello there! We're currently in closed alpha. Bugs may occur.")
   }
 
 }

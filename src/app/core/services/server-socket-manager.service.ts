@@ -11,6 +11,8 @@ export class ServerSocketManagerService {
   currentSocketServer = '';
   private socket;
   lastStatus: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
+  lastInstalled: boolean;
+  lastBlocked: boolean;
   statusEmitter = new EventEmitter();
   consoleEmitter = new EventEmitter();
   announceEmitter = new EventEmitter();
@@ -77,15 +79,20 @@ export class ServerSocketManagerService {
     this.socket.on('connect', () => {
       this.socket.emit('authenticate', {token: this.auth.getUser().token}).on('authenticated', () => {
           this.socket.on('initialStatus', (data) => {
-            this.handleStatus(data);
+            this.handleStatus(data.status);
+            this.lastInstalled = data.installed;
+            this.lastBlocked = data.blocked;
           }).on('statusUpdate', (data) => {
             this.handleStatus(data);
           }).on('console', (data) => {
             this.consoleEmitter.emit(data.line);
           }).on('announcement', data => {
             this.announceEmitter.emit(data);
+          }).on('block', data => {
+            this.lastBlocked = data;
+          }).on('installed', data => {
+            this.lastInstalled = data;
           });
-
         if(callback)
           callback();
       });

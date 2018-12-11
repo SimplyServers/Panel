@@ -23,6 +23,8 @@ import {NotifierModule, NotifierOptions} from 'angular-notifier';
 import { PanelFrameComponent } from './controllers/panel/panel-frame/panel-frame.component';
 import {AppLoadService} from './core/services/app-load.service';
 import {Router} from '@angular/router';
+import { PanelSettingsComponent } from './panel-settings/panel-settings.component';
+import { PanelPluginsComponent } from './panel-plugins/panel-plugins.component';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -86,6 +88,8 @@ const customNotifierOptions: NotifierOptions = {
     PanelCreateComponent,
     PanelMinecraftPluginsComponent,
     PanelFrameComponent,
+    PanelSettingsComponent,
+    PanelPluginsComponent,
   ],
   imports: [
     NotifierModule.withConfig(customNotifierOptions),

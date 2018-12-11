@@ -31,9 +31,15 @@
           Server Controls
         </div>
         <div class="card-block">
-          <button (click)="serverOn()" type="button" class="btn btn-success btn-lg btn-block server-action">Start Server</button>
-          <button (click)="serverOff()" type="button" class="btn btn-warning btn-stop btn-lg btn-block server-action">Stop Server</button>
-          <button (click)="serverKill()" type="button" class="btn btn-danger btn-forcekill btn-lg btn-block server-action">Force kill server</button>
+          <button [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" *ngIf="!serverSocket.lastInstalled" (click)="installServer()" type="button" class="btn btn-info btn-lg btn-block server-action" data-toggle="modal" data-target="#installModal">
+            Install Server
+          </button>
+          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" (click)="serverOn()" type="button" class="btn btn-success btn-lg btn-block server-action">Start Server</button>
+          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Running'" (click)="serverOff()" type="button" class="btn btn-danger btn-stop btn-lg btn-block server-action">Stop Server</button>
+          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || (serverSocket.lastStatus !== 'Running' && serverSocket.lastStatus !== 'Stopping' && serverSocket.lastStatus !== 'Starting')" (click)="serverKill()" type="button" class="btn btn-warning btn-lg btn-block server-action">Force kill Server</button>
+          <button [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" *ngIf="serverSocket.lastInstalled" type="button" class="btn btn-info btn-lg btn-block server-action" data-toggle="modal" data-target="#reinstallModal">
+            Reinstall Server
+          </button>
         </div>
       </div>
       <div class="card" id="usage">
@@ -43,6 +49,26 @@
         <div class="card-block">
           <p><span class="value">Credits/day: </span>0</p>
           <p><span class="value">Plan name: </span>{{ currentServer.preset.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="reinstallModal" tabindex="-1" role="dialog" aria-labelledby="installModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reinstallModalLabel">Are you sure?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>If you have an issue (or need help) with your server, contact our support team before performing a reinstall.</p>
+          <p>This action will permanently remove all server data; we cannot recover server data if a reinstall is performed.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button [disabled]="serverSocket.lastBlocked || !serverSocket.lastInstalled" (click)="reinstallServer()" type="button" data-dismiss="modal" class="btn btn-primary">Reinstall</button>
         </div>
       </div>
     </div>

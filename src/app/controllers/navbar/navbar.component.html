@@ -23,9 +23,17 @@
       <li class="nav-item" *ngIf="!login">
         <a class="nav-link text-primary" routerLink="/login">Login</a>
       </li>
-      <li class="nav-item" *ngIf="login">
-        <a class="nav-link text-primary" routerLink="/logout">Logout</a>
+      <li class="nav-item dropdown" *ngIf="login">
+        <a class="nav-link dropdown-toggle text-primary" href="#" id="navbarAccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{username}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+          <a class="dropdown-item" href="#">Manage account</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/logout">Logout</a>
+        </div>
       </li>
+
     </ul>
   </div>
 </nav>

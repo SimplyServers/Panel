@@ -23,6 +23,10 @@
   .nav-item{
     padding: 0 1rem;
 
+    .dropdown-menu{
+      left: -5rem;
+    }
+
     @media (max-width: 34em) {
       padding: 0;
     }

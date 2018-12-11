@@ -3,45 +3,54 @@
   <div id="sidebar">
     <div class="dropdown">
       <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
-        <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}" [selected]="server._id === currentServer">{{ server.name }}</option>
+        <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}"
+                [selected]="server._id === currentServer">{{ server.name }}</option>
       </select>
     </div>
     <ul class="sidebar-content">
       <li class="title">
         <span>Manage:</span>
       </li>
-      <li class="srv-mgt">
+      <li class="srv-mgt" [class.selected]="currentUrl == '/panel'">
         <a routerLink="/panel"><i class="material-icons">code</i>Console</a>
       </li>
       <li class="srv-mgt">
         <a href="#"><i class="material-icons">file_copy</i>Files</a>
       </li>
       <li class="srv-mgt end">
+        <a href="#"><i class="material-icons">people</i>Subusers</a>
+      </li>
+      <li class="srv-mgt end">
         <a href="#"><i class="material-icons">settings</i>Settings</a>
       </li>
-      <li class="title title-upper">
-        <span>Minecraft:</span>
-      </li>
-      <li class="srv-mgt">
-        <a href="#"><i class="material-icons">person</i>Players</a>
-      </li>
-      <li class="srv-mgt">
-        <a routerLink="/panel/minecraft/plugins"><i class="material-icons">developer_board</i>Plugins</a>
-      </li>
-      <li class="srv-mgt">
-        <a href="#"><i class="material-icons">link</i>Domain</a>
-      </li>
-      <li class="srv-mgt">
-        <a href="#"><i class="material-icons">reorder</i>Properties</a>
-      </li>
+      <div *ngIf="isMinecraft" class="plugin-viewer">
+        <li class="title title-upper">
+          <span>Minecraft:</span>
+        </li>
+        <li class="srv-mgt">
+          <a href="#"><i class="material-icons">person</i>Players</a>
+        </li>
+        <li class="srv-mgt">
+          <a routerLink="/panel/minecraft/plugins"><i class="material-icons">developer_board</i>Plugins</a>
+        </li>
+        <li class="srv-mgt">
+          <a href="#"><i class="material-icons">link</i>Domain</a>
+        </li>
+        <li class="srv-mgt">
+          <a href="#"><i class="material-icons">reorder</i>Properties</a>
+        </li>
+      </div>
     </ul>
   </div>
   <div id="panel-content">
     <div id="heading">
-      <button *ngIf="!sidebarDisplayed" (click)="toggleSidebar()" type="button" class="btn btn-primary"><i class="material-icons switch-arrow">arrow_right</i> </button>
-      <button *ngIf="sidebarDisplayed" (click)="toggleSidebar()" type="button" class="btn btn-primary"><i class="material-icons switch-arrow">arrow_left</i> </button>
+      <button *ngIf="!sidebarDisplayed" (click)="toggleSidebar()" type="button" class="btn btn-primary"><i
+        class="material-icons switch-arrow">arrow_right</i></button>
+      <button *ngIf="sidebarDisplayed" (click)="toggleSidebar()" type="button" class="btn btn-primary"><i
+        class="material-icons switch-arrow">arrow_left</i></button>
       <div id="server">
-        <span id="status"><span class="bold">Status: </span>{{status}}  <span class='dot' [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[status]"></span> </span>
+        <span id="status"><span class="bold">Status: </span>{{status}}  <span class='dot'
+                                                                              [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[status]"></span> </span>
       </div>
     </div>
     <notifier-container></notifier-container>
