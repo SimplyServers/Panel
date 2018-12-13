@@ -30,12 +30,14 @@ export class PanelSubownersComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
 
-    this.loadSubusers();
-
-    //On server update
-    this.selectedServer.serverEmitter.subscribe(() => {
+    if(this.selectedServer.getCurrentServer() !== undefined) {
       this.loadSubusers();
-    });
+
+      //On server update
+      this.selectedServer.serverEmitter.subscribe(() => {
+        this.loadSubusers();
+      });
+    }
   }
 
   loadSubusers(){

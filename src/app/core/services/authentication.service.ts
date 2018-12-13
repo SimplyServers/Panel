@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import {ConfigService} from "../../config.service";
 import {TokenPayload} from "../models/token-payload";
-import {ServerDetails} from '../models/server-details';
 import {ServerPayload} from '../models/server-payload';
 
 @Injectable()
@@ -56,6 +55,7 @@ export class AuthenticationService{
         return data;
       }));
   }
+
   startServer(server: string){
     return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/on",{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {
@@ -105,9 +105,7 @@ export class AuthenticationService{
     return JSON.parse(this.user);
   }
 
-  logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('session');
+  clearUser(){
     this.user = undefined;
   }
 

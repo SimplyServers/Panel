@@ -51,7 +51,7 @@ export class PanelCreateComponent implements OnInit {
     this.server.motd = this.createForm.controls.motd.value;
 
     this.auth.createServer(this.server).subscribe(() => {
-      this.selectedServer.updateCache(() => {
+      this.selectedServer.updateCache(false, () => {
         this.router.navigateByUrl('/panel');
       });
     }, (err) => {

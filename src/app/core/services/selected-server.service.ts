@@ -18,17 +18,24 @@ export class SelectedServerService {
 
   getCurrentServer() {
     if (this.currentServer === undefined) {
+      if(this.servers === undefined){
+        this.currentServer = undefined;
+        return this.currentServer;
+      }
       if(Object.keys(this.servers).length >= 1){
         this.currentServer = this.servers[0];
       }else {
+        this.currentServer = undefined;
       }
     }
     return this.currentServer;
   }
 
-  setCurrentServer(server) {
+  setCurrentServer(server, emit?) {
     this.currentServer = server;
-    this.serverEmitter.emit();
+    if(emit) {
+      this.serverEmitter.emit();
+    }
   }
 
   reloadCurrentServer(){

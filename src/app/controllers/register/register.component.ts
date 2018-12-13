@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     }, {
       validator: PasswordValidation.MatchPassword
     });
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/panel';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || undefined;
   }
 
   onSubmit(){
@@ -50,7 +50,11 @@ export class RegisterComponent implements OnInit {
     this.newUser.email = this.registerForm.controls.email.value;
     this.newUser.password = this.registerForm.controls.password.value;
     this.auth.register(this.newUser).subscribe((data) => {
-      this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); //Good login! Return to dash.
+      if(this.returnUrl === undefined){
+        this.router.navigateByUrl('/login'); //Good login! Return to dash w/o returnUrl
+      }else{
+        this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); //Good login! Return to dash /w returnUrl
+      }
     }, (err) => {
       this.error = err.error.msg;
     });
