@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {interval, Subject} from 'rxjs';
+import {interval} from 'rxjs';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';

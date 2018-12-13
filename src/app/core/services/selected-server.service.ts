@@ -11,7 +11,7 @@ export class SelectedServerService {
 
   private currentServer;
   public serverEmitter = new EventEmitter();
-  public servers: object;
+  public servers: any;
 
   constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient) {
   }
@@ -33,8 +33,13 @@ export class SelectedServerService {
 
   setCurrentServer(server, emit?) {
     this.currentServer = server;
-    if(emit) {
-      this.serverEmitter.emit();
+    console.log("switched server to: " + JSON.stringify(this.currentServer));
+    if(emit === undefined){
+      this.serverEmitter.emit(); //Emit by default
+    }else{
+      if(emit){
+        this.serverEmitter.emit();
+      }
     }
   }
 

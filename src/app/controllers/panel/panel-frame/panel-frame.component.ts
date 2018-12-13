@@ -17,6 +17,7 @@ export class PanelFrameComponent implements OnInit {
   currentServer: ServerDetails;
 
   isMinecraft = false;
+  isOwner = false;
 
   currentUrl: string;
 
@@ -37,6 +38,7 @@ export class PanelFrameComponent implements OnInit {
     //Typescript can be super dumb sometimes
     const views = <any>this.currentServer.preset.special.views;
     this.isMinecraft = views.indexOf("minecraft") > -1;
+    this.isOwner = this.currentServer.isOwner;
   }
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class PanelFrameComponent implements OnInit {
   }
 
   update(server) {
-    this.selectedServer.setCurrentServer(server);
+    this.selectedServer.setCurrentServer(this.selectedServer.servers.find(serverData => serverData._id === server));
     this.currentServer = server;
   }
 
