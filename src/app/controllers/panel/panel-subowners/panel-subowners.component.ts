@@ -1,28 +1,31 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../../core/services/authentication.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 import {ServerDetails} from '../../../core/models/server-details';
 import {NotifierService} from 'angular-notifier';
+import {Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-panel-subowners',
   templateUrl: './panel-subowners.component.html',
   styleUrls: ['./panel-subowners.component.scss']
 })
-export class PanelSubownersComponent implements OnInit {
+export class PanelSubownersComponent implements OnInit, OnDestroy {
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
 
   currentServer: ServerDetails;
   subUsers: any;
-  empty: boolean;
 
   error: string;
   addLoading = false;
   addSubmitted = false;
   addForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private selectedServer: SelectedServerService, private notify: NotifierService) {
+  selectedServerEmitter: Subject<any>;
+
+  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private selectedServer: SelectedServerService, private notify: NotifierService, private router: Router) {
   }
 
   ngOnInit() {
@@ -34,14 +37,25 @@ export class PanelSubownersComponent implements OnInit {
       this.loadSubusers();
 
       //On server update
-      this.selectedServer.serverEmitter.subscribe(() => {
+      this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
         this.loadSubusers();
       });
     }
   }
 
+  ngOnDestroy() {
+    if(this.selectedServerEmitter !== undefined)
+      this.selectedServerEmitter.unsubscribe();
+  }
+
   loadSubusers(){
     this.currentServer = this.selectedServer.getCurrentServer();
+
+    console.log("loading subs...");
+    if(!this.currentServer.isOwner){
+      this.router.navigateByUrl('/panel');
+    }
+
     this.subUsers = this.currentServer.sub_owners;
   }
 

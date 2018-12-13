@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 import {ServerDetails} from '../../../core/models/server-details';
 import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-panel-frame',
   templateUrl: './panel-frame.component.html',
   styleUrls: ['./panel-frame.component.scss']
 })
-export class PanelFrameComponent implements OnInit {
+export class PanelFrameComponent implements OnInit, OnDestroy {
 
   sidebarDisplayed = true;
   status: 'Running' | 'Stopped' | 'Stopping' | 'Crashed' | 'Starting' | 'Loading' = 'Loading';
@@ -20,6 +21,9 @@ export class PanelFrameComponent implements OnInit {
   isOwner = false;
 
   currentUrl: string;
+
+  selectedServerEmitter: Subject<any>;
+  statusEmitter: Subject<any>;
 
   constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService, private router: Router) {
     this.router.events.subscribe((e) => {
@@ -48,14 +52,21 @@ export class PanelFrameComponent implements OnInit {
 
     this.updateStatus();
 
-    this.serverSocket.statusEmitter.subscribe(data => {
+    this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {
       this.status = data;
     });
 
-    this.selectedServer.serverEmitter.subscribe(() => {
+    this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
       this.serverSocket.cacheConsole('');
       this.updateStatus();
     });
+  }
+
+  ngOnDestroy() {
+    if(this.statusEmitter !== undefined)
+      this.statusEmitter.unsubscribe();
+    if(this.selectedServerEmitter !== undefined)
+      this.selectedServerEmitter.unsubscribe();
   }
 
   update(server) {

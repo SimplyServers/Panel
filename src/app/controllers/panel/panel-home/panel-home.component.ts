@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {interval} from 'rxjs';
+import {interval, Subject} from 'rxjs';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
 import {SelectedServerService} from '../../../core/services/selected-server.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -26,6 +26,10 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   groupAnnounce = false;
   update = false;
 
+  announceEmitter: Subject<any>;
+  consoleEmitter: Subject<any>;
+  selectedServerEmitter: Subject<any>;
+
   constructor(public serverSocket: ServerSocketManagerService,
               private selectedServer: SelectedServerService,
               private formBuilder: FormBuilder,
@@ -36,7 +40,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     if(this.selectedServer.getCurrentServer() !== undefined) {
       this.updateServer();
-      this.serverSocket.consoleEmitter.subscribe(data => {
+      this.consoleEmitter = this.serverSocket.consoleEmitter.subscribe(data => {
         if(this.groupAnnounce) {
           this.consoleHistory = this.consoleHistory + '\n\n------------\n\n' + data;
         }else{
@@ -45,7 +49,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.groupAnnounce = false;
         this.scroll();
       });
-      this.serverSocket.announceEmitter.subscribe(data => {
+      this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
         if(!this.groupAnnounce && this.consoleHistory !== ''){
           this.consoleHistory = this.consoleHistory + '\n\n------------\n\n[SS MANAGER] ' + data + "\n";
         }else{
@@ -56,7 +60,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
       //On server update
-      this.selectedServer.serverEmitter.subscribe(() => {
+      this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
         this.updateServer();
       });
     }
@@ -85,6 +89,12 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.serverSocket.cacheConsole(this.consoleHistory);
+    if(this.announceEmitter !== undefined)
+      this.announceEmitter.unsubscribe();
+    if(this.consoleEmitter !== undefined)
+      this.consoleEmitter.unsubscribe();
+    if(this.selectedServerEmitter !== undefined)
+      this.selectedServerEmitter.unsubscribe();
   }
 
   updateServer() {
