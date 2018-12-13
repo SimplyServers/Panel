@@ -31,13 +31,30 @@ export class SelectedServerService {
     this.serverEmitter.emit();
   }
 
-  updateCache(callback) {
+  reloadCurrentServer(){
+    const servers = <any> this.servers;
+    let updatedServer = servers.find(server => server._id === this.currentServer);
+    if(updatedServer === undefined){
+      this.currentServer = updatedServer;
+      this.getCurrentServer();
+    }else {
+      this.currentServer = updatedServer;
+    }
+  }
+
+  updateCache(emit, callback?) {
     this.http.get<any>(this.config.getAPIURL() + 'user/getServers', {headers: {Authorization: 'Token ' + this.auth.getUser().token}})
       .pipe(map(data => {
         return data.servers;
       })).subscribe(data => {
       this.servers = data;
-      callback();
+
+      //The callback is supposed to be first. We may need to execute some important action in it.
+      if(callback)
+        callback();
+      if(emit){
+        this.serverEmitter.emit();
+      }
     });
   }
 

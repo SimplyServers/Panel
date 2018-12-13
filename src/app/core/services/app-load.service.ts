@@ -12,7 +12,7 @@ export class AppLoadService {
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
       if(this.auth.isLoggedIn()) {
-        this.selectedServer.updateCache((err) => {
+        this.selectedServer.updateCache(false,(err) => {
           if (err) reject(err);
           else resolve();
         })

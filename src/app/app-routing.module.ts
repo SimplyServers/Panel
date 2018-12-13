@@ -10,6 +10,9 @@ import {LogoutComponent} from "./controllers/logout/logout.component";
 import {PanelHomeComponent} from "./controllers/panel/panel-home/panel-home.component";
 import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
 import {PanelMinecraftPluginsComponent} from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
+import {PanelPluginsComponent} from './controllers/panel/panel-plugins/panel-plugins.component';
+import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel-subowners.component';
+import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
 
 const routes: Routes = [
   {
@@ -51,6 +54,24 @@ const routes: Routes = [
     path: 'panel/minecraft/plugins',
     component: PanelMinecraftPluginsComponent,
     data: {title: "Browse plugins"},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'panel/plugins',
+    component: PanelPluginsComponent,
+    data: {title: "Browse plugins"},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'panel/subusers',
+    component: PanelSubownersComponent,
+    data: {title: "Server Sub-users"},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'panel/settings',
+    component: PanelSettingsComponent,
+    data: {title: "Server Settings"},
     canActivate: [AuthGuardService]
   },
   {

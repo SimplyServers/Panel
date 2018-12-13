@@ -4,7 +4,7 @@
     <div class="dropdown">
       <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
         <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}"
-                [selected]="server._id === currentServer">{{ server.name }}</option>
+                [selected]="server._id === currentServer">{{ server.isOwner ? server.name : server.name + " (sub-user)" }}</option>
       </select>
     </div>
     <ul class="sidebar-content">
@@ -17,11 +17,14 @@
       <li class="srv-mgt">
         <a href="#"><i class="material-icons">file_copy</i>Files</a>
       </li>
-      <li class="srv-mgt end">
-        <a href="#"><i class="material-icons">people</i>Subusers</a>
+      <li class="srv-mgt end" *ngIf="currentServer.isOwner" [class.selected]="currentUrl == '/panel/subusers'">
+        <a routerLink="/panel/subusers"><i class="material-icons">people</i>Subusers</a>
       </li>
-      <li class="srv-mgt end">
-        <a href="#"><i class="material-icons">settings</i>Settings</a>
+      <li class="srv-mgt end" *ngIf="currentServer.isOwner" [class.selected]="currentUrl == '/panel/settings'">
+        <a routerLink="/panel/settings"><i class="material-icons">settings</i>Settings</a>
+      </li>
+      <li class="srv-mgt end" [class.selected]="currentUrl == '/panel/plugins'">
+        <a routerLink="/panel/settings"><i class="material-icons">developer_board</i>Mods</a>
       </li>
       <div *ngIf="isMinecraft" class="plugin-viewer">
         <li class="title title-upper">
@@ -31,7 +34,7 @@
           <a href="#"><i class="material-icons">person</i>Players</a>
         </li>
         <li class="srv-mgt">
-          <a routerLink="/panel/minecraft/plugins"><i class="material-icons">developer_board</i>Plugins</a>
+          <a routerLink="/panel/minecraft/plugins" [class.selected]="currentUrl == '/panel/minecraft/plugins'"><i class="material-icons">settings_input_hdmi</i>Plugins</a>
         </li>
         <li class="srv-mgt">
           <a href="#"><i class="material-icons">link</i>Domain</a>

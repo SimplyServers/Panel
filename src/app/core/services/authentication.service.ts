@@ -80,6 +80,18 @@ export class AuthenticationService{
         return data;
       }));
   }
+  addSubuser(server: string, email: string){
+    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/addSubuser",{email: email}, {headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+  removeSubuser(server: string, id: string){
+    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/removeSubuser",{id: id}, {headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
   reinstallServer(server: string){
     return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/reinstall",{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {

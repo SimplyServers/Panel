@@ -51,6 +51,7 @@ export class PanelFrameComponent implements OnInit {
     });
 
     this.selectedServer.serverEmitter.subscribe(() => {
+      this.serverSocket.cacheConsole('');
       this.updateStatus();
     });
   }

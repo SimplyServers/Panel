@@ -18,7 +18,8 @@ export class NavbarComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         this.currentUrl = e.url;
         this.login = this.auth.isLoggedIn();
-        this.username = this.auth.getUser().username;
+        if(this.login)
+          this.username = this.auth.getUser().username;
       }
     });
   }

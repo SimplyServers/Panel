@@ -57,7 +57,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       //On server update
       this.selectedServer.serverEmitter.subscribe(() => {
-        this.serverSocket.cacheConsole('');
         this.updateServer();
       });
     }

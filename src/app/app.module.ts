@@ -23,8 +23,9 @@ import {NotifierModule, NotifierOptions} from 'angular-notifier';
 import { PanelFrameComponent } from './controllers/panel/panel-frame/panel-frame.component';
 import {AppLoadService} from './core/services/app-load.service';
 import {Router} from '@angular/router';
-import { PanelSettingsComponent } from './panel-settings/panel-settings.component';
-import { PanelPluginsComponent } from './panel-plugins/panel-plugins.component';
+import { PanelSettingsComponent } from './controllers/panel/panel-settings/panel-settings.component';
+import { PanelPluginsComponent } from './controllers/panel/panel-plugins/panel-plugins.component';
+import { PanelSubownersComponent } from './controllers/panel/panel-subowners/panel-subowners.component';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -90,6 +91,7 @@ const customNotifierOptions: NotifierOptions = {
     PanelFrameComponent,
     PanelSettingsComponent,
     PanelPluginsComponent,
+    PanelSubownersComponent,
   ],
   imports: [
     NotifierModule.withConfig(customNotifierOptions),
