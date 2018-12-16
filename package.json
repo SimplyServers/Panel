@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod": "ng build --prod && node ss-minifier.js"
+    "build:prod": "ng build --prod && node ss-minifier.js",
+    "build:prerender": "node prerender.js"
   },
   "private": true,
   "dependencies": {
@@ -33,11 +34,13 @@
     "@angular/cli": "~6.2.4",
     "@angular/compiler-cli": "^6.1.0",
     "@angular/language-service": "^6.1.0",
+    "@angular/platform-server": "^6.1.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^8.10.38",
     "@types/socket.io-client": "^1.4.32",
     "codelyzer": "~4.3.0",
+    "express": "^4.16.4",
     "html-minifier": "^3.5.21",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -46,7 +49,11 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "lodash": "^4.17.11",
+    "mz": "^2.7.0",
+    "npm-run-all": "^4.1.5",
     "protractor": "~5.4.0",
+    "puppeteer": "^1.11.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~2.9.2"

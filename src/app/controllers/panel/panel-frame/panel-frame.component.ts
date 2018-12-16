@@ -39,6 +39,8 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
     this.status = this.serverSocket.lastStatus;
     this.serverSocket.getSocket(this.currentServer._id);
 
+    console.log(JSON.stringify(this.currentServer));
+
     //Typescript can be super dumb sometimes
     const views = <any>this.currentServer.preset.special.views;
     this.isMinecraft = views.indexOf("minecraft") > -1;

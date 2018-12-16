@@ -18,6 +18,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   currentServer: ServerDetails;
   subUsers: any;
 
+  loading = true;
   error: string;
   addLoading = false;
   addSubmitted = false;
@@ -51,7 +52,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   loadSubusers(){
     this.currentServer = this.selectedServer.getCurrentServer();
 
-    console.log("loading subs...");
+    this.loading = false;
     if(!this.currentServer.isOwner){
       this.router.navigateByUrl('/panel');
     }

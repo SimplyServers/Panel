@@ -101,7 +101,10 @@ const customNotifierOptions: NotifierOptions = {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserModule.withServerTransition(
+      {appId: 'simplyservers'}
+    )
   ],
   providers: [AuthenticationService, APIInterceptor, { provide: APP_INITIALIZER, useFactory: init_any, deps: [SSAnalyticsService], multi: true }, { provide: APP_INITIALIZER, useFactory: init_servers, deps: [AppLoadService], multi: true }],
   bootstrap: [AppComponent]

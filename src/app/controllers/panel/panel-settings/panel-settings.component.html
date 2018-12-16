@@ -1,3 +1,17 @@
-<p>
-  panel-settings works!
-</p>
+<app-panel-frame>
+  <div id="loading" *ngIf="loading">
+    <div class="spinner"></div>
+  </div>
+  <div class="row" id="settings" *ngIf="!loading">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          Server settings
+        </div>
+        <div class="card-block">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</app-panel-frame>

@@ -13,6 +13,6 @@ export interface ServerDetails {
   special: {
     minecraftPlugins: object
   }
-  isOwner?: boolean
+  isOwner?: boolean,
   _id: string
 }

@@ -14,5 +14,7 @@ export interface PresetDetails {
   },
   preinstalledPlugins: object,
   allowSwitchingTo: object,
+  creditsPerDay: number,
+  maxPlugins: number
   _id: string
 }
