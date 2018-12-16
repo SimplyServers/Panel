@@ -22,7 +22,6 @@ import { PanelMinecraftPluginsComponent } from './controllers/panel/panel-minecr
 import {NotifierModule, NotifierOptions} from 'angular-notifier';
 import { PanelFrameComponent } from './controllers/panel/panel-frame/panel-frame.component';
 import {AppLoadService} from './core/services/app-load.service';
-import {Router} from '@angular/router';
 import { PanelSettingsComponent } from './controllers/panel/panel-settings/panel-settings.component';
 import { PanelPluginsComponent } from './controllers/panel/panel-plugins/panel-plugins.component';
 import { PanelSubownersComponent } from './controllers/panel/panel-subowners/panel-subowners.component';
@@ -101,10 +100,7 @@ const customNotifierOptions: NotifierOptions = {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpModule,
-    HttpClientModule,
-    BrowserModule.withServerTransition(
-      {appId: 'simplyservers'}
-    )
+    HttpClientModule
   ],
   providers: [AuthenticationService, APIInterceptor, { provide: APP_INITIALIZER, useFactory: init_any, deps: [SSAnalyticsService], multi: true }, { provide: APP_INITIALIZER, useFactory: init_servers, deps: [AppLoadService], multi: true }],
   bootstrap: [AppComponent]
