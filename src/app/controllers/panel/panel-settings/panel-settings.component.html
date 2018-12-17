@@ -1,15 +1,53 @@
 <app-panel-frame>
-  <div id="loading" *ngIf="loading">
+  <div *ngIf="loading" id="loading">
     <div class="spinner"></div>
   </div>
+
   <div class="row" id="settings" *ngIf="!loading">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          Server settings
+          <span>General Settings</span>
         </div>
         <div class="card-block">
-
+          <div>
+            <p><b>Please note:</b> Changing your server plan may have unintended side-effects such as plugin removal. This change may be irreversible, due to certain technical limitations of certain games.</p>
+            <button type="button" class="btn btn-secondary btn-block server-action">Change Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12" id="danger">
+      <div class="card">
+        <div class="card-header">
+          <span>Danger Zone</span>
+        </div>
+        <div class="card-block">
+          <p><b>Warning:</b> Server removal will result in immediate permanent loss of data. We recommend downloading your server files on a daily basis and backing up your data. We are not able to recover your server after deletion.</p>
+          <div>
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" data-toggle="modal" data-target="#removeModal" type="button" class="btn btn-danger btn-block server-action">Remove My Server
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reinstallModalLabel">Are you sure?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><b>Wait just one moment!</b> Are you sure you want to remove your server? If your experiencing technical issues, our support team would be happy to assist you.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind</button>
+          <button [disabled]="serverSocket.lastStatus !== 'Stopped'" type="button" data-dismiss="modal" (click)="removeServer()" class="btn btn-primary">I'm sure</button>
         </div>
       </div>
     </div>

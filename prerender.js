@@ -60,7 +60,7 @@ async function main() {
   server.close();
 }
 
-// Run the main asyn function
+// Run the main async function
 main()
   .then(() => console.log('[SS] Done prerendering.'))
   .catch(err => {

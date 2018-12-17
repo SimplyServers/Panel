@@ -13,6 +13,8 @@ export class SelectedServerService {
   public serverEmitter = new EventEmitter();
   public servers: any;
 
+  ownsOne = false;
+
   constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient) {
   }
 
@@ -31,9 +33,12 @@ export class SelectedServerService {
     return this.currentServer;
   }
 
+  resetCurrentServer(){
+    this.setCurrentServer(this.servers[0], true)
+  }
+
   setCurrentServer(server, emit?) {
     this.currentServer = server;
-    console.log("switched server to: " + JSON.stringify(this.currentServer));
     if(emit === undefined){
       this.serverEmitter.emit(); //Emit by default
     }else{
@@ -60,6 +65,13 @@ export class SelectedServerService {
         return data.servers;
       })).subscribe(data => {
       this.servers = data;
+
+      this.ownsOne = false;
+      this.servers.map(server => {
+        if(server.isOwner){
+          this.ownsOne = true;
+        }
+      });
 
       //The callback is supposed to be first. We may need to execute some important action in it.
       if(callback)

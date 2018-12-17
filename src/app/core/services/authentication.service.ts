@@ -42,6 +42,13 @@ export class AuthenticationService{
       }));
   }
 
+  removeServer(server: string){
+    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/remove",{headers: {Authorization: "Token " + this.getUser().token }})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
   submitCommand(server: string, command: string){
     return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/control/command", {command: command},{headers: {Authorization: "Token " + this.getUser().token }})
       .pipe(map(data => {

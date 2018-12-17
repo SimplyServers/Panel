@@ -25,7 +25,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   selectedServerEmitter: Subject<any>;
   statusEmitter: Subject<any>;
 
-  constructor(private serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService, private router: Router) {
+  constructor(private serverSocket: ServerSocketManagerService, public selectedServer: SelectedServerService, private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.currentUrl = e.url;
@@ -34,12 +34,14 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(){
+    if(Object.keys(this.selectedServer.servers).length < 1){
+      this.router.navigateByUrl('/panel/create');
+    }
+
     this.currentServer = this.selectedServer.getCurrentServer();
     this.servers = this.selectedServer.getServers();
     this.status = this.serverSocket.lastStatus;
     this.serverSocket.getSocket(this.currentServer._id);
-
-    console.log(JSON.stringify(this.currentServer));
 
     //Typescript can be super dumb sometimes
     const views = <any>this.currentServer.preset.special.views;
@@ -48,10 +50,6 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(Object.keys(this.selectedServer.servers).length < 1){
-      this.router.navigateByUrl('/panel/create');
-    }
-
     this.updateStatus();
 
     this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {

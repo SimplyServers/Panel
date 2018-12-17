@@ -4,11 +4,19 @@
     <div class="dropdown">
       <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
         <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}"
-                [selected]="server._id === currentServer">{{ server.isOwner ? server.name : server.name + " (sub-user)" }}</option>
+                [selected]="server._id === currentServer._id">{{ server.isOwner ? server.name : server.name + " (sub-user)" }}</option>
       </select>
     </div>
     <ul class="sidebar-content">
-      <li class="title">
+      <div *ngIf="!selectedServer.ownsOne">
+        <li class="title">
+          <span>Account:</span>
+        </li>
+        <li class="srv-mgt">
+          <a routerLink="/panel/create"><i class="material-icons">add_box</i>Create Server</a>
+        </li>
+      </div>
+      <li class="title title-upper">
         <span>Manage:</span>
       </li>
       <li class="srv-mgt" [class.selected]="currentUrl == '/panel'">
@@ -34,7 +42,8 @@
           <a href="#"><i class="material-icons">person</i>Players</a>
         </li>
         <li class="srv-mgt">
-          <a routerLink="/panel/minecraft/plugins" [class.selected]="currentUrl == '/panel/minecraft/plugins'"><i class="material-icons">settings_input_hdmi</i>Plugins</a>
+          <a routerLink="/panel/minecraft/plugins" [class.selected]="currentUrl == '/panel/minecraft/plugins'"><i
+            class="material-icons">settings_input_hdmi</i>Plugins</a>
         </li>
         <li class="srv-mgt">
           <a href="#"><i class="material-icons">link</i>Domain</a>

@@ -116,7 +116,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.startServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
-      this.notify.notify('error', 'Failed to turn the server on; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to turn the server on; ' + err);
     });
   }
 
@@ -126,7 +126,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.stopServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
-      this.notify.notify('error', 'Failed to turn the server off; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to turn the server off; ' + err);
     });
   }
 
@@ -136,7 +136,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.killServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
-      this.notify.notify('error', 'Failed to kill server; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to kill server; ' + err);
     });
   }
 
@@ -146,7 +146,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.installServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
-      this.notify.notify('error', 'Failed to install server; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to install server; ' + err);
     });
   }
 
@@ -156,7 +156,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.reinstallServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
-      this.notify.notify('error', 'Failed to reinstall server; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to reinstall server; ' + err);
     });
   }
 
@@ -177,7 +177,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }, (err) => {
       this.commandLoading = false;
       this.commandSubmitted = false;
-      this.notify.notify('error', 'Failed to submit command; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to submit command; ' + err);
     });
   }
 

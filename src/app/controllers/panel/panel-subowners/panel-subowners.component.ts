@@ -18,7 +18,6 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   currentServer: ServerDetails;
   subUsers: any;
 
-  loading = true;
   error: string;
   addLoading = false;
   addSubmitted = false;
@@ -52,7 +51,6 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   loadSubusers(){
     this.currentServer = this.selectedServer.getCurrentServer();
 
-    this.loading = false;
     if(!this.currentServer.isOwner){
       this.router.navigateByUrl('/panel');
     }
@@ -85,7 +83,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
       })
 
     }, (err) => {
-      this.error = err.error.msg;
+      this.error = err;
     });
   }
 }

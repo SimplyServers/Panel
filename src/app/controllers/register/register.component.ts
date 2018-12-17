@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); //Good login! Return to dash /w returnUrl
       }
     }, (err) => {
-      this.error = err.error.msg;
+      this.error = err;
     });
   }
 
