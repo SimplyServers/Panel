@@ -4,6 +4,7 @@ import {PasswordValidation} from "../../core/password-validation";
 import {TokenPayload} from "../../core/models/token-payload";
 import {AuthenticationService} from "../../core/services/authentication.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PasswordStrength} from '../../core/password-strength';
 
 @Component({
   selector: 'app-register',

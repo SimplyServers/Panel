@@ -28,7 +28,8 @@
     "core-js": "^2.5.4",
     "rxjs": "~6.2.0",
     "socket.io-client": "^2.2.0",
-    "zone.js": "~0.8.26"
+    "zone.js": "~0.8.26",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.8.0",
@@ -40,6 +41,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^8.10.38",
     "@types/socket.io-client": "^1.4.32",
+    "@types/zxcvbn": "^4.4.0",
     "codelyzer": "~4.3.0",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1",
