@@ -18,12 +18,13 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
 
   loading = true;
 
-  constructor(private auth: AuthenticationService, public serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService, private notify: NotifierService, private router: Router) { }
+  constructor(private auth: AuthenticationService, public serverSocket: ServerSocketManagerService, private selectedServer: SelectedServerService, private notify: NotifierService, private router: Router) {
+  }
 
-  updateServer(){
+  updateServer() {
     this.currentServer = this.selectedServer.getCurrentServer();
 
-    if(!this.currentServer.isOwner){
+    if (!this.currentServer.isOwner) {
       this.router.navigateByUrl('/panel');
     }
 
@@ -31,7 +32,7 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(this.selectedServer.getCurrentServer() !== undefined) {
+    if (this.selectedServer.getCurrentServer() !== undefined) {
       this.updateServer();
 
       //On server update
@@ -42,11 +43,11 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined)
       this.selectedServerEmitter.unsubscribe();
   }
 
-  removeServer(){
+  removeServer() {
     if (this.serverSocket.lastStatus !== 'Stopped')
       return;
     this.auth.removeServer(this.currentServer._id).subscribe(() => {

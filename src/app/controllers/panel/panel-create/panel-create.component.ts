@@ -29,6 +29,11 @@ export class PanelCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.selectedServer.ownsOne){
+      this.router.navigateByUrl('/panel');
+      return;
+    }
+
     this.createForm = this.formBuilder.group({
       preset: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
       name: ['', Validators.compose([Validators.required, Validators.maxLength(20)])],

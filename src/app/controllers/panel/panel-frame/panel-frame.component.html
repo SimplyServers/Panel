@@ -31,7 +31,7 @@
       <li class="srv-mgt end" *ngIf="isOwner" [class.selected]="currentUrl == '/panel/settings'">
         <a routerLink="/panel/settings"><i class="material-icons">settings</i>Settings</a>
       </li>
-      <li class="srv-mgt end" [class.selected]="currentUrl == '/panel/plugins'">
+      <li *ngIf="!isMinecraft" class="srv-mgt end" [class.selected]="currentUrl == '/panel/plugins'">
         <a routerLink="/panel/settings"><i class="material-icons">developer_board</i>Mods</a>
       </li>
       <div *ngIf="isMinecraft" class="plugin-viewer">
