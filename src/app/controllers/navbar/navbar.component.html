@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-toggleable-md navbar-inverse">
-  <a href="/" class="navbar-brand text-primary">Simply Servers Alpha</a>
+  <a routerLink="/" class="navbar-brand text-primary">Simply Servers Alpha</a>
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
           aria-label="Toggle navigation">
@@ -22,6 +22,9 @@
       </li>
       <li class="nav-item" *ngIf="!login">
         <a class="nav-link text-primary" routerLink="/login">Login</a>
+      </li>
+      <li class="nav-item" *ngIf="!login">
+        <a class="nav-link text-primary" routerLink="/register">Register</a>
       </li>
       <li class="nav-item dropdown" *ngIf="login">
         <a class="nav-link dropdown-toggle text-primary" href="#" id="navbarAccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

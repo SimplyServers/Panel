@@ -4,10 +4,10 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-console.log(`%c                                    ________________________________________
-                                  Want to help change the way game servers work?
-                                       < https://simplyservers.io/apply >
-                                    ________________________________________
+console.log(`%c                                        ________________________________________
+
+                                         Made with <3 by the SimplyServers Team.
+                                        ________________________________________
                      .__               .__                                                           .__        
                 _____|__| _____ ______ |  | ___.__. ______ ______________  __ ___________  ______    |__| ____  
                /  ___/  |/     \\\\____ \\|  |<   |  |/  ___// __ \\_  __ \\  \\/ // __ \\_  __ \\/  ___/    |  |/  _ \\ 

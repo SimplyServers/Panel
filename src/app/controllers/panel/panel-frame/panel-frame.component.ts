@@ -19,6 +19,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
 
   isMinecraft = false;
   isOwner = false;
+  hidePlugins = false;
 
   currentUrl: string;
 
@@ -46,6 +47,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
     //Typescript can be super dumb sometimes
     const views = <any>this.currentServer.preset.special.views;
     this.isMinecraft = views.indexOf("minecraft") > -1;
+    this.hidePlugins = views.indexOf("no_plugin_viewer") > -1;
     this.isOwner = this.currentServer.isOwner;
   }
 
