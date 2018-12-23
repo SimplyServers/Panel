@@ -25,6 +25,7 @@ import {AppLoadService} from './core/services/app-load.service';
 import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
 import {PanelPluginsComponent} from './controllers/panel/panel-plugins/panel-plugins.component';
 import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel-subowners.component';
+import {RecaptchaModule} from 'ng-recaptcha';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -99,7 +100,8 @@ const customNotifierOptions: NotifierOptions = {
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    HttpModule,
+    HttpClientModule,
+    RecaptchaModule,
     HttpClientModule
   ],
   providers: [AuthenticationService, {

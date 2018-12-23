@@ -28,6 +28,11 @@ export class PanelCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
   }
 
+  resolved(captchaResponse){
+      console.log("captcha: " + captchaResponse);
+      this.createForm.controls.recaptchaReactive.setValue(captchaResponse);
+  }
+
   ngOnInit() {
     if(this.selectedServer.ownsOne){
       this.router.navigateByUrl('/panel');
@@ -37,7 +42,8 @@ export class PanelCreateComponent implements OnInit {
     this.createForm = this.formBuilder.group({
       preset: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
       name: ['', Validators.compose([Validators.required, Validators.maxLength(20)])],
-      motd: ['', Validators.compose([Validators.required, Validators.maxLength(100)])]
+      motd: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
+      recaptchaReactive: ['', [Validators.required]]
     });
 
     this.auth.getPresets().subscribe((data) => {

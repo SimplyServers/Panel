@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import {ConfigService} from "../../config.service";
-import {TokenPayload} from "../models/token-payload";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {map} from 'rxjs/operators';
+import {ConfigService} from '../../config.service';
+import {TokenPayload} from '../models/token-payload';
 import {ServerPayload} from '../models/server-payload';
 
 @Injectable()
-export class AuthenticationService{
+export class AuthenticationService {
   private user: any;
 
-  constructor(private http: HttpClient, private config: ConfigService) { }
+  constructor(private http: HttpClient, private config: ConfigService) {
+  }
 
   login(token: TokenPayload) {
     return this.http.post<any>(this.config.getAPIURL() + "auth/login", token)
@@ -21,90 +22,97 @@ export class AuthenticationService{
       }));
   }
 
-  register(newUser: TokenPayload){
-    return this.http.post<any>(this.config.getAPIURL() + "auth/register", newUser)
+  register(newUser: TokenPayload) {
+    return this.http.post<any>(this.config.getAPIURL() + 'auth/register', newUser)
       .pipe(map(data => {
         return data.user;
       }));
   }
 
-  getPresets(){
-    return this.http.get<any>(this.config.getAPIURL() + "user/getPresets", {headers: {Authorization: "Token " + this.getUser().token }})
+  getPresets() {
+    return this.http.get<any>(this.config.getAPIURL() + 'user/getPresets', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data.presets;
       }));
   }
 
-  createServer(server: ServerPayload){
-    return this.http.post<any>(this.config.getAPIURL() + "server/create", server,{headers: {Authorization: "Token " + this.getUser().token }})
+  createServer(server: ServerPayload) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/create', server, {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data.server;
       }));
   }
 
-  removeServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/remove",{headers: {Authorization: "Token " + this.getUser().token }})
+  removeServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/remove', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
 
-  submitCommand(server: string, command: string){
-    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/control/command", {command: command},{headers: {Authorization: "Token " + this.getUser().token }})
+  submitCommand(server: string, command: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/control/command', {command: command}, {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
 
-  killServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/kill",{headers: {Authorization: "Token " + this.getUser().token }})
+  killServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/power/kill', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
 
-  startServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/on",{headers: {Authorization: "Token " + this.getUser().token }})
+  startServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/power/on', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
-  getServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/",{headers: {Authorization: "Token " + this.getUser().token }})
+
+  getServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data.server;
       }));
   }
-  stopServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/power/off",{headers: {Authorization: "Token " + this.getUser().token }})
+
+  stopServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/power/off', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
-  installServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/install",{headers: {Authorization: "Token " + this.getUser().token }})
+
+  installServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/control/install', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
-  addSubuser(server: string, email: string){
-    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/addSubuser",{email: email}, {headers: {Authorization: "Token " + this.getUser().token }})
+
+  addSubuser(server: string, email: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/addSubuser', {email: email}, {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
-  removeSubuser(server: string, id: string){
-    return this.http.post<any>(this.config.getAPIURL() + "server/" + server + "/removeSubuser",{id: id}, {headers: {Authorization: "Token " + this.getUser().token }})
+
+  removeSubuser(server: string, id: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/removeSubuser', {id: id}, {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
-  reinstallServer(server: string){
-    return this.http.get<any>(this.config.getAPIURL() + "server/" + server + "/control/reinstall",{headers: {Authorization: "Token " + this.getUser().token }})
+
+  reinstallServer(server: string) {
+    return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/control/reinstall', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
       }));
   }
+
   getUser() {
     if (!this.user) { //Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');
@@ -112,11 +120,11 @@ export class AuthenticationService{
     return JSON.parse(this.user);
   }
 
-  clearUser(){
+  clearUser() {
     this.user = undefined;
   }
 
-  isLoggedIn(){ //Checks for session token. Then validates it.
+  isLoggedIn() { //Checks for session token. Then validates it.
     const user = this.getUser(); //Maybe a lil overkill
     if (user) {
       let payload = user.token.split('.')[1]; //Get the data out of the stored JWT payload and read it.
