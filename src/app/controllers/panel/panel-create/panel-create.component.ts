@@ -22,15 +22,11 @@ export class PanelCreateComponent implements OnInit {
   server: ServerPayload = {
     preset: '',
     name: '',
-    motd: ''
+    motd: '',
+    captcha: ''
   };
 
   constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
-  }
-
-  resolved(captchaResponse){
-      console.log("captcha: " + captchaResponse);
-      this.createForm.controls.recaptchaReactive.setValue(captchaResponse);
   }
 
   ngOnInit() {
@@ -60,6 +56,7 @@ export class PanelCreateComponent implements OnInit {
     this.server.preset = this.createForm.controls.preset.value;
     this.server.name = this.createForm.controls.name.value;
     this.server.motd = this.createForm.controls.motd.value;
+    this.server.captcha = this.createForm.controls.recaptchaReactive.value;
 
     this.auth.createServer(this.server).subscribe(() => {
       this.selectedServer.updateCache(false, () => {
