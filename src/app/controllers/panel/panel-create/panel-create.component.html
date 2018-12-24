@@ -1,6 +1,7 @@
 <app-navbar></app-navbar>
 <div *ngIf="loading" id="loading">
   <div class="spinner"></div>
+  <p>Provisioning your server...</p>
 </div>
 
 <div *ngIf="!loading" class="container">
@@ -18,14 +19,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="preset">Server type</label>
+      <label for="preset">Server plan</label>
       <select id="preset" formControlName="preset" class="form-control"
               [ngClass]="{ 'is-invalid': submitted && createForm.controls['preset'].errors }">
         <option *ngFor="let preset of serverPlans" [ngValue]="preset._id">{{ preset.name }}</option>
       </select>
 
       <div *ngIf="submitted && createForm.controls['preset'].errors" class="invalid-feedback">
-        <div class="invalid" *ngIf="createForm.controls['preset'].errors.required">Type is required</div>
+        <div class="invalid" *ngIf="createForm.controls['preset'].errors.required">Plan is required</div>
       </div>
     </div>
     <div class="form-group">

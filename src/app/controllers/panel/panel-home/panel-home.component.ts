@@ -98,6 +98,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   updateServer() {
+    this.loading = true;
     this.currentServer = this.selectedServer.getCurrentServer();
     this.serverSocket.getSocket(this.currentServer._id, () => {
       this.loading = false;
