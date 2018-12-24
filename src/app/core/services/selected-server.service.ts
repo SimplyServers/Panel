@@ -60,6 +60,7 @@ export class SelectedServerService {
   }
 
   updateCache(emit, callback?) {
+    console.log('updating server cache...');
     this.http.get<any>(this.config.getAPIURL() + 'user/getServers', {headers: {Authorization: 'Token ' + this.auth.getUser().token}})
       .pipe(map(data => {
         return data.servers;
@@ -72,6 +73,8 @@ export class SelectedServerService {
           this.ownsOne = true;
         }
       });
+
+      console.log('cache updated.');
 
       //The callback is supposed to be first. We may need to execute some important action in it.
       if(callback)

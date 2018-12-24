@@ -10,7 +10,6 @@ import {LoginComponent} from './controllers/login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegisterComponent} from './controllers/register/register.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpModule} from '@angular/http';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LogoutComponent} from './controllers/logout/logout.component';
 import {APIInterceptor} from './core/apiinterceptor';

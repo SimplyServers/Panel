@@ -25,3 +25,12 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+//Override bug
+import {RecaptchaComponent} from 'ng-recaptcha';
+
+RecaptchaComponent.prototype.ngOnDestroy = function () {
+  if (this.subscription) {
+    this.subscription.unsubscribe();
+  }
+};
