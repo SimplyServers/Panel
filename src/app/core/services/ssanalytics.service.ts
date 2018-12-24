@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class SSAnalyticsService {
 
-  public loadData: string;
+  public loadData: any;
 
   constructor(private http: HttpClient, private config: ConfigService) {}
 

@@ -4,6 +4,7 @@ import {SelectedServerService} from '../../../core/services/selected-server.serv
 import {ServerDetails} from '../../../core/models/server-details';
 import {NavigationEnd, Router} from '@angular/router';
 import {Subject} from 'rxjs';
+import {SSAnalyticsService} from '../../../core/services/ssanalytics.service';
 
 @Component({
   selector: 'app-panel-frame',
@@ -26,7 +27,9 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   selectedServerEmitter: Subject<any>;
   statusEmitter: Subject<any>;
 
-  constructor(private serverSocket: ServerSocketManagerService, public selectedServer: SelectedServerService, private router: Router) {
+  motd = '';
+
+  constructor(private serverSocket: ServerSocketManagerService, public selectedServer: SelectedServerService, private router: Router, private analytics: SSAnalyticsService) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.currentUrl = e.url;
@@ -52,6 +55,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.motd = this.analytics.loadData.motd;
     this.updateStatus();
 
     this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {

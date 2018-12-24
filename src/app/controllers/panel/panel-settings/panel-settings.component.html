@@ -10,10 +10,14 @@
           <span>General Settings</span>
         </div>
         <div class="card-block">
-          <div>
+          <div id="empty-change" *ngIf="nothingToChange">
+            <p>There seems to be nothing here...</p>
+          </div>
+          <div *ngIf="!nothingToChange">
             <p><b>Please note:</b> Changing your server plan may have unintended side-effects such as plugin removal.
               This change may be irreversible, due to certain technical limitations of certain games.</p>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" data-toggle="modal" data-target="#changeModal"
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" data-toggle="modal"
+                    data-target="#changeModal"
                     type="button" class="btn btn-secondary btn-block server-action">Change Plan
             </button>
           </div>
@@ -60,10 +64,11 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModal" aria-hidden="true">
+  <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModal" aria-hidden="true"
+       #changeModal>
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form [formGroup]="changeForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="changeForm" (ngSubmit)="updatePlan()">
           <div class="modal-header">
             <h5 class="modal-title" id="changeModalLabel">Update server plan</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -75,19 +80,22 @@
             <div class="form-group">
               <label for="preset">Server plan</label>
               <select id="preset" formControlName="preset" class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && createForm.controls['preset'].errors }">
-                <option *ngFor="let preset of serverPlans" [ngValue]="preset._id">{{ preset.name }}</option>
+                      [ngClass]="{ 'is-invalid': changeSubmitted && changeForm.controls['preset'].errors }">
+                <option *ngFor="let preset of presetList" [ngValue]="preset._id">{{ preset.name }}</option>
               </select>
 
-              <div *ngIf="submitted && createForm.controls['preset'].errors" class="invalid-feedback">
-                <div class="invalid" *ngIf="createForm.controls['preset'].errors.required">Type is required</div>
+              <div *ngIf="changeSubmitted && changeForm.controls['preset'].errors" class="invalid-feedback">
+                <div class="invalid" *ngIf="changeForm.controls['preset'].errors.required">Type is required</div>
               </div>
+            </div>
+            <div *ngIf="error" class="invalid-feedback">
+              <div class="invalid bigerror">Failed to change preset; {{ error }}</div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" type="button" data-dismiss="modal"
-                    (click)="removeServer()" class="btn btn-primary">Update plan
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" type="submit"
+                    class="btn btn-primary">Update plan
             </button>
           </div>
         </form>

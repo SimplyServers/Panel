@@ -57,6 +57,13 @@ export class AuthenticationService {
       }));
   }
 
+  changePreset(server: string, preset: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/changePreset', {preset: preset}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
   killServer(server: string) {
     return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/power/kill', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {

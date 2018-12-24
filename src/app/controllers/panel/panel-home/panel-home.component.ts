@@ -98,6 +98,10 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   updateServer() {
+    this.commandForm = this.formBuilder.group({
+      command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+    });
+
     this.loading = true;
     this.currentServer = this.selectedServer.getCurrentServer();
     this.serverSocket.getSocket(this.currentServer._id, () => {
@@ -105,10 +109,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.consoleHistory = this.serverSocket.getConsole();
-
-    this.commandForm = this.formBuilder.group({
-      command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-    });
   }
 
   serverOn() {
