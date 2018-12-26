@@ -51,12 +51,11 @@ export class SelectedServerService {
 
   reloadCurrentServer(){
     const servers = <any> this.servers;
-    let updatedServer = servers.find(server => server._id === this.currentServer);
+    let updatedServer = servers.find(server => server._id === this.currentServer._id);
     if(updatedServer === undefined){
-      this.currentServer = updatedServer;
-      this.getCurrentServer();
+      this.setCurrentServer(this.getCurrentServer(), true);
     }else {
-      this.currentServer = updatedServer;
+      this.setCurrentServer(updatedServer, true);
     }
   }
 

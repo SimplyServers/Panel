@@ -32,9 +32,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
     this.addForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
-
     this.loadSubusers();
-
     //On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.loadSubusers();
@@ -55,7 +53,6 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
     }
 
     this.subUsers = this.currentServer.sub_owners;
-
   }
 
   removeUser(id) {
@@ -64,7 +61,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
         this.selectedServer.reloadCurrentServer();
       });
     }, (err) => {
-      this.notify.notify('error', 'Failed to remove subuser; ' + err.error.msg);
+      this.notify.notify('error', 'Failed to remove subuser; ' + err);
     });
   }
 
