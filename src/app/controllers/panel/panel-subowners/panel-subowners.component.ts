@@ -33,29 +33,29 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
 
-    if(this.selectedServer.getCurrentServer() !== undefined) {
-      this.loadSubusers();
+    this.loadSubusers();
 
-      //On server update
-      this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
-        this.loadSubusers();
-      });
-    }
+    //On server update
+    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
+      this.loadSubusers();
+    });
+
   }
 
   ngOnDestroy() {
-    if(this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined)
       this.selectedServerEmitter.unsubscribe();
   }
 
-  loadSubusers(){
+  loadSubusers() {
     this.currentServer = this.selectedServer.getCurrentServer();
 
-    if(!this.currentServer.isOwner){
+    if (!this.currentServer.isOwner) {
       this.router.navigateByUrl('/panel');
     }
 
     this.subUsers = this.currentServer.sub_owners;
+
   }
 
   removeUser(id) {
@@ -80,7 +80,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
         this.addSubmitted = false;
         this.addLoading = false;
         this.addModal.nativeElement.click();
-      })
+      });
 
     }, (err) => {
       this.error = err;

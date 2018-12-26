@@ -25,6 +25,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   currentUrl: string;
 
   selectedServerEmitter: Subject<any>;
+  serverCacheEmitter: Subject<any>;
   statusEmitter: Subject<any>;
 
   motd = '';
@@ -38,12 +39,15 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(){
+    console.log(this.selectedServer.servers);
     if(Object.keys(this.selectedServer.servers).length < 1){
       this.router.navigateByUrl('/panel/create');
+      return;
+    } else {
+      console.log('everything is ok');
     }
 
     this.currentServer = this.selectedServer.getCurrentServer();
-    this.servers = this.selectedServer.getServers();
     this.status = this.serverSocket.lastStatus;
     this.serverSocket.getSocket(this.currentServer._id);
 
@@ -54,15 +58,24 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
     this.isOwner = this.currentServer.isOwner;
   }
 
+  updateDropdown() {
+    this.servers = this.selectedServer.getServers();
+  }
+
   ngOnInit() {
     this.motd = this.analytics.loadData.motd;
     this.updateStatus();
+    this.updateDropdown();
 
     this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {
       this.status = data;
     });
 
-    this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
+    this.serverCacheEmitter = this.selectedServer.serverCacheEmitter.subscribe(() => {
+      this.updateDropdown();
+    });
+
+    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.serverSocket.cacheConsole('');
       this.updateStatus();
     });
@@ -73,6 +86,8 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
       this.statusEmitter.unsubscribe();
     if(this.selectedServerEmitter !== undefined)
       this.selectedServerEmitter.unsubscribe();
+    if (this.serverCacheEmitter !== undefined)
+      this.serverCacheEmitter.unsubscribe();
   }
 
   update(server) {

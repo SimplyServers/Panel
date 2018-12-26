@@ -23,7 +23,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   commandLoading = false;
   commandSubmitted = false;
 
-  groupAnnounce = false;
   update = false;
 
   announceEmitter: Subject<any>;
@@ -38,40 +37,29 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    if(this.selectedServer.getCurrentServer() !== undefined) {
-      this.updateServer();
-      this.consoleEmitter = this.serverSocket.consoleEmitter.subscribe(data => {
-        if(this.groupAnnounce) {
-          this.consoleHistory = this.consoleHistory + '\n\n------------\n\n' + data;
-        }else{
-          this.consoleHistory = this.consoleHistory + data;
-        }
-        this.groupAnnounce = false;
-        this.scroll();
-      });
-      this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
-        if(!this.groupAnnounce && this.consoleHistory !== ''){
-          this.consoleHistory = this.consoleHistory + '\n\n------------\n\n[SS MANAGER] ' + data + "\n";
-        }else{
-          this.consoleHistory = this.consoleHistory + '\n[SS MANAGER] ' + data;
-        }
-        this.groupAnnounce = true;
-        this.scroll();
-      });
+    this.updateServer();
+    this.consoleEmitter = this.serverSocket.consoleEmitter.subscribe(data => {
+      this.consoleHistory = this.consoleHistory + data;
+      this.scroll();
+    });
+    this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
+      this.consoleHistory = this.consoleHistory + '➤ [SS] ' + data + '\n';
+      this.scroll();
+    });
 
-      //On server update
-      this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
-        this.updateServer();
-      });
-    }
+    //On server update
+    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
+      this.updateServer();
+    });
+
 
     //Read scroll() todo.
     interval(500).subscribe(() => {
-      if(this.update){
+      if (this.update) {
         this.update = false;
         this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
       }
-    })
+    });
   }
 
   scroll() {
@@ -89,11 +77,11 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.serverSocket.cacheConsole(this.consoleHistory);
-    if(this.announceEmitter !== undefined)
+    if (this.announceEmitter !== undefined)
       this.announceEmitter.unsubscribe();
-    if(this.consoleEmitter !== undefined)
+    if (this.consoleEmitter !== undefined)
       this.consoleEmitter.unsubscribe();
-    if(this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined)
       this.selectedServerEmitter.unsubscribe();
   }
 
@@ -109,6 +97,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.consoleHistory = this.serverSocket.getConsole();
+
   }
 
   serverOn() {

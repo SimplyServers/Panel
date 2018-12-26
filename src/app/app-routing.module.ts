@@ -13,6 +13,8 @@ import {PanelMinecraftPluginsComponent} from './controllers/panel/panel-minecraf
 import {PanelPluginsComponent} from './controllers/panel/panel-plugins/panel-plugins.component';
 import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel-subowners.component';
 import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
+import {ProfileComponent} from './controllers/profile/profile.component';
+import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -35,7 +37,19 @@ const routes: Routes = [
   {
     path: 'logout',
     component: LogoutComponent,
-    data: {title: "Log out"},
+    data: {title: 'Logout'},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'account',
+    component: ProfileComponent,
+    data: {title: 'My Account'},
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'password/change',
+    component: ChangePasswordComponent,
+    data: {title: 'Change Password'},
     canActivate: [AuthGuardService]
   },
   {

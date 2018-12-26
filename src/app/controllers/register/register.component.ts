@@ -57,6 +57,8 @@ export class RegisterComponent implements OnInit {
       }
     }, (err) => {
       this.error = err;
+      this.loading = false;
+      this.submitted = false;
     });
   }
 

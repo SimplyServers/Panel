@@ -76,6 +76,27 @@ body{
   background-color: #2f2f2f;
 }
 
+.dropdown-menu {
+  background-color: #1a1a1d;
+}
+
+.dropdown-item {
+  color: #fff;
+}
+
+.dropdown-divider {
+  background-color: #27272b;
+}
+
+.dropdown-item:hover {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+.dropdown-nohover:hover {
+  background-color: #1a1a1d;
+}
+
 @import "../node_modules/angular-notifier/styles";
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');

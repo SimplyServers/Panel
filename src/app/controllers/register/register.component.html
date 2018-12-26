@@ -1,5 +1,10 @@
 <app-navbar></app-navbar>
-<div class="container">
+<div *ngIf="loading" id="loading">
+  <div class="spinner"></div>
+  <p>Creating your account...</p>
+</div>
+
+<div class="container" *ngIf="!loading">
   <h2>Register</h2>
   <form [formGroup]="registerForm" class="row" (ngSubmit)="onSubmit()">
     <div class="form-group col-12">

@@ -8,6 +8,7 @@ import {ServerPayload} from '../models/server-payload';
 @Injectable()
 export class AuthenticationService {
   private user: any;
+  cachedShards = 0;
 
   constructor(private http: HttpClient, private config: ConfigService) {
   }
@@ -22,10 +23,26 @@ export class AuthenticationService {
       }));
   }
 
+  recacheShards(shards: number) {
+    let user = this.getUser();
+    user.credits = shards;
+    localStorage.setItem('session', JSON.stringify(user));
+  }
+
   register(newUser: TokenPayload) {
     return this.http.post<any>(this.config.getAPIURL() + 'auth/register', newUser)
       .pipe(map(data => {
         return data.user;
+      }));
+  }
+
+  changePassword(existingPassword: string, newPassword: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'auth/changePassword', {
+      newPassword: newPassword,
+      existingPassword: existingPassword
+    }, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data;
       }));
   }
 
@@ -47,6 +64,13 @@ export class AuthenticationService {
     return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/remove', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {
         return data;
+      }));
+  }
+
+  getUserData() {
+    return this.http.get<any>(this.config.getAPIURL() + 'user/my', {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data.user;
       }));
   }
 

@@ -6,7 +6,7 @@ import {SelectedServerService} from '../../../core/services/selected-server.serv
 import {Subject} from 'rxjs';
 import {NotifierService} from 'angular-notifier';
 import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, NgModel, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-panel-settings',
@@ -44,6 +44,7 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
 
     this.loading = false;
     this.presetList = this.currentServer.preset.allowSwitchingTo;
+
   }
 
   ngOnInit() {
@@ -51,14 +52,13 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
       preset: ['', Validators.compose([Validators.required, Validators.maxLength(30)])]
     });
 
-    if (this.selectedServer.getCurrentServer() !== undefined) {
-      this.updateServer();
+    this.updateServer();
 
-      //On server update
-      this.selectedServerEmitter = this.selectedServer.serverEmitter.subscribe(() => {
-        this.updateServer();
-      });
-    }
+    //On server update
+    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
+      this.updateServer();
+    });
+
   }
 
   ngOnDestroy() {
@@ -71,7 +71,12 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
       return;
     this.auth.removeServer(this.currentServer._id).subscribe(() => {
       this.selectedServer.updateCache(true, () => {
-        this.selectedServer.resetCurrentServer();
+        if (Object.keys(this.selectedServer.servers).length >= 1) {
+          this.selectedServer.resetCurrentServer();
+        } else {
+          this.selectedServer.setCurrentServer(undefined, false);
+          this.router.navigateByUrl('/panel/create');
+        }
       });
     }, (err) => {
       this.notify.notify('error', 'Failed to reinstall server; ' + err);

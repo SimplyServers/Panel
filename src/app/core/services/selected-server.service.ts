@@ -3,14 +3,15 @@ import {AuthenticationService} from './authentication.service';
 import {ConfigService} from '../../config.service';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectedServerService {
-
   private currentServer;
-  public serverEmitter = new EventEmitter();
+  public serverCacheEmitter = new EventEmitter();
+  public serverUpdateEmitter = new EventEmitter();
   public servers: any;
 
   ownsOne = false;
@@ -40,10 +41,10 @@ export class SelectedServerService {
   setCurrentServer(server, emit?) {
     this.currentServer = server;
     if(emit === undefined){
-      this.serverEmitter.emit(); //Emit by default
+      this.serverUpdateEmitter.emit(); //Emit by default
     }else{
       if(emit){
-        this.serverEmitter.emit();
+        this.serverUpdateEmitter.emit();
       }
     }
   }
@@ -80,7 +81,7 @@ export class SelectedServerService {
       if(callback)
         callback();
       if(emit){
-        this.serverEmitter.emit();
+        this.serverCacheEmitter.emit();
       }
     });
   }

@@ -31,8 +31,10 @@
           {{username}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
-          <a class="dropdown-item" href="#">Manage account</a>
+          <span class="dropdown-item dropdown-nohover">Shards: {{ shards }}</span>
+          <a class="dropdown-item" routerLink="/shop">Buy Shards</a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/account">Manage account</a>
           <a class="dropdown-item" routerLink="/logout">Logout</a>
         </div>
       </li>

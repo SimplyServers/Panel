@@ -1,5 +1,10 @@
 <app-navbar></app-navbar>
-<div class="container">
+<div *ngIf="loading" id="loading">
+  <div class="spinner"></div>
+  <p>Logging in...</p>
+</div>
+
+<div class="container" *ngIf="!loading">
   <h2>Login</h2>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
