@@ -2,6 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {ConfigService} from '../../config.service';
 import {AuthenticationService} from './authentication.service';
 import * as io from 'socket.io-client';
+import {st} from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,42 @@ export class ServerSocketManagerService {
   }
 
   private handleStatus(data) {
-    switch (data) {
+    //Added support for old version of manager
+    if (Number.isInteger(data)) {
+      this.handleStatusOld(data);
+    } else {
+      this.handleStatusNew(data);
+    }
+
+    this.statusEmitter.emit(this.lastStatus);
+  }
+
+  private handleStatusNew = (status: string) => {
+    switch (status) {
+      case 'Starting':
+        this.lastStatus = 'Starting';
+        break;
+      case 'Stopping':
+        this.lastStatus = 'Stopping';
+        break;
+      case 'Running':
+        this.lastStatus = 'Running';
+        break;
+      case 'Off':
+        this.lastStatus = 'Stopped';
+        break;
+      case 'Crashed':
+        this.lastStatus = 'Crashed';
+        break;
+      default:
+        console.log('got unknown status:' + status);
+        this.lastStatus = 'Loading';
+        break;
+    }
+  };
+  
+  private handleStatusOld = (status: number) => {
+    switch (status) {
       case 0:
         this.lastStatus = 'Starting';
         break;
@@ -60,12 +96,11 @@ export class ServerSocketManagerService {
         this.lastStatus = 'Crashed';
         break;
       default:
-        console.log('got unknown status:' + data.status);
+        console.log('got unknown status:' + status);
         this.lastStatus = 'Loading';
         break;
     }
-    this.statusEmitter.emit(this.lastStatus);
-  }
+  };
 
   private updateSocket(server, callback?) {
     this.currentSocketServer = server;
