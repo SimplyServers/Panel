@@ -15,6 +15,8 @@ import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel
 import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
 import {ProfileComponent} from './controllers/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
+import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
+import {ServerGuardService} from './core/services/server-guard.service';
 
 const routes: Routes = [
   {
@@ -56,7 +58,7 @@ const routes: Routes = [
     path: 'panel',
     component: PanelHomeComponent,
     data: {title: "Your Servers"},
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, ServerGuardService]
   },
   {
     path: 'panel/create',
@@ -68,25 +70,31 @@ const routes: Routes = [
     path: 'panel/minecraft/plugins',
     component: PanelMinecraftPluginsComponent,
     data: {title: "Browse plugins"},
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, ServerGuardService]
   },
   {
     path: 'panel/plugins',
     component: PanelPluginsComponent,
     data: {title: "Browse plugins"},
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, ServerGuardService]
   },
   {
     path: 'panel/subusers',
     component: PanelSubownersComponent,
     data: {title: "Server Sub-users"},
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, ServerGuardService]
   },
   {
     path: 'panel/settings',
     component: PanelSettingsComponent,
     data: {title: "Server Settings"},
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, ServerGuardService]
+  },
+  {
+    path: 'panel/files',
+    component: PanelFilesComponent,
+    data: {title: 'Server Files'},
+    canActivate: [AuthGuardService, ServerGuardService]
   },
   {
     path: '**',

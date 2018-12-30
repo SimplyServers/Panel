@@ -39,14 +39,6 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(){
-    console.log(this.selectedServer.servers);
-    if(Object.keys(this.selectedServer.servers).length < 1){
-      this.router.navigateByUrl('/panel/create');
-      return;
-    } else {
-      console.log('everything is ok');
-    }
-
     this.currentServer = this.selectedServer.getCurrentServer();
     this.status = this.serverSocket.lastStatus;
     this.serverSocket.getSocket(this.currentServer._id);

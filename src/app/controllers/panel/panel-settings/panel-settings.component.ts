@@ -19,7 +19,6 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
   currentServer: ServerDetails;
   selectedServerEmitter: Subject<any>;
 
-  loading = true;
   error: string;
 
   changeLoading = false;
@@ -42,7 +41,6 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/panel');
     }
 
-    this.loading = false;
     this.presetList = this.currentServer.preset.allowSwitchingTo;
 
   }
@@ -75,6 +73,7 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
           this.selectedServer.resetCurrentServer();
         } else {
           this.selectedServer.setCurrentServer(undefined, false);
+          this.serverSocket.cacheConsole('');
           this.router.navigateByUrl('/panel/create');
         }
       });

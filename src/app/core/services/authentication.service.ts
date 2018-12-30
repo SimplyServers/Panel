@@ -60,6 +60,13 @@ export class AuthenticationService {
       }));
   }
 
+  listDir(server: string, path: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/directory', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data.files;
+      }));
+  }
+
   removeServer(server: string) {
     return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/remove', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {

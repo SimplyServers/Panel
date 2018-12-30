@@ -22,13 +22,13 @@
       <li class="srv-mgt" [class.selected]="currentUrl == '/panel'">
         <a routerLink="/panel"><i class="material-icons">code</i>Console</a>
       </li>
-      <li class="srv-mgt">
-        <a href="#"><i class="material-icons">file_copy</i>Files</a>
+      <li class="srv-mgt" [class.selected]="currentUrl == '/panel/files'">
+        <a routerLink="/panel/files"><i class="material-icons">file_copy</i>Files</a>
       </li>
-      <li class="srv-mgt end" *ngIf="isOwner" [class.selected]="currentUrl == '/panel/subusers'">
+      <li class="srv-mgt" *ngIf="isOwner" [class.selected]="currentUrl == '/panel/subusers'">
         <a routerLink="/panel/subusers"><i class="material-icons">people</i>Subusers</a>
       </li>
-      <li class="srv-mgt end" *ngIf="isOwner" [class.selected]="currentUrl == '/panel/settings'">
+      <li class="srv-mgt" *ngIf="isOwner" [class.selected]="currentUrl == '/panel/settings'">
         <a routerLink="/panel/settings"><i class="material-icons">settings</i>Settings</a>
       </li>
       <li *ngIf="!hidePlugins" class="srv-mgt end" [class.selected]="currentUrl == '/panel/plugins'">

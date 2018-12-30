@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.credentials.email = this.loginForm.controls.email.value;
     this.credentials.password = this.loginForm.controls.password.value;
-    this.auth.login(this.credentials).subscribe((data) => {
+    this.auth.login(this.credentials).subscribe(() => {
       this.selectedServer.updateCache(false, () => {
         this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
       });

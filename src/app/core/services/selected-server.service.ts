@@ -4,6 +4,7 @@ import {ConfigService} from '../../config.service';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
+import {ServerSocketManagerService} from './server-socket-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class SelectedServerService {
 
   ownsOne = false;
 
-  constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient) {
+  constructor(private auth: AuthenticationService, private config: ConfigService, private http: HttpClient, private serverSocket: ServerSocketManagerService) {
   }
 
   getCurrentServer() {
@@ -40,12 +41,10 @@ export class SelectedServerService {
 
   setCurrentServer(server, emit?) {
     this.currentServer = server;
-    if(emit === undefined){
-      this.serverUpdateEmitter.emit(); //Emit by default
-    }else{
-      if(emit){
+    if (emit === undefined || emit) {
+      this.serverSocket.getSocket(this.currentServer._id, () => {
         this.serverUpdateEmitter.emit();
-      }
+      });
     }
   }
 

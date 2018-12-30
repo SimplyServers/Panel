@@ -17,7 +17,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   currentServer: ServerDetails;
   consoleHistory = '';
-  loading = true;
 
   commandForm: FormGroup;
   commandLoading = false;
@@ -90,12 +89,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
       command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
     });
 
-    this.loading = true;
     this.currentServer = this.selectedServer.getCurrentServer();
-    this.serverSocket.getSocket(this.currentServer._id, () => {
-      this.loading = false;
-    });
-
     this.consoleHistory = this.serverSocket.getConsole();
 
   }

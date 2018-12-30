@@ -1,9 +1,10 @@
 <app-panel-frame>
-  <div *ngIf="loading" id="loading">
+  <div *ngIf="changeLoading" id="loading">
     <div class="spinner"></div>
+    <p>Loading server data...</p>
   </div>
 
-  <div class="row" id="settings" *ngIf="!loading">
+  <div class="row" id="settings" *ngIf="!changeLoading">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">

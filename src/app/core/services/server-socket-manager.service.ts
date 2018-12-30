@@ -2,7 +2,6 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {ConfigService} from '../../config.service';
 import {AuthenticationService} from './authentication.service';
 import * as io from 'socket.io-client';
-import {st} from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +76,7 @@ export class ServerSocketManagerService {
         break;
     }
   };
-  
+
   private handleStatusOld = (status: number) => {
     switch (status) {
       case 0:

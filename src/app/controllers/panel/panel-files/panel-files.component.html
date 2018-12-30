@@ -1,0 +1,39 @@
+<app-panel-frame>
+  <div class="row" id="files">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <span>Server files</span>
+        </div>
+        <div class="card-block">
+          <ul class="list-group">
+            <li class="list-group-item" id="cwd"><b>Current directory: </b><span id="cwd-path">{{currentPath}}</span>
+            </li>
+            <div class="progress" *ngIf="loading">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1"
+                   aria-valuemin="1" aria-valuemax="1"></div>
+            </div>
+            <li class="list-group-item flex-column align-items-start file-item" (click)="goUp()">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">../</h5>
+              </div>
+              <small class="text-muted">Go to parent...</small>
+            </li>
+            <li class="list-group-item flex-column align-items-start file-item" *ngFor="let file of filesList"
+                (click)="onClick(file)">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">/{{file.name}}</h5>
+                <small class="text-muted">Size: {{getSize(file.size)}}</small>
+              </div>
+              <small class="text-muted"><b>Created: </b> {{file.created}}</small>
+              <small class="text-muted"><b>Modified: </b> {{file.modified}}</small>
+              <small class="text-muted">
+                <b>Type: </b> {{file.isDir ? 'Folder' : file.isFile && file.edible ? 'Edible File' : file.isFile && !file.edible ? 'Non-edible File' : 'Unknown'}}
+              </small>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-panel-frame>
