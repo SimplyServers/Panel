@@ -67,6 +67,20 @@ export class AuthenticationService {
       }));
   }
 
+  removeFile(server: string, path: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/removeFile', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
+  removeFolder(server: string, path: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/removeFolder', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
   removeServer(server: string) {
     return this.http.get<any>(this.config.getAPIURL() + 'server/' + server + '/remove', {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {

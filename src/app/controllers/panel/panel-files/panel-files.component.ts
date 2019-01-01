@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerDetails} from '../../../core/models/server-details';
 import {Subject} from 'rxjs';
 import {FileDetails} from '../../../core/models/file-details';
@@ -23,12 +23,20 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   currentPath: string;
 
   loading = false;
+  blocked = false;
 
   constructor(private selectedServer: SelectedServerService, private auth: AuthenticationService, private notify: NotifierService, private serverSocket: ServerSocketManagerService) {
   }
 
   ngOnInit() {
     this.currentPath = '/';
+
+    //We cannot view files while the server is blocked.
+    if (this.serverSocket.lastBlocked) {
+      this.blocked = true;
+      return;
+    }
+
     this.updateFiles();
 
     //On server update
@@ -49,11 +57,6 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
 
   updateListing() {
     this.loading = true;
-    if (this.serverSocket.lastBlocked) {
-      console.log('block detected');
-      this.notify.notify('error', 'Cannot get directory listing when the server is blocked.');
-      return;
-    }
 
     this.auth.listDir(this.currentServer._id, this.currentPath).subscribe(data => {
       this.loading = false;
@@ -72,6 +75,25 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   goUp() {
     this.currentPath = path.join(this.currentPath, '../');
     this.updateListing();
+  }
+
+  remove(file: FileDetails) {
+    if (file.isDir) {
+      this.auth.removeFolder(this.currentServer._id, path.join(this.currentPath, file.name)).subscribe(data => {
+        this.updateListing();
+      }, () => {
+        this.notify.notify('error', 'Failed to remove folder. (is it not empty?)');
+      });
+    } else if (file.isFile) {
+      this.auth.removeFile(this.currentServer._id, path.join(this.currentPath, file.name)).subscribe(data => {
+        this.updateListing();
+      }, (err) => {
+        console.log(err);
+        this.notify.notify('error', 'Failed to remove file.');
+      });
+    } else {
+
+    }
   }
 
   getSize(bytes: number) {

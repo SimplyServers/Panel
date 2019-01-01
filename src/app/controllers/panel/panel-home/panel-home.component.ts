@@ -26,6 +26,7 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   announceEmitter: Subject<any>;
   consoleEmitter: Subject<any>;
+  f;
   selectedServerEmitter: Subject<any>;
 
   constructor(public serverSocket: ServerSocketManagerService,

@@ -1,9 +1,13 @@
 <app-panel-frame>
-  <div class="row" id="files">
+  <div id="blocked" *ngIf="blocked">
+    <p>Server files are not currently available. Try reloading the page.</p>
+  </div>
+  <div class="row" id="files" *ngIf="!blocked">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
           <span>Server files</span>
+          <span (click)="updateListing()" class="badge badge-default badge-pill float-right"><i class="material-icons">refresh</i></span>
         </div>
         <div class="card-block">
           <ul class="list-group">
@@ -13,20 +17,20 @@
               <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1"
                    aria-valuemin="1" aria-valuemax="1"></div>
             </div>
-            <li class="list-group-item flex-column align-items-start file-item" (click)="goUp()">
+            <li class="list-group-item flex-column align-items-start file-item" *ngIf="currentPath !== '/'">
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">../</h5>
+                <a (click)="goUp()"><h5 class="mb-1">../</h5></a>
               </div>
               <small class="text-muted">Go to parent...</small>
             </li>
-            <li class="list-group-item flex-column align-items-start file-item" *ngFor="let file of filesList"
-                (click)="onClick(file)">
+            <li class="list-group-item flex-column align-items-start file-item" *ngFor="let file of filesList">
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">/{{file.name}}</h5>
-                <small class="text-muted">Size: {{getSize(file.size)}}</small>
+                <a (click)="onClick(file)"><h5 class="mb-1">{{file.name}}</h5></a>
+                <span (click)="remove(file)" class="badge badge-default badge-pill"><i class="material-icons">clear</i></span>
               </div>
               <small class="text-muted"><b>Created: </b> {{file.created}}</small>
               <small class="text-muted"><b>Modified: </b> {{file.modified}}</small>
+              <small class="text-muted"><b>Size: </b> {{getSize(file.size)}}</small>
               <small class="text-muted">
                 <b>Type: </b> {{file.isDir ? 'Folder' : file.isFile && file.edible ? 'Edible File' : file.isFile && !file.edible ? 'Non-edible File' : 'Unknown'}}
               </small>
