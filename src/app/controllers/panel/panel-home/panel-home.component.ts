@@ -26,6 +26,8 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   announceEmitter: Subject<any>;
   consoleEmitter: Subject<any>;
+  statusEmitter: Subject<any>;
+
   selectedServerEmitter: Subject<any>;
 
   constructor(public serverSocket: ServerSocketManagerService,
@@ -42,7 +44,11 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.scroll();
     });
     this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
-      this.consoleHistory = this.consoleHistory + '➤ [SS] ' + data + '\n';
+      this.consoleHistory = this.consoleHistory + '➤ [Manager daemon] ' + data + '\n';
+      this.scroll();
+    });
+    this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {
+      this.consoleHistory = this.consoleHistory + '➤ [Status update] Status updated to ' + data + '\n';
       this.scroll();
     });
 
@@ -82,6 +88,8 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.consoleEmitter.unsubscribe();
     if (this.selectedServerEmitter !== undefined)
       this.selectedServerEmitter.unsubscribe();
+    if (this.statusEmitter !== undefined)
+      this.statusEmitter.unsubscribe();
   }
 
   updateServer() {
