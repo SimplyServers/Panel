@@ -64,7 +64,6 @@ export class PanelCreateComponent implements OnInit {
       });
     }, (err) => {
       this.loading = false;
-      this.submitted = false;
       this.error = err;
     });
 

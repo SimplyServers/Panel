@@ -1,0 +1,42 @@
+<app-panel-frame>
+  <div id="blocked" *ngIf="blocked">
+    <p>File editor is not currently available. Try reloading the page.</p>
+  </div>
+  <div id="loading" *ngIf="loading && !blocked">
+    <div class="spinner"></div>
+    <p>Getting file contents...</p>
+  </div>
+  <div class="row" id="editor" *ngIf="!blocked && !loading">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <span>{{ newFile ? 'Creating ' : 'Editing'  }} file "{{ editName }}"</span>
+          <span (click)="getContents()" class="badge badge-default badge-pill float-right"><i class="material-icons">refresh</i></span>
+        </div>
+        <div class="card-block">
+          <form [formGroup]="editForm" (ngSubmit)="onEdit()">
+            <div class="form-group">
+              <div *ngIf="error" class="invalid-feedback">
+                <div class="invalid bigerror">Failed to save file contents; {{ error }}</div>
+              </div>
+              <textarea id="content" class="form-control" formControlName="content" class="form-control"
+                        [ngClass]="{ 'is-invalid': editSubmitted && editForm.controls['content'].errors }"
+                        rows="30"></textarea>
+              <div *ngIf="editSubmitted && editForm.controls['content'].errors" class="invalid-feedback">
+                <div class="invalid" *ngIf="editForm.controls['content'].errors.required">Content is required</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="btn-toolbar">
+                <button [disabled]="editLoading" type="submit" class="btn btn-primary">Submit</button>
+                <a routerLink="/panel/files">
+                  <button type="button" class="btn btn-secondary">Cancel</button>
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-panel-frame>

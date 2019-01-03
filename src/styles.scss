@@ -9,36 +9,40 @@ html, body{
   min-height: 100%;
 }
 
-.spinner {
-  border: .5rem solid #f3f3f3; /* Light grey */
-  border-top: .5rem solid #C3073F; /* Blue */
-  border-radius: 50%;
-  width: 4rem;
-  height: 4rem;
-  animation: spin 2s linear infinite;
-
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25%;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-#loading{
+#loading {
   -webkit-animation: fadein 1.5s;
   -moz-animation: fadein 1.5s;
   -ms-animation: fadein 1.5s;
   -o-animation: fadein 1.5s;
   animation: fadein 1.5s;
+  padding-top: 25%;
 
   p {
     padding-top: 1vh;
     text-align: center;
     color: #fff;
     font-size: 1.2rem;
+  }
+
+  .spinner {
+    border: .5rem solid #f3f3f3; /* Light grey */
+    border-top: .5rem solid #C3073F; /* Blue */
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    animation: spin 2s linear infinite;
+
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
 }

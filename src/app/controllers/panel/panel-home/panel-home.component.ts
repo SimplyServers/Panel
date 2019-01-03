@@ -26,7 +26,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   announceEmitter: Subject<any>;
   consoleEmitter: Subject<any>;
-  f;
   selectedServerEmitter: Subject<any>;
 
   constructor(public serverSocket: ServerSocketManagerService,
@@ -92,7 +91,6 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.currentServer = this.selectedServer.getCurrentServer();
     this.consoleHistory = this.serverSocket.getConsole();
-
   }
 
   serverOn() {
@@ -158,10 +156,8 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auth.submitCommand(this.currentServer._id, this.commandForm.controls.command.value).subscribe(() => {
       this.commandForm.controls.command.setValue('');
       this.commandLoading = false;
-      this.commandSubmitted = false;
     }, (err) => {
       this.commandLoading = false;
-      this.commandSubmitted = false;
       this.notify.notify('error', 'Failed to submit command; ' + err);
     });
   }

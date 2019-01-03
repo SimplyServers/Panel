@@ -96,7 +96,6 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
     this.auth.changePreset(this.currentServer._id, this.changeForm.controls.preset.value).subscribe(() => {
       this.selectedServer.updateCache(true, () => {
         this.selectedServer.reloadCurrentServer();
-        this.changeSubmitted = false;
         this.changeLoading = false;
         this.changeModal.nativeElement.click();
         this.changeForm.controls.preset.setValue(undefined);
@@ -104,7 +103,6 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
     }, (err) => {
       this.error = err;
       this.changeLoading = false;
-      this.changeSubmitted = false;
     });
   }
 

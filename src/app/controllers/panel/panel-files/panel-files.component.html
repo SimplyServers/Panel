@@ -7,7 +7,12 @@
       <div class="card">
         <div class="card-header">
           <span>Server files</span>
-          <span (click)="updateListing()" class="badge badge-default badge-pill float-right"><i class="material-icons">refresh</i></span>
+          <span id="reload" data-toggle="modal" data-target="#addModal"
+                class="badge badge-default badge-pill float-right"><i class="material-icons">note_add</i></span>
+          <span id="root" (click)="goToRoot()" class="badge badge-default badge-pill float-right"><i
+            class="material-icons">keyboard_capslock</i></span>
+          <span id="add" (click)="updateListing()" class="badge badge-default badge-pill float-right"><i
+            class="material-icons">refresh</i></span>
         </div>
         <div class="card-block">
           <ul class="list-group">
@@ -25,10 +30,10 @@
             </li>
             <li class="list-group-item flex-column align-items-start file-item" *ngFor="let file of filesList">
               <div class="d-flex w-100 justify-content-between">
-                <a (click)="onClick(file)"><h5 class="mb-1">{{file.name}}</h5></a>
-                <span (click)="remove(file)" class="badge badge-default badge-pill"><i class="material-icons">clear</i></span>
+                <a (click)="onClick(file)"><h5 class="mb-1">{{file.name}}{{file.isDir ? '/' : ''}}</h5></a>
+                <span *ngIf="file.edible || file.isDir" (click)="remove(file)" class="badge badge-default badge-pill"><i
+                  class="material-icons">clear</i></span>
               </div>
-              <small class="text-muted"><b>Created: </b> {{file.created}}</small>
               <small class="text-muted"><b>Modified: </b> {{file.modified}}</small>
               <small class="text-muted"><b>Size: </b> {{getSize(file.size)}}</small>
               <small class="text-muted">
@@ -37,6 +42,41 @@
             </li>
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true"
+       #addModal>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Create new file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="addForm" (ngSubmit)="onAdd()">
+          <div class="modal-body">
+            <div class="form-group">
+              <div *ngIf="error" class="invalid-feedback">
+                <div class="invalid bigerror">Failed to create file; {{ error }}</div>
+              </div>
+              <label for="path">File name:</label>
+              <input id="path" formControlName="path" class="form-control"/>
+              <div *ngIf="addSubmitted && addForm.controls['path'].errors" class="invalid-feedback">
+                <div class="invalid" *ngIf="addForm.controls['path'].errors.required">Path is required</div>
+              </div>
+            </div>
+            <p>We currently support the following file formats: <b>.properties</b>, <b>.nbt</b>, <b>.yaml</b>,
+              <b>.json</b>, <b>.yml</b>, <b>.log</b></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="serverSocket.lastBlocked" type="submit"
+                    class="btn btn-primary">Create
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

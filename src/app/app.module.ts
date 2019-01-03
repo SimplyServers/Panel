@@ -29,6 +29,7 @@ import {RecaptchaFormsModule} from 'ng-recaptcha/forms';
 import {ProfileComponent} from './controllers/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
+import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/panel-file-editor.component';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -98,6 +99,7 @@ const customNotifierOptions: NotifierOptions = {
     ProfileComponent,
     ChangePasswordComponent,
     PanelFilesComponent,
+    PanelFileEditorComponent,
   ],
   imports: [
     NotifierModule.withConfig(customNotifierOptions),

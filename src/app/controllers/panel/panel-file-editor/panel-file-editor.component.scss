@@ -1,0 +1,27 @@
+#editor {
+  width: 95%;
+  padding-left: 4rem;
+  padding-top: 2rem;
+
+  textarea {
+    color: #a7a0a0;
+    background-color: #2f2f2f;
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .btn-secondary {
+    margin-left: .25rem;
+  }
+
+  .badge-pill {
+    cursor: pointer;
+    height: 1.6rem;
+    width: 1.6rem;
+
+    .material-icons {
+      padding-bottom: 0;
+      padding-top: 4px;
+      font-size: 12px;
+    }
+  }
+}

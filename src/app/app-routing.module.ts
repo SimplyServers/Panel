@@ -17,6 +17,7 @@ import {ProfileComponent} from './controllers/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
 import {ServerGuardService} from './core/services/server-guard.service';
+import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/panel-file-editor.component';
 
 const routes: Routes = [
   {
@@ -94,6 +95,12 @@ const routes: Routes = [
     path: 'panel/files',
     component: PanelFilesComponent,
     data: {title: 'Server Files'},
+    canActivate: [AuthGuardService, ServerGuardService]
+  },
+  {
+    path: 'panel/files/edit',
+    component: PanelFileEditorComponent,
+    data: {title: 'Edit file'},
     canActivate: [AuthGuardService, ServerGuardService]
   },
   {

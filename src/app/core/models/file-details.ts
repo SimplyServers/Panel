@@ -5,5 +5,6 @@ export interface FileDetails {
   size: number,
   symlink: boolean,
   isDir: boolean
-  isFile: boolean
+  isFile: boolean,
+  edible: boolean
 }

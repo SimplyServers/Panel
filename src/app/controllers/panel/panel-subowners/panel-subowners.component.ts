@@ -81,6 +81,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
 
     }, (err) => {
       this.error = err;
+      this.addLoading = false;
     });
   }
 }

@@ -67,6 +67,30 @@ export class AuthenticationService {
       }));
   }
 
+  getContents(server: string, path: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/contents', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data.content;
+      }));
+  }
+
+  checkAllowed(server: string, path: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/checkAllowed', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data.allowed;
+      }));
+  }
+
+  writeContents(server: string, path: string, content: string) {
+    return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/write', {
+      path: path,
+      contents: content
+    }, {headers: {Authorization: 'Token ' + this.getUser().token}})
+      .pipe(map(data => {
+        return data.content;
+      }));
+  }
+
   removeFile(server: string, path: string) {
     return this.http.post<any>(this.config.getAPIURL() + 'server/' + server + '/fs/removeFile', {path: path}, {headers: {Authorization: 'Token ' + this.getUser().token}})
       .pipe(map(data => {

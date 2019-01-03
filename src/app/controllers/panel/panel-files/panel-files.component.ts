@@ -8,6 +8,8 @@ import {AuthenticationService} from '../../../core/services/authentication.servi
 import * as path from 'path-browserify';
 import {NotifierService} from 'angular-notifier';
 import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-panel-files',
@@ -15,6 +17,7 @@ import {ServerSocketManagerService} from '../../../core/services/server-socket-m
   styleUrls: ['./panel-files.component.scss']
 })
 export class PanelFilesComponent implements OnInit, OnDestroy {
+  @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
 
   currentServer: ServerDetails;
   selectedServerEmitter: Subject<any>;
@@ -25,10 +28,24 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   loading = false;
   blocked = false;
 
-  constructor(private selectedServer: SelectedServerService, private auth: AuthenticationService, private notify: NotifierService, private serverSocket: ServerSocketManagerService) {
+  addForm: FormGroup;
+  addLoading = false;
+  addSubmitted = false;
+  error: string;
+
+  constructor(private selectedServer: SelectedServerService,
+              private auth: AuthenticationService,
+              private notify: NotifierService,
+              public serverSocket: ServerSocketManagerService,
+              private router: Router,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
+    this.addForm = this.formBuilder.group({
+      path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+    });
+
     this.currentPath = '/';
 
     //We cannot view files while the server is blocked.
@@ -69,11 +86,22 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   onClick(file: FileDetails) {
     if (file.isDir)
       this.currentPath = path.join(this.currentPath, file.name);
+    else if (file.edible && file.isFile) {
+      this.router.navigateByUrl('/panel/files/edit?f=' + path.join(this.currentPath, file.name));
+      return;
+    } else {
+      return;
+    }
     this.updateListing();
   }
 
   goUp() {
     this.currentPath = path.join(this.currentPath, '../');
+    this.updateListing();
+  }
+
+  goToRoot() {
+    this.currentPath = '/';
     this.updateListing();
   }
 
@@ -87,8 +115,7 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
     } else if (file.isFile) {
       this.auth.removeFile(this.currentServer._id, path.join(this.currentPath, file.name)).subscribe(data => {
         this.updateListing();
-      }, (err) => {
-        console.log(err);
+      }, () => {
         this.notify.notify('error', 'Failed to remove file.');
       });
     } else {
@@ -106,6 +133,29 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
       return Math.round(kb * 100) / 100 + 'KB';
     else
       return Math.round(mb * 100) / 100 + 'MB';
+  }
+
+  onAdd() {
+    this.addSubmitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+    this.addLoading = true;
+
+    const targetPath = path.join(this.currentPath, this.addForm.controls.path.value);
+
+    this.auth.checkAllowed(this.currentServer._id, targetPath).subscribe(data => {
+      if (data) {
+        this.addModal.nativeElement.click();
+        this.router.navigateByUrl('/panel/files/edit?f=' + targetPath);
+      } else {
+        this.error = 'File path not supported.';
+      }
+      this.addLoading = false;
+    }, (err) => {
+      this.error = err;
+      this.addLoading = false;
+    });
   }
 
 }
