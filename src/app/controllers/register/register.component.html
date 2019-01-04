@@ -24,7 +24,10 @@
              [ngClass]="{ 'is-invalid': submitted && registerForm.controls['email'].errors }"/>
       <div *ngIf="submitted && registerForm.controls['email'].errors" class="invalid-feedback">
         <div class="invalid" *ngIf="registerForm.controls['email'].errors.required">Email is required</div>
-        <div class="invalid" *ngIf="!registerForm.controls['email'].errors.required && registerForm.controls['email'].errors.email">Email must be a valid email.</div>
+        <div class="invalid"
+             *ngIf="!registerForm.controls['email'].errors.required && registerForm.controls['email'].errors.email">
+          Email must be a valid email.
+        </div>
       </div>
     </div>
     <div class="form-group col-md-6 col-sm-12">
@@ -33,16 +36,25 @@
              [ngClass]="{ 'is-invalid': submitted && registerForm.controls['password'].errors }"/>
       <div *ngIf="submitted && registerForm.controls['password'].errors" class="invalid-feedback">
         <div class="invalid" *ngIf="registerForm.controls['password'].errors.required">Password is required</div>
-        <div class="invalid" *ngIf="!(registerForm.controls['password'].errors.required) && registerForm.controls['password'].errors.PassTooWeak">Please pick a stronger password</div>
+        <div class="invalid"
+             *ngIf="!(registerForm.controls['password'].errors.required) && registerForm.controls['password'].errors.PassTooWeak">
+          Please pick a stronger password
+        </div>
       </div>
     </div>
     <div class="form-group col-md-6 col-sm-12">
       <label for="confirmPassword">Confirm password</label>
-      <input autocomplete="new-password" id="confirmPassword" type="password" formControlName="confirmPassword" class="form-control"
+      <input autocomplete="new-password" id="confirmPassword" type="password" formControlName="confirmPassword"
+             class="form-control"
              [ngClass]="{ 'is-invalid': submitted && registerForm.controls['confirmPassword'].errors }"/>
       <div *ngIf="submitted && registerForm.controls['confirmPassword'].errors" class="invalid-feedback">
-        <div class="invalid" *ngIf="registerForm.controls['confirmPassword'].errors.required">You must type your password twice.</div>
-        <div class="invalid" *ngIf="!(registerForm.controls['confirmPassword'].errors.required) && registerForm.controls['confirmPassword'].errors.MatchPassword">Passwords do not match.</div>
+        <div class="invalid" *ngIf="registerForm.controls['confirmPassword'].errors.required">You must type your
+          password twice.
+        </div>
+        <div class="invalid"
+             *ngIf="!(registerForm.controls['confirmPassword'].errors.required) && registerForm.controls['confirmPassword'].errors.MatchPassword">
+          Passwords do not match.
+        </div>
       </div>
     </div>
     <div class="form-group col-12">

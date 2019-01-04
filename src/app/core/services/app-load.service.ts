@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {SelectedServerService} from './selected-server.service';
 import {AuthenticationService} from './authentication.service';
 
@@ -7,16 +7,17 @@ import {AuthenticationService} from './authentication.service';
 })
 export class AppLoadService {
 
-  constructor(private selectedServer: SelectedServerService, private auth: AuthenticationService) { }
+  constructor(private selectedServer: SelectedServerService, private auth: AuthenticationService) {
+  }
 
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
-      if(this.auth.isLoggedIn()) {
-        this.selectedServer.updateCache(false,(err) => {
+      if (this.auth.isLoggedIn()) {
+        this.selectedServer.updateCache(false, (err) => {
           if (err) reject(err);
           else resolve();
-        })
-      }else{
+        });
+      } else {
         resolve();
       }
     });

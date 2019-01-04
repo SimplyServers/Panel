@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerDetails} from '../../../core/models/server-details';
 import {Subject} from 'rxjs';
 import {FileDetails} from '../../../core/models/file-details';

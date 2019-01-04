@@ -3,7 +3,6 @@ import {AuthenticationService} from './authentication.service';
 import {ConfigService} from '../../config.service';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import {Observable, Subject} from 'rxjs';
 import {ServerSocketManagerService} from './server-socket-manager.service';
 
 @Injectable({
@@ -22,21 +21,21 @@ export class SelectedServerService {
 
   getCurrentServer() {
     if (this.currentServer === undefined) {
-      if(this.servers === undefined){
+      if (this.servers === undefined) {
         this.currentServer = undefined;
         return this.currentServer;
       }
-      if(Object.keys(this.servers).length >= 1){
+      if (Object.keys(this.servers).length >= 1) {
         this.currentServer = this.servers[0];
-      }else {
+      } else {
         this.currentServer = undefined;
       }
     }
     return this.currentServer;
   }
 
-  resetCurrentServer(){
-    this.setCurrentServer(this.servers[0], true)
+  resetCurrentServer() {
+    this.setCurrentServer(this.servers[0], true);
   }
 
   setCurrentServer(server, emit?) {
@@ -48,12 +47,12 @@ export class SelectedServerService {
     }
   }
 
-  reloadCurrentServer(){
-    const servers = <any> this.servers;
+  reloadCurrentServer() {
+    const servers = <any>this.servers;
     let updatedServer = servers.find(server => server._id === this.currentServer._id);
-    if(updatedServer === undefined){
+    if (updatedServer === undefined) {
       this.setCurrentServer(this.getCurrentServer(), true);
-    }else {
+    } else {
       this.setCurrentServer(updatedServer, true);
     }
   }
@@ -68,7 +67,7 @@ export class SelectedServerService {
 
       this.ownsOne = false;
       this.servers.map(server => {
-        if(server.isOwner){
+        if (server.isOwner) {
           this.ownsOne = true;
         }
       });
@@ -76,9 +75,9 @@ export class SelectedServerService {
       console.log('cache updated.');
 
       //The callback is supposed to be first. We may need to execute some important action in it.
-      if(callback)
+      if (callback)
         callback();
-      if(emit){
+      if (emit) {
         this.serverCacheEmitter.emit();
       }
     });

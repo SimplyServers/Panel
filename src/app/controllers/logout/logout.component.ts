@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthenticationService} from "../../core/services/authentication.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from '../../core/services/authentication.service';
+import {Router} from '@angular/router';
 import {SelectedServerService} from '../../core/services/selected-server.service';
 
 @Component({
@@ -10,7 +10,8 @@ import {SelectedServerService} from '../../core/services/selected-server.service
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) { }
+  constructor(private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
+  }
 
   ngOnInit() {
 

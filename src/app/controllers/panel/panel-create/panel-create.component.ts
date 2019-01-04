@@ -30,7 +30,7 @@ export class PanelCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.selectedServer.ownsOne){
+    if (this.selectedServer.ownsOne) {
       this.router.navigateByUrl('/panel');
       return;
     }
@@ -49,7 +49,7 @@ export class PanelCreateComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if(this.createForm.invalid){
+    if (this.createForm.invalid) {
       return;
     }
     this.loading = true;

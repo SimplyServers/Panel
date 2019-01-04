@@ -14,7 +14,7 @@ export class AuthenticationService {
   }
 
   login(token: TokenPayload) {
-    return this.http.post<any>(this.config.getAPIURL() + "auth/login", token)
+    return this.http.post<any>(this.config.getAPIURL() + 'auth/login', token)
       .pipe(map(data => {
         if (data && data.user.token) {
           localStorage.setItem('session', JSON.stringify(data.user));

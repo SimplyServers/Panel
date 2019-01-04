@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {PasswordValidation} from "../../core/password-validation";
-import {TokenPayload} from "../../core/models/token-payload";
-import {AuthenticationService} from "../../core/services/authentication.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PasswordValidation} from '../../core/password-validation';
+import {TokenPayload} from '../../core/models/token-payload';
+import {AuthenticationService} from '../../core/services/authentication.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -40,9 +40,9 @@ export class RegisterComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || undefined;
   }
 
-  onSubmit(){
+  onSubmit() {
     this.submitted = true;
-    if(this.registerForm.invalid){
+    if (this.registerForm.invalid) {
       return;
     }
     this.loading = true;
@@ -50,9 +50,9 @@ export class RegisterComponent implements OnInit {
     this.newUser.email = this.registerForm.controls.email.value;
     this.newUser.password = this.registerForm.controls.password.value;
     this.auth.register(this.newUser).subscribe((data) => {
-      if(this.returnUrl === undefined){
+      if (this.returnUrl === undefined) {
         this.router.navigateByUrl('/login'); //Good login! Return to dash w/o returnUrl
-      }else{
+      } else {
         this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); //Good login! Return to dash /w returnUrl
       }
     }, (err) => {

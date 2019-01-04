@@ -23,22 +23,22 @@ export class ServerSocketManagerService {
 
   getSocket(server, callback?) {
     if (server !== this.currentSocketServer) {
-      if(callback){
+      if (callback) {
         this.updateSocket(server, callback);
-      }else{
+      } else {
         this.updateSocket(server);
       }
-    }else{
-      if(callback)
+    } else {
+      if (callback)
         callback();
     }
   }
 
-  cacheConsole(consoleText){
+  cacheConsole(consoleText) {
     this.cachedConsole = consoleText;
   }
 
-  getConsole(){
+  getConsole() {
     return this.cachedConsole;
   }
 
@@ -104,7 +104,7 @@ export class ServerSocketManagerService {
   private updateSocket(server, callback?) {
     this.currentSocketServer = server;
 
-    if(this.socket !== undefined){
+    if (this.socket !== undefined) {
       this.socket.disconnect();
       this.socket = undefined;
     }
@@ -112,22 +112,22 @@ export class ServerSocketManagerService {
     this.socket = io(this.config.socketEndpoint + 'console', {path: '/s/', query: {server: server}});
     this.socket.on('connect', () => {
       this.socket.emit('authenticate', {token: this.auth.getUser().token}).on('authenticated', () => {
-          this.socket.on('initialStatus', (data) => {
-            this.handleStatus(data.status);
-            this.lastInstalled = data.installed;
-            this.lastBlocked = data.blocked;
-          }).on('statusUpdate', (data) => {
-            this.handleStatus(data);
-          }).on('console', (data) => {
-            this.consoleEmitter.emit(data.line);
-          }).on('announcement', data => {
-            this.announceEmitter.emit(data);
-          }).on('block', data => {
-            this.lastBlocked = data;
-          }).on('installed', data => {
-            this.lastInstalled = data;
-          });
-        if(callback)
+        this.socket.on('initialStatus', (data) => {
+          this.handleStatus(data.status);
+          this.lastInstalled = data.installed;
+          this.lastBlocked = data.blocked;
+        }).on('statusUpdate', (data) => {
+          this.handleStatus(data);
+        }).on('console', (data) => {
+          this.consoleEmitter.emit(data.line);
+        }).on('announcement', data => {
+          this.announceEmitter.emit(data);
+        }).on('block', data => {
+          this.lastBlocked = data;
+        }).on('installed', data => {
+          this.lastInstalled = data;
+        });
+        if (callback)
           callback();
       });
     });

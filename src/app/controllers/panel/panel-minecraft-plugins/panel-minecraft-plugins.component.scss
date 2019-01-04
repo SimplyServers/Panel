@@ -1,21 +1,21 @@
 $sidebar-width: 24vh;
 
-body{
+body {
   background-color: #e2e2e2;
 }
 
 #panel {
   color: #363636;
-  position:relative;
+  position: relative;
 
   height: calc(100% - 56px);
   min-height: calc(100% - 56px);
 
-  #panel-content{
+  #panel-content {
     padding-left: $sidebar-width;
   }
 }
 
-p{
+p {
   white-space: pre;
 }
