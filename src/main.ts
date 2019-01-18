@@ -8,16 +8,16 @@ console.log(`%c                                        _________________________
 
                                          Made with <3 by the SimplyServers Team.
                                         ________________________________________
-                     .__               .__                                                           .__        
-                _____|__| _____ ______ |  | ___.__. ______ ______________  __ ___________  ______    |__| ____  
-               /  ___/  |/     \\\\____ \\|  |<   |  |/  ___// __ \\_  __ \\  \\/ // __ \\_  __ \\/  ___/    |  |/  _ \\ 
+                     .__               .__                                                           .__
+                _____|__| _____ ______ |  | ___.__. ______ ______________  __ ___________  ______    |__| ____
+               /  ___/  |/     \\\\____ \\|  |<   |  |/  ___// __ \\_  __ \\  \\/ // __ \\_  __ \\/  ___/    |  |/  _ \\
                \\___ \\|  |  Y Y  \\  |_> >  |_\\___  |\\___ \\\\  ___/|  | \\/\\   /\\  ___/|  | \\/\\___ \\     |  (  <_> )
-              /____  >__|__|_|  /   __/|____/ ____/____  >\\___  >__|    \\_/  \\___  >__|  /____  > /\\ |__|\\____/ 
-                   \\/         \\/|__|        \\/         \\/     \\/                 \\/           \\/  \\/            
-                
-                
-                `, "font-family:monospace");
-console.log("This is a feature intended for web developers. If someone told you to copy-paste something in here for \"hacks\" or something like that, you are being scammed. https://en.wikipedia.org/wiki/Self-XSS");
+              /____  >__|__|_|  /   __/|____/ ____/____  >\\___  >__|    \\_/  \\___  >__|  /____  > /\\ |__|\\____/
+                   \\/         \\/|__|        \\/         \\/     \\/                 \\/           \\/  \\/
+
+
+                `, 'font-family:monospace');
+console.log('This is a feature intended for web developers. If someone told you to copy-paste something in here for "hacks" or something like that, you are being scammed. https://en.wikipedia.org/wiki/Self-XSS');
 
 if (environment.production) {
   enableProdMode();
@@ -26,7 +26,7 @@ if (environment.production) {
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
-//Override bug
+// Override bug
 import {RecaptchaComponent} from 'ng-recaptcha';
 
 RecaptchaComponent.prototype.ngOnDestroy = function () {

@@ -48,7 +48,7 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
 
     this.currentPath = '/';
 
-    //We cannot view files while the server is blocked.
+    // We cannot view files while the server is blocked.
     if (this.serverSocket.lastBlocked) {
       this.blocked = true;
       return;
@@ -56,15 +56,16 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
 
     this.updateFiles();
 
-    //On server update
+    // On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.updateFiles();
     });
   }
 
   ngOnDestroy() {
-    if (this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined) {
       this.selectedServerEmitter.unsubscribe();
+    }
   }
 
   updateFiles() {
@@ -84,8 +85,9 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   }
 
   onClick(file: FileDetails) {
-    if (file.isDir)
+    if (file.isDir) {
       this.currentPath = path.join(this.currentPath, file.name);
+    }
     else if (file.edible && file.isFile) {
       this.router.navigateByUrl('/panel/files/edit?f=' + path.join(this.currentPath, file.name));
       return;
@@ -127,12 +129,13 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
     const kb = bytes * 0.001;
     const mb = bytes * 0.000001;
 
-    if (bytes < 1000)
+    if (bytes < 1000) {
       return Math.round(bytes * 100) / 100 + 'B';
-    else if (kb < 1000)
+    } else if (kb < 1000) {
       return Math.round(kb * 100) / 100 + 'KB';
-    else
+    } else {
       return Math.round(mb * 100) / 100 + 'MB';
+    }
   }
 
   onAdd() {

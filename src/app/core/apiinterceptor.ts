@@ -16,13 +16,13 @@ export class APIInterceptor implements HttpInterceptor {
       if (err.status === 401) {
         // auto logout if 401 response returned from api
 
-        //TODO: remove repeated code
+        // TODO: remove repeated code
 
         // remove user from local storage to log user out
         localStorage.removeItem('session');
         this.auth.clearUser();
 
-        //Make sure we clear the server on logout
+        // Make sure we clear the server on logout
         this.selectedServer.servers = undefined;
         this.selectedServer.setCurrentServer(undefined, false);
         location.reload(true);

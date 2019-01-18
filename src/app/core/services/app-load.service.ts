@@ -14,8 +14,11 @@ export class AppLoadService {
     return new Promise((resolve, reject) => {
       if (this.auth.isLoggedIn()) {
         this.selectedServer.updateCache(false, (err) => {
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
         });
       } else {
         resolve();

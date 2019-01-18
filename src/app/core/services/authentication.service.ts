@@ -24,7 +24,7 @@ export class AuthenticationService {
   }
 
   recacheShards(shards: number) {
-    let user = this.getUser();
+    const user = this.getUser();
     user.credits = shards;
     localStorage.setItem('session', JSON.stringify(user));
   }
@@ -190,7 +190,7 @@ export class AuthenticationService {
   }
 
   getUser() {
-    if (!this.user) { //Check to see if we already have a token in memory. If we don't, load it.
+    if (!this.user) { // Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');
     }
     return JSON.parse(this.user);
@@ -200,10 +200,10 @@ export class AuthenticationService {
     this.user = undefined;
   }
 
-  isLoggedIn() { //Checks for session token. Then validates it.
-    const user = this.getUser(); //Maybe a lil overkill
+  isLoggedIn() { // Checks for session token. Then validates it.
+    const user = this.getUser(); // Maybe a lil overkill
     if (user) {
-      let payload = user.token.split('.')[1]; //Get the data out of the stored JWT payload and read it.
+      let payload = user.token.split('.')[1]; // Get the data out of the stored JWT payload and read it.
       payload = JSON.parse(window.atob(payload));
       return payload.exp > Date.now() / 1000;
     } else {

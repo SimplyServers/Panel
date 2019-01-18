@@ -49,7 +49,7 @@ export class SelectedServerService {
 
   reloadCurrentServer() {
     const servers = <any>this.servers;
-    let updatedServer = servers.find(server => server._id === this.currentServer._id);
+    const updatedServer = servers.find(server => server._id === this.currentServer._id);
     if (updatedServer === undefined) {
       this.setCurrentServer(this.getCurrentServer(), true);
     } else {
@@ -74,9 +74,10 @@ export class SelectedServerService {
 
       console.log('cache updated.');
 
-      //The callback is supposed to be first. We may need to execute some important action in it.
-      if (callback)
+      // The callback is supposed to be first. We may need to execute some important action in it.
+      if (callback) {
         callback();
+      }
       if (emit) {
         this.serverCacheEmitter.emit();
       }

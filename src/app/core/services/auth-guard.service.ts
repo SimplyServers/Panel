@@ -14,15 +14,15 @@ export class AuthGuardService implements CanActivate {
   canActivate() {
     if (!this.auth.isLoggedIn()) {
 
-      //We're trying to get the route from outside the outlet, so things get really weird
-      //https://stackoverflow.com/questions/45737375/angular-activatedroute-data-returns-an-empty-object
-      let urlCheck = this.router.events.subscribe((data) => {
-        urlCheck.unsubscribe(); //Unsubscrive so this wont fire again
+      // We're trying to get the route from outside the outlet, so things get really weird
+      // https://stackoverflow.com/questions/45737375/angular-activatedroute-data-returns-an-empty-object
+      const urlCheck = this.router.events.subscribe((data) => {
+        urlCheck.unsubscribe(); // Unsubscrive so this wont fire again
         if (data instanceof RouterEvent) {
           this.router.navigateByUrl('/login?returnUrl=' + data.url);
           return false;
         }
-        //Something strange happened.
+        // Something strange happened.
         this.router.navigateByUrl('/login');
         return false;
       });

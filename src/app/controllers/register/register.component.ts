@@ -51,9 +51,9 @@ export class RegisterComponent implements OnInit {
     this.newUser.password = this.registerForm.controls.password.value;
     this.auth.register(this.newUser).subscribe((data) => {
       if (this.returnUrl === undefined) {
-        this.router.navigateByUrl('/login'); //Good login! Return to dash w/o returnUrl
+        this.router.navigateByUrl('/login'); // Good login! Return to dash w/o returnUrl
       } else {
-        this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); //Good login! Return to dash /w returnUrl
+        this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); // Good login! Return to dash /w returnUrl
       }
     }, (err) => {
       this.error = err;

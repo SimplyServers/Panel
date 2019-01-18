@@ -29,8 +29,9 @@ export class ServerSocketManagerService {
         this.updateSocket(server);
       }
     } else {
-      if (callback)
+      if (callback) {
         callback();
+      }
     }
   }
 
@@ -43,7 +44,7 @@ export class ServerSocketManagerService {
   }
 
   private handleStatus(data) {
-    //Added support for old version of manager
+    // Added support for old version of manager
     if (Number.isInteger(data)) {
       this.handleStatusOld(data);
     } else {
@@ -127,8 +128,9 @@ export class ServerSocketManagerService {
         }).on('installed', data => {
           this.lastInstalled = data;
         });
-        if (callback)
+        if (callback) {
           callback();
+        }
       });
     });
   }

@@ -38,15 +38,15 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateStatus(){
+  updateStatus() {
     this.currentServer = this.selectedServer.getCurrentServer();
     this.status = this.serverSocket.lastStatus;
     this.serverSocket.getSocket(this.currentServer._id);
 
-    //Typescript can be super dumb sometimes
+    // Typescript can be super dumb sometimes
     const views = <any>this.currentServer.preset.special.views;
-    this.isMinecraft = views.indexOf("minecraft") > -1;
-    this.hidePlugins = views.indexOf("no_plugin_viewer") > -1;
+    this.isMinecraft = views.indexOf('minecraft') > -1;
+    this.hidePlugins = views.indexOf('no_plugin_viewer') > -1;
     this.isOwner = this.currentServer.isOwner;
   }
 
@@ -74,12 +74,15 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.statusEmitter !== undefined)
+    if (this.statusEmitter !== undefined) {
       this.statusEmitter.unsubscribe();
-    if(this.selectedServerEmitter !== undefined)
+    }
+    if (this.selectedServerEmitter !== undefined) {
       this.selectedServerEmitter.unsubscribe();
-    if (this.serverCacheEmitter !== undefined)
+    }
+    if (this.serverCacheEmitter !== undefined) {
       this.serverCacheEmitter.unsubscribe();
+    }
   }
 
   update(server) {
@@ -87,7 +90,7 @@ export class PanelFrameComponent implements OnInit, OnDestroy {
     this.currentServer = server;
   }
 
-  toggleSidebar(){
+  toggleSidebar() {
     this.sidebarDisplayed = !this.sidebarDisplayed;
   }
 

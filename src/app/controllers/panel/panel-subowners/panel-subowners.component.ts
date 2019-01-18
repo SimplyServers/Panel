@@ -33,7 +33,7 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
     this.loadSubusers();
-    //On server update
+    // On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.loadSubusers();
     });
@@ -41,8 +41,9 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined) {
       this.selectedServerEmitter.unsubscribe();
+    }
   }
 
   loadSubusers() {

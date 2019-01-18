@@ -47,7 +47,7 @@ export class PanelFileEditorComponent implements OnInit {
     }
     this.updateContents();
 
-    //On server update
+    // On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.updateContents();
     });
@@ -64,7 +64,7 @@ export class PanelFileEditorComponent implements OnInit {
   getContents() {
     this.loading = true;
     this.activatedRoute.queryParams.subscribe(params => {
-      let filePath = params['f'];
+      const filePath = params['f'];
       this.editName = filePath;
       this.auth.getContents(this.currentServer._id, filePath).subscribe(data => {
         this.newFile = false;

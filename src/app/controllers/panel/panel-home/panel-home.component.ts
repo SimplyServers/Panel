@@ -52,13 +52,13 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.scroll();
     });
 
-    //On server update
+    // On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.updateServer();
     });
 
 
-    //Read scroll() todo.
+    // Read scroll() todo.
     interval(500).subscribe(() => {
       if (this.update) {
         this.update = false;
@@ -68,28 +68,32 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scroll() {
-    //TODO: this could be better. Basically instead of doing this every time the console is updated, constantly check every .5 seconds to see if there is new text, if there is, scroll down.
-    //this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
-    //console.log(this.textAreaElement.nativeElement.scrollHeight);
+    // TODO: this could be better. Basically instead of doing this every time the console is updated, constantly check every .5 seconds to see if there is new text, if there is, scroll down.
+    // this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
+    // console.log(this.textAreaElement.nativeElement.scrollHeight);
     this.update = true;
   }
 
   ngAfterViewInit() {
     if (this.textAreaElement) {
-      this.scroll(); //This is so the console will scroll
+      this.scroll(); // This is so the console will scroll
     }
   }
 
   ngOnDestroy() {
     this.serverSocket.cacheConsole(this.consoleHistory);
-    if (this.announceEmitter !== undefined)
+    if (this.announceEmitter !== undefined) {
       this.announceEmitter.unsubscribe();
-    if (this.consoleEmitter !== undefined)
+    }
+    if (this.consoleEmitter !== undefined) {
       this.consoleEmitter.unsubscribe();
-    if (this.selectedServerEmitter !== undefined)
+    }
+    if (this.selectedServerEmitter !== undefined) {
       this.selectedServerEmitter.unsubscribe();
-    if (this.statusEmitter !== undefined)
+    }
+    if (this.statusEmitter !== undefined) {
       this.statusEmitter.unsubscribe();
+    }
   }
 
   updateServer() {
@@ -102,8 +106,9 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   serverOn() {
-    if (this.serverSocket.lastStatus !== 'Stopped')
+    if (this.serverSocket.lastStatus !== 'Stopped') {
       return;
+    }
     this.auth.startServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
@@ -112,8 +117,9 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   serverOff() {
-    if (this.serverSocket.lastStatus !== 'Running')
+    if (this.serverSocket.lastStatus !== 'Running') {
       return;
+    }
     this.auth.stopServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
@@ -122,8 +128,9 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   serverKill() {
-    if (this.serverSocket.lastStatus !== 'Running' && this.serverSocket.lastStatus !== 'Starting' && this.serverSocket.lastStatus !== 'Stopping')
+    if (this.serverSocket.lastStatus !== 'Running' && this.serverSocket.lastStatus !== 'Starting' && this.serverSocket.lastStatus !== 'Stopping') {
       return;
+    }
     this.auth.killServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
@@ -132,8 +139,9 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   installServer() {
-    if (this.serverSocket.lastStatus !== 'Stopped')
+    if (this.serverSocket.lastStatus !== 'Stopped') {
       return;
+    }
     this.auth.installServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {
@@ -142,8 +150,9 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   reinstallServer() {
-    if (this.serverSocket.lastStatus !== 'Stopped')
+    if (this.serverSocket.lastStatus !== 'Stopped') {
       return;
+    }
     this.auth.reinstallServer(this.currentServer._id).subscribe(() => {
 
     }, (err) => {

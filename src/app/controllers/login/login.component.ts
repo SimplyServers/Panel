@@ -33,12 +33,13 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
       password: ['', Validators.compose([Validators.required, Validators.maxLength(50)])]
     });
-    if (this.route.snapshot.queryParams['returnUrl'])
+    if (this.route.snapshot.queryParams['returnUrl']) {
       this.returnUrlSet = true;
+    }
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/panel';
 
-    //Watch the router for changes (since the page isnt reloaded)
+    // Watch the router for changes (since the page isnt reloaded)
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.returnUrlSet = this.route.snapshot.queryParams['returnUrl'];
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
     this.credentials.password = this.loginForm.controls.password.value;
     this.auth.login(this.credentials).subscribe(() => {
       this.selectedServer.updateCache(false, () => {
-        this.router.navigateByUrl(this.returnUrl); //Good login! Return to dash.
+        this.router.navigateByUrl(this.returnUrl); // Good login! Return to dash.
       });
     }, (err) => {
       this.loading = false;

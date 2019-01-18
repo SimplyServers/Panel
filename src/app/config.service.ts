@@ -5,14 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class ConfigService {
 
-  apiEndpoint: string = 'http://10.1.1.238:8080/api/v1/';
-  socketEndpoint: string = 'http://10.1.1.238:8080/';
-  ver: string = 'rel-1.0';
+  apiEndpoint = 'http://10.1.1.238:8080/api/v1/';
+  socketEndpoint = 'http://10.1.1.238:8080/';
+  ver = 'rel-1.0';
 
-  getAPIURL(){
+  getAPIURL() {
     return this.apiEndpoint;
   }
-  getVer(){
+
+  getVer() {
     return this.ver;
   }
 

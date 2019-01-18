@@ -20,7 +20,7 @@ export class LogoutComponent implements OnInit {
       localStorage.removeItem('session');
       this.auth.clearUser();
 
-      //Make sure we clear the server on logout
+      // Make sure we clear the server on logout
       this.selectedServer.servers = undefined;
       this.selectedServer.setCurrentServer(undefined, false);
     });

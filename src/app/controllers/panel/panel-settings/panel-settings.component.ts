@@ -34,8 +34,9 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
   updateServer() {
     this.currentServer = this.selectedServer.getCurrentServer();
 
-    if (Object.keys(this.currentServer.preset.allowSwitchingTo).length < 1)
+    if (Object.keys(this.currentServer.preset.allowSwitchingTo).length < 1) {
       this.nothingToChange = true;
+    }
 
     if (!this.currentServer.isOwner) {
       this.router.navigateByUrl('/panel');
@@ -52,7 +53,7 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
 
     this.updateServer();
 
-    //On server update
+    // On server update
     this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
       this.updateServer();
     });
@@ -60,13 +61,15 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.selectedServerEmitter !== undefined)
+    if (this.selectedServerEmitter !== undefined) {
       this.selectedServerEmitter.unsubscribe();
+    }
   }
 
   removeServer() {
-    if (this.serverSocket.lastStatus !== 'Stopped')
+    if (this.serverSocket.lastStatus !== 'Stopped') {
       return;
+    }
     this.auth.removeServer(this.currentServer._id).subscribe(() => {
       this.selectedServer.updateCache(true, () => {
         if (Object.keys(this.selectedServer.servers).length >= 1) {
@@ -89,8 +92,8 @@ export class PanelSettingsComponent implements OnInit, OnDestroy {
     }
     this.changeLoading = true;
 
-    //WTF BROWSERS ARE LITERALLY HORRIBLE
-    //This needs to set to a empty array to actually sync the actual value of the option dropdown with the one that is displayed
+    // WTF BROWSERS ARE LITERALLY HORRIBLE
+    // This needs to set to a empty array to actually sync the actual value of the option dropdown with the one that is displayed
     this.presetList = [];
 
     this.auth.changePreset(this.currentServer._id, this.changeForm.controls.preset.value).subscribe(() => {
