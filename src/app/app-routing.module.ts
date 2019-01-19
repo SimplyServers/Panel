@@ -4,8 +4,8 @@ import {NotfoundComponent} from './controllers/notfound/notfound.component';
 import {HomeComponent} from './controllers/home/home.component';
 import {LoginComponent} from './controllers/login/login.component';
 import {RegisterComponent} from './controllers/register/register.component';
-import {DeauthGuardService} from './core/services/deauth-guard.service';
-import {AuthGuardService} from './core/services/auth-guard.service';
+import {DeauthGuardService} from './core/services/middleware/deauth-guard.service';
+import {AuthGuardService} from './core/services/middleware/auth-guard.service';
 import {LogoutComponent} from './controllers/logout/logout.component';
 import {PanelHomeComponent} from './controllers/panel/panel-home/panel-home.component';
 import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
@@ -16,7 +16,7 @@ import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-s
 import {ProfileComponent} from './controllers/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
-import {ServerGuardService} from './core/services/server-guard.service';
+import {ServerGuardService} from './core/services/middleware/server-guard.service';
 import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/panel-file-editor.component';
 
 const routes: Routes = [

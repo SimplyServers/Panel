@@ -193,6 +193,7 @@ export class AuthenticationService {
     if (!this.user) { // Check to see if we already have a token in memory. If we don't, load it.
       this.user = localStorage.getItem('session');
     }
+    console.debug(this.user);
     return JSON.parse(this.user);
   }
 
