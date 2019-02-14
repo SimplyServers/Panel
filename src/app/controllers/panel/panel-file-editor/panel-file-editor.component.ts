@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
-import {SelectedServerService} from '../../../core/services/selected-server.service';
-import {AuthenticationService} from '../../../core/services/authentication.service';
+import {ServerSocketManagerService} from '../../../core/services/legacy/server-socket-manager.service';
+import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
+import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
 import {NotifierService} from 'angular-notifier';
-import {ServerDetails} from '../../../core/models/server-details';
+import {ServerDetails} from '../../../core/models/legacy/server-details';
 import {Subject} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 

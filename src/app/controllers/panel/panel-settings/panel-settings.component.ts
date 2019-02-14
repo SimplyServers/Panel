@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthenticationService} from '../../../core/services/authentication.service';
-import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
-import {ServerDetails} from '../../../core/models/server-details';
-import {SelectedServerService} from '../../../core/services/selected-server.service';
+import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
+import {ServerSocketManagerService} from '../../../core/services/legacy/server-socket-manager.service';
+import {ServerDetails} from '../../../core/models/legacy/server-details';
+import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
 import {Subject} from 'rxjs';
 import {NotifierService} from 'angular-notifier';
 import {Router} from '@angular/router';

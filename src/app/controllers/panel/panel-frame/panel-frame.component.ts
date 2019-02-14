@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ServerSocketManagerService} from '../../../core/services/server-socket-manager.service';
-import {SelectedServerService} from '../../../core/services/selected-server.service';
-import {ServerDetails} from '../../../core/models/server-details';
+import {ServerSocketManagerService} from '../../../core/services/legacy/server-socket-manager.service';
+import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
+import {ServerDetails} from '../../../core/models/legacy/server-details';
 import {NavigationEnd, Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {SSAnalyticsService} from '../../../core/services/ssanalytics.service';
+import {SSAnalyticsService} from '../../../core/services/legacy/ssanalytics.service';
 
 @Component({
   selector: 'app-panel-frame',

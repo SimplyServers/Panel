@@ -1,22 +1,22 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {NotfoundComponent} from './controllers/notfound/notfound.component';
-import {HomeComponent} from './controllers/home/home.component';
-import {LoginComponent} from './controllers/login/login.component';
-import {RegisterComponent} from './controllers/register/register.component';
-import {DeauthGuardService} from './core/services/middleware/deauth-guard.service';
-import {AuthGuardService} from './core/services/middleware/auth-guard.service';
-import {LogoutComponent} from './controllers/logout/logout.component';
+import {NotfoundComponent} from './controllers/main/notfound/notfound.component';
+import {HomeComponent} from './controllers/main/home/home.component';
+import {LoginComponent} from './controllers/main/login/login.component';
+import {RegisterComponent} from './controllers/main/register/register.component';
+import {DeauthGuardService} from './core/services/legacy/deauth-guard.service';
+import {AuthGuardService} from './core/services/legacy/auth-guard.service';
+import {LogoutComponent} from './controllers/main/logout/logout.component';
 import {PanelHomeComponent} from './controllers/panel/panel-home/panel-home.component';
 import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
 import {PanelMinecraftPluginsComponent} from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 import {PanelPluginsComponent} from './controllers/panel/panel-plugins/panel-plugins.component';
 import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel-subowners.component';
 import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
-import {ProfileComponent} from './controllers/profile/profile.component';
-import {ChangePasswordComponent} from './controllers/change-password/change-password.component';
+import {ProfileComponent} from './controllers/main/profile/profile.component';
+import {ChangePasswordComponent} from './controllers/main/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
-import {ServerGuardService} from './core/services/middleware/server-guard.service';
+import {ServerGuardService} from './core/services/legacy/server-guard.service';
 import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/panel-file-editor.component';
 
 const routes: Routes = [

@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../core/services/authentication.service';
-import {SelectedServerService} from '../../../core/services/selected-server.service';
-import {ServerDetails} from '../../../core/models/server-details';
+import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
+import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
+import {ServerDetails} from '../../../core/models/legacy/server-details';
 import {NotifierService} from 'angular-notifier';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../../core/services/authentication.service';
+import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ServerPayload} from '../../../core/models/server-payload';
-import {SelectedServerService} from '../../../core/services/selected-server.service';
+import {ServerPayload} from '../../../core/models/legacy/server-payload';
+import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
 
 @Component({
   selector: 'app-panel-create',
