@@ -61,7 +61,7 @@ export class CurrentServerService {
 
   public updateCache = async (): Promise<void> => {
     this.servers = (await this.http.get<any>(
-      this.config.getConfig().endpoints.api + 'user/getServers',
+      this.config.config.endpoints.api + 'user/getServers',
       {headers: {Authorization: 'Token ' + this.auth.getUser().token}}).toPromise()).servers;
 
     // Check to see if the person owns a server

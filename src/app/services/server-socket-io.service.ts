@@ -147,10 +147,10 @@ export class ServerSocketIOService {
       this.ioSocket.disconnect();
     }
 
-    this.ioSocket = io(this.config.getConfig().endpoints.socket + 'console', {
+    this.ioSocket = io(this.config.config.endpoints.socket + 'console', {
       path: '/s/',
       query: {
-        server: this.currentServer.currentServer.getDetails()._id
+        server: this.currentServer.currentServer.details._id
       }
     });
 
