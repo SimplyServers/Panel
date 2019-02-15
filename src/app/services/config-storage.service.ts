@@ -14,7 +14,7 @@ export class ConfigStorageService {
 
   constructor() { }
 
-  public getConfig = (): IConfig => {
+  public get config(): IConfig{
     return {
       endpoints: {
         socket: 'http://10.1.1.238:8080/',
@@ -22,5 +22,4 @@ export class ConfigStorageService {
       }
     }
   }
-
 }

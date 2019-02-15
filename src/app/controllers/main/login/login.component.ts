@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {TokenPayload} from '../../../core/models/legacy/token-payload';
-import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
-import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
+import {TokenPayload} from '../../../../core/models/legacy/token-payload';
+import {AuthenticationService} from '../../../services/legacy/authentication.service';
+import {SelectedServerService} from '../../../services/legacy/selected-server.service';
 
 @Component({
   selector: 'app-login',

@@ -1,5 +1,5 @@
 import {PresetDetails} from './legacy/preset-details';
-import {AuthenticationService} from '../services/legacy/authentication.service';
+import {AuthenticationService} from '../../services/legacy/authentication.service';
 
 export interface ServerDetails {
   owner: string;

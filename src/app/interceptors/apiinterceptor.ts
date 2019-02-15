@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {AuthenticationService} from './services/legacy/authentication.service';
-import {SelectedServerService} from './services/legacy/selected-server.service';
+import {AuthenticationService} from '../services/legacy/authentication.service';
+import {SelectedServerService} from '../services/legacy/selected-server.service';
 
 
 @Injectable()

@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ConfigService} from '../config.service';
-import {TokenPayload} from '../../models/legacy/token-payload';
-import {ServerPayload} from '../../models/legacy/server-payload';
+import {TokenPayload} from '../../core/models/legacy/token-payload';
+import {ServerPayload} from '../../core/models/legacy/server-payload';
 
 @Injectable()
 export class AuthenticationService {

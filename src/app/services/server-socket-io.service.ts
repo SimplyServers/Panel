@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {CurrentServerService} from '../services/current-server.service';
+import {CurrentServerService} from './current-server.service';
 import * as io from 'socket.io-client';
-import {ConfigStorageService} from '../services/config-storage.service';
-import {AuthenticationService} from '../services/legacy/authentication.service';
+import {ConfigStorageService} from './config-storage.service';
+import {AuthenticationService} from './legacy/authentication.service';
 
 export enum ServerStatus {
   RUNNING = 'Running',

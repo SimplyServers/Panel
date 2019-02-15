@@ -1,11 +1,11 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {interval, Subject} from 'rxjs';
-import {ServerSocketManagerService} from '../../../core/services/legacy/server-socket-manager.service';
-import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
+import {ServerSocketManagerService} from '../../../../services/legacy/server-socket-manager.service';
+import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
+import {AuthenticationService} from '../../../../services/legacy/authentication.service';
 import {NotifierService} from 'angular-notifier';
-import {ServerDetails} from '../../../core/models/legacy/server-details';
+import {ServerDetails} from '../../../../core/models/legacy/server-details';
 
 @Component({
   selector: 'app-panel-home',

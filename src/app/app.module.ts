@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
+import {AppComponent} from './controllers/app.component';
 import {NotfoundComponent} from './controllers/main/notfound/notfound.component';
 import {HomeComponent} from './controllers/main/home/home.component';
 import {NavbarComponent} from './controllers/main/navbar/navbar.component';
@@ -12,24 +12,24 @@ import {RegisterComponent} from './controllers/main/register/register.component'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LogoutComponent} from './controllers/main/logout/logout.component';
-import {APIInterceptor} from './core/apiinterceptor';
-import {AuthenticationService} from './core/services/legacy/authentication.service';
-import {SSAnalyticsService} from './core/services/legacy/ssanalytics.service';
-import {PanelHomeComponent} from './controllers/panel/panel-home/panel-home.component';
-import {PanelCreateComponent} from './controllers/panel/panel-create/panel-create.component';
-import {PanelMinecraftPluginsComponent} from './controllers/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
+import {APIInterceptor} from './interceptors/apiinterceptor';
+import {AuthenticationService} from './services/legacy/authentication.service';
+import {SSAnalyticsService} from './services/legacy/ssanalytics.service';
+import {PanelHomeComponent} from './controllers/legacy/panel/panel-home/panel-home.component';
+import {PanelCreateComponent} from './controllers/legacy/panel/panel-create/panel-create.component';
+import {PanelMinecraftPluginsComponent} from './controllers/legacy/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 import {NotifierModule, NotifierOptions} from 'angular-notifier';
-import {PanelFrameComponent} from './controllers/panel/panel-frame/panel-frame.component';
-import {AppLoadService} from './core/services/legacy/app-load.service';
-import {PanelSettingsComponent} from './controllers/panel/panel-settings/panel-settings.component';
-import {PanelPluginsComponent} from './controllers/panel/panel-plugins/panel-plugins.component';
-import {PanelSubownersComponent} from './controllers/panel/panel-subowners/panel-subowners.component';
+import {PanelFrameComponent} from './controllers/legacy/panel/panel-frame/panel-frame.component';
+import {AppLoadService} from './services/legacy/app-load.service';
+import {PanelSettingsComponent} from './controllers/legacy/panel/panel-settings/panel-settings.component';
+import {PanelPluginsComponent} from './controllers/legacy/panel/panel-plugins/panel-plugins.component';
+import {PanelSubownersComponent} from './controllers/legacy/panel/panel-subowners/panel-subowners.component';
 import {RecaptchaModule} from 'ng-recaptcha';
 import {RecaptchaFormsModule} from 'ng-recaptcha/forms';
 import {ProfileComponent} from './controllers/main/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/main/change-password/change-password.component';
-import {PanelFilesComponent} from './controllers/panel/panel-files/panel-files.component';
-import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/panel-file-editor.component';
+import {PanelFilesComponent} from './controllers/legacy/panel/panel-files/panel-files.component';
+import {PanelFileEditorComponent} from './controllers/legacy/panel/panel-file-editor/panel-file-editor.component';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();

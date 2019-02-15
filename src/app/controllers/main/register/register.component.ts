@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PasswordValidation} from '../../../core/password-validation';
-import {TokenPayload} from '../../../core/models/legacy/token-payload';
-import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
+import {PasswordValidation} from '../../../password-validation';
+import {TokenPayload} from '../../../../core/models/legacy/token-payload';
+import {AuthenticationService} from '../../../services/legacy/authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({

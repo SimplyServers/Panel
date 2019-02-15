@@ -1,13 +1,13 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ServerDetails} from '../../../core/models/legacy/server-details';
+import {ServerDetails} from '../../../../core/models/legacy/server-details';
 import {Subject} from 'rxjs';
-import {FileDetails} from '../../../core/models/legacy/file-details';
-import {SelectedServerService} from '../../../core/services/legacy/selected-server.service';
-import {AuthenticationService} from '../../../core/services/legacy/authentication.service';
+import {FileDetails} from '../../../../core/models/legacy/file-details';
+import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
+import {AuthenticationService} from '../../../../services/legacy/authentication.service';
 
 import * as path from 'path-browserify';
 import {NotifierService} from 'angular-notifier';
-import {ServerSocketManagerService} from '../../../core/services/legacy/server-socket-manager.service';
+import {ServerSocketManagerService} from '../../../../services/legacy/server-socket-manager.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 

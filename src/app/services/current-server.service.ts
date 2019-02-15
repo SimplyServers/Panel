@@ -1,9 +1,9 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Server} from '../models/server.model';
 import {ServerNotFoundError} from '../errors/server.not.found.error';
 import {AuthenticationService} from './legacy/authentication.service';
 import {HttpClient} from '@angular/common/http';
 import {ConfigStorageService} from './config-storage.service';
+import {Server} from '../models/server.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,10 +47,8 @@ export class CurrentServerService {
 
   // OOF https://github.com/Microsoft/TypeScript/issues/14982
   public getCurrentServer = async (useCache?: boolean): Promise<Server> => {
-    if (!this.currentServer || useCache) {
-      if (!this.servers || useCache) {
-        await this.updateCache();
-      }
+    if ((!this.currentServer && !this.servers) || useCache) {
+      await this.updateCache();
 
       // Check to see if the server list is empty. If it is return not found
       if (Object.keys(this.servers < 1)) { throw new ServerNotFoundError(); }
@@ -58,21 +56,18 @@ export class CurrentServerService {
       // Update the current server
       this.currentServer = this.servers[0];
     }
-    return this._currentServer;
+    return this.currentServer;
   };
 
   public updateCache = async (): Promise<void> => {
-    this.servers = await this.http.get<any>(
+    this.servers = (await this.http.get<any>(
       this.config.getConfig().endpoints.api + 'user/getServers',
-      {headers: {Authorization: 'Token ' + this.auth.getUser().token}}).toPromise();
+      {headers: {Authorization: 'Token ' + this.auth.getUser().token}}).toPromise()).servers;
 
     // Check to see if the person owns a server
     this.ownsOne = false;
     this.servers.forEach(server => {
       if (server.isOwner) {  this.ownsOne = true; }
     });
-
-
-
   };
 }
