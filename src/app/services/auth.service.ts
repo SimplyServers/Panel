@@ -52,8 +52,10 @@ export class AuthService {
 
   private _user: UserDetails;
 
-  constructor(private http: HttpClient,
-              private config: ConfigStorageService) {
+  constructor(
+    private http: HttpClient,
+    private config: ConfigStorageService
+  ) {
   };
 
   public authorize = async (token: TokenPayload): Promise<UserDetails> => {
