@@ -2,8 +2,8 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {ServerNotFoundError} from '../errors/server.not.found.error';
 import {AuthenticationService} from './legacy/authentication.service';
 import {HttpClient} from '@angular/common/http';
-import {ConfigStorageService} from './config-storage.service';
 import {Server} from '../models/server.model';
+import {ConfigStorage} from './config-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class CurrentServerService {
 
   constructor(
     private auth: AuthenticationService,
-    private config: ConfigStorageService,
+    private storage: ConfigStorage,
     private http: HttpClient
   ) { }
 
@@ -61,7 +61,7 @@ export class CurrentServerService {
 
   public updateCache = async (): Promise<void> => {
     this.servers = (await this.http.get<any>(
-      this.config.config.endpoints.api + 'user/getServers',
+      this.storage.config.endpoints.api + 'user/getServers',
       {headers: {Authorization: 'Token ' + this.auth.getUser().token}}).toPromise()).servers;
 
     // Check to see if the person owns a server

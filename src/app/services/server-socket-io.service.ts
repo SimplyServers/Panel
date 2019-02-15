@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {CurrentServerService} from './current-server.service';
 import * as io from 'socket.io-client';
-import {ConfigStorageService} from './config-storage.service';
 import {AuthenticationService} from './legacy/authentication.service';
+import {ConfigStorage} from './config-storage.service';
 
 export enum ServerStatus {
   RUNNING = 'Running',
@@ -73,7 +73,7 @@ export class ServerSocketIOService {
 
   constructor(
     private currentServer: CurrentServerService,
-    private config: ConfigStorageService,
+    private storage: ConfigStorage,
     private auth: AuthenticationService
   ) {
     this._serverStatus = ServerStatus.LOADING;
@@ -147,7 +147,7 @@ export class ServerSocketIOService {
       this.ioSocket.disconnect();
     }
 
-    this.ioSocket = io(this.config.config.endpoints.socket + 'console', {
+    this.ioSocket = io(this.storage.config.endpoints.socket + 'console', {
       path: '/s/',
       query: {
         server: this.currentServer.currentServer.details._id
