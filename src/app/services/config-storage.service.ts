@@ -10,7 +10,7 @@ export interface IConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigStorageService {
+export class ConfigStorage {
 
   constructor() { }
 

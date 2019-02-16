@@ -100,6 +100,7 @@ export class AuthService {
   }
 
   // ---------------*
+
   public register = async (newUser: TokenPayload): Promise<UserDetails> => {
     return (await this.http.post<any>(
       this.config.config.endpoints.api + 'auth/register',
