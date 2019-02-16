@@ -7,17 +7,12 @@ import {AuthService} from '../auth.service';
 })
 export class AppLoadService {
 
-  constructor(private currentServer: CurrentServerService, private auth: AuthService) {
-  }
+  constructor(
+    private currentServer: CurrentServerService,
+    private auth: AuthService
+  ) {}
 
-  public initializeApp = async (): Promise<any> {
-      if (this.auth.checkLoggedIn()) {
-        this.currentServer.updateCache(false, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-  }
+  public initializeApp = async (): Promise<any> => {
+      if (this.auth.checkLoggedIn()) { await this.currentServer.updateCache() }
+  };
 }

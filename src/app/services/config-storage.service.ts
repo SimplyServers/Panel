@@ -14,7 +14,7 @@ export class ConfigStorage {
 
   constructor() { }
 
-  public get config(): IConfig{
+  public static get config(): IConfig {
     return {
       endpoints: {
         socket: 'http://10.1.1.238:8080/',

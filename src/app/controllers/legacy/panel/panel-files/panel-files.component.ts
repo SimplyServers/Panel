@@ -87,8 +87,7 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   onClick(file: FileDetails) {
     if (file.isDir) {
       this.currentPath = path.join(this.currentPath, file.name);
-    }
-    else if (file.edible && file.isFile) {
+    } else if (file.edible && file.isFile) {
       this.router.navigateByUrl('/panel/files/edit?f=' + path.join(this.currentPath, file.name));
       return;
     } else {

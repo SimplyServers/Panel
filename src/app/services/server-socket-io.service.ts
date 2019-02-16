@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {CurrentServerService} from './current-server.service';
 import * as io from 'socket.io-client';
-import {AuthenticationService} from './legacy/authentication.service';
 import {ConfigStorage} from './config-storage.service';
+import {AuthService} from './auth.service';
 
 export enum ServerStatus {
   RUNNING = 'Running',
@@ -73,8 +73,7 @@ export class ServerSocketIOService {
 
   constructor(
     private currentServer: CurrentServerService,
-    private storage: ConfigStorage,
-    private auth: AuthenticationService
+    private auth: AuthService
   ) {
     this._serverStatus = ServerStatus.LOADING;
     this._installed = false;
@@ -112,7 +111,7 @@ export class ServerSocketIOService {
   };
 
   private handleStatus = (data: string): void => {
-    switch (status) {
+    switch (data) {
       case 'Starting':
         this._serverStatus = ServerStatus.STARTING;
         break;
@@ -147,7 +146,7 @@ export class ServerSocketIOService {
       this.ioSocket.disconnect();
     }
 
-    this.ioSocket = io(this.storage.config.endpoints.socket + 'console', {
+    this.ioSocket = io(ConfigStorage.config.endpoints.socket + 'console', {
       path: '/s/',
       query: {
         server: this.currentServer.currentServer.details._id
@@ -157,7 +156,7 @@ export class ServerSocketIOService {
     await new Promise((resolve) => {
       this.ioSocket.on('connect', () => {
         this.ioSocket.emit('authenticate', {
-          token: this.auth.getUser().token
+          token: this.auth.user.token
         }, () => {
           this.ioSocket.on('initialStatus', this.handleInitial);
           this.ioSocket.on('statusUpdate', this.handleStatus);

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {ConfigService} from '../config.service';
 import {HttpClient} from '@angular/common/http';
+import {ConfigStorage} from '../config-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +9,12 @@ export class SSAnalyticsService {
 
   public loadData: any;
 
-  constructor(private http: HttpClient, private config: ConfigService) {
-  }
+  constructor(
+    private http: HttpClient,
+  ) {}
 
   onLoad() {
-    this.http.get<any>(this.config.getAPIURL() + 'analytics/load').subscribe(data => {
+    this.http.get<any>(ConfigStorage.config.endpoints.api + 'analytics/load').subscribe(data => {
       console.log('SSAnalytics loaded.');
       console.log('API build name is: ' + data.codename);
       this.loadData = data;

@@ -36,8 +36,7 @@ export class Server {
 
   constructor(
     private auth: AuthService,
-    private http: HttpClient,
-    private storage: ConfigStorage
+    private http: HttpClient
   ) {
   }
 
@@ -47,7 +46,7 @@ export class Server {
 
   public listDir = async (path: string): Promise<FileDetails[]> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/directory',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/directory',
       {
         path
       },
@@ -57,7 +56,7 @@ export class Server {
 
   public getFileContents = async (path: string): Promise<string> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/contents',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/contents',
       {
         path
       },
@@ -67,7 +66,7 @@ export class Server {
 
   public checkAllowed = async (path: string): Promise<boolean> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/checkAllowed',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/checkAllowed',
       {
         path
       },
@@ -77,7 +76,7 @@ export class Server {
 
   public writeContents = async (path: string, contents: string): Promise<void> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/checkAllowed',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/checkAllowed',
       {
         path,
         contents
@@ -88,7 +87,7 @@ export class Server {
 
   public removeFile = async (path: string): Promise<void> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/removeFile',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/removeFile',
       {
         path,
       },
@@ -98,7 +97,7 @@ export class Server {
 
   public removeFolder = async (path: string): Promise<void> => {
     return (await this.http.post<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/removeFolder',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/removeFolder',
       {
         path,
       },
@@ -108,7 +107,7 @@ export class Server {
 
   public remove = async (): Promise<void> => {
     return (await this.http.get<any>(
-      this.storage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/remove',
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/remove',
       this.auth.authOptions
     ).toPromise());
   };
