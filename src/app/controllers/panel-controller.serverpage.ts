@@ -1,15 +1,15 @@
-import {AuthenticationService} from '../services/legacy/authentication.service';
 import {NotifierService} from 'angular-notifier';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {OnDestroy, OnInit} from '@angular/core';
 import {CurrentServerService} from '../services/current-server.service';
 import {Server} from '../models/server.model';
+import {AuthService} from '../services/auth.service';
 
 class ResponsiveSereverPage implements OnInit, OnDestroy {
   private selectedServerEmitter: Subject<any>;
 
-  constructor(private auth: AuthenticationService,
+  constructor(private auth: AuthService,
               private selectedServer: CurrentServerService,
               private notify: NotifierService,
               private router: Router) {};

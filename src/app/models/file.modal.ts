@@ -1,4 +1,4 @@
-export interface FileDetails {
+export interface FileModal {
   name: string;
   created: string;
   modified: string;
