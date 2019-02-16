@@ -12,6 +12,16 @@ export interface UserTokenDetails {
   iat: number
 }
 
+export interface GroupDetails {
+   _id: string;
+  color: string;
+  name: string;
+  displayName: string;
+  isAdmin: boolean;
+  isStaff: boolean;
+  presetsAllowed: string[];
+}
+
 export interface ServerPayload {
   preset: string;
   motd: string;
@@ -26,7 +36,7 @@ export interface UserDetails {
   mcUUID: string;
   id: string;
   credits: number;
-  group: string;
+  group: GroupDetails;
 }
 
 export interface TokenPayload {

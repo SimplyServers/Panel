@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {SelectedServerService} from './selected-server.service';
+import {CurrentServerService} from '../current-server.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +8,12 @@ import {SelectedServerService} from './selected-server.service';
 
 export class ServerGuardService implements CanActivate {
 
-  constructor(private selectedServer: SelectedServerService, private router: Router) {
+  constructor(private currentServer: CurrentServerService,
+              private router: Router) {
   }
 
   canActivate() {
-    if (Object.keys(this.selectedServer.servers).length < 1) {
+    if (Object.keys(this.currentServer.servers).length < 1) {
       this.router.navigateByUrl('/panel/create');
       return false;
     }
