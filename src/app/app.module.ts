@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './controllers/app.component';
@@ -18,7 +18,7 @@ import {SSAnalyticsService} from './services/legacy/ssanalytics.service';
 import {PanelHomeComponent} from './controllers/legacy/panel/panel-home/panel-home.component';
 import {PanelCreateComponent} from './controllers/legacy/panel/panel-create/panel-create.component';
 import {PanelMinecraftPluginsComponent} from './controllers/legacy/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
-import {NotifierModule, NotifierOptions} from 'angular-notifier';
+import {NotifierModule, NotifierOptions, NotifierService} from 'angular-notifier';
 import {PanelFrameComponent} from './controllers/legacy/panel/panel-frame/panel-frame.component';
 import {AppLoadService} from './services/legacy/app-load.service';
 import {PanelSettingsComponent} from './controllers/legacy/panel/panel-settings/panel-settings.component';
@@ -30,6 +30,10 @@ import {ProfileComponent} from './controllers/main/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/main/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/legacy/panel/panel-files/panel-files.component';
 import {PanelFileEditorComponent} from './controllers/legacy/panel/panel-file-editor/panel-file-editor.component';
+import {ServiceLocator} from './service.injector';
+import {AuthService} from './services/auth.service';
+import {CurrentServerService} from './services/current-server.service';
+import {Router} from '@angular/router';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -80,6 +84,25 @@ const customNotifierOptions: NotifierOptions = {
   }
 };
 
+export const services: {[key: string]: {provide: any, deps: any[], useClass?: any}} = {
+  'auth': {
+    provide: AuthService,
+    deps: []
+  },
+  'currentServer': {
+    provide: CurrentServerService,
+    deps: []
+  },
+  'notifier': {
+    provide: NotifierService,
+    deps: []
+  },
+  'router': {
+    provide: Router,
+    deps: []
+  }
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -126,4 +149,13 @@ const customNotifierOptions: NotifierOptions = {
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor() {
+    ServiceLocator.injector = Injector.create(
+      Object.keys(services).map(key => ({
+        provide: services[key].provide,
+        useClass: services[key].provide,
+        deps: services[key].deps
+      }))
+    );
+  }
 }
