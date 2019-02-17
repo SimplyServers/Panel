@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../../../services/legacy/authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ServerPayload} from '../../../../core/models/legacy/server-payload';
-import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
+import {AuthService, ServerPayload} from '../../../../services/auth.service';
+import {CurrentServerService} from '../../../../services/current-server.service';
 
 @Component({
   selector: 'app-panel-create',
@@ -26,11 +25,15 @@ export class PanelCreateComponent implements OnInit {
     captcha: ''
   };
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    private currentServer: CurrentServerService) {
   }
 
   ngOnInit() {
-    if (this.selectedServer.ownsOne) {
+    if (this.currentServer.ownsOne) {
       this.router.navigateByUrl('/panel');
       return;
     }
@@ -42,7 +45,7 @@ export class PanelCreateComponent implements OnInit {
       recaptchaReactive: ['', [Validators.required]]
     });
 
-    this.auth.getPresets().subscribe((data) => {
+    this.auth.getPresets().then(data => {
       this.serverPlans = data;
     });
   }
@@ -58,14 +61,14 @@ export class PanelCreateComponent implements OnInit {
     this.server.motd = this.createForm.controls.motd.value;
     this.server.captcha = this.createForm.controls.recaptchaReactive.value;
 
-    this.auth.createServer(this.server).subscribe(() => {
-      this.selectedServer.updateCache(false, () => {
+    this.auth.createServer(this.server).then(() => {
+      this.currentServer.updateCache().then(() => {
         this.router.navigateByUrl('/panel');
-      });
-    }, (err) => {
-      this.loading = false;
+      })
+    }).catch((err) => {
       this.error = err;
-    });
+      this.loading = false;
+    })
 
   }
 }
