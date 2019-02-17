@@ -9,10 +9,10 @@ import {ServiceLocator} from '../service.injector';
 export class ResponsiveServerPage implements OnInit, OnDestroy {
   private selectedServerEmitter: Subject<any>;
 
-  private auth: AuthService;
-  private currentServer: CurrentServerService;
-  private notify: NotifierService;
-  private router: Router;
+  public auth: AuthService;
+  public currentServer: CurrentServerService;
+  public notify: NotifierService;
+  public router: Router;
 
   constructor() {
     this.auth = ServiceLocator.injector.get(AuthService);
@@ -21,7 +21,7 @@ export class ResponsiveServerPage implements OnInit, OnDestroy {
     this.router = ServiceLocator.injector.get(Router);
   };
 
-  loadData = (): void => {};
+  loadData = async (): Promise<void> => {};
 
   public ngOnDestroy = (): void => {
     if (!this.selectedServerEmitter) { this.selectedServerEmitter.unsubscribe(); }
