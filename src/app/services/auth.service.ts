@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ConfigStorageService} from './config-storage.service';
 import {Token} from '@angular/compiler';
 import {PresetDetails} from '../models/preset.modal';
 import {Server} from '../models/server.model';
+import {ConfigStorage} from './config-storage.service';
 
 export interface UserTokenDetails {
   username: string;
@@ -63,14 +63,13 @@ export class AuthService {
   private _user: UserDetails;
 
   constructor(
-    private http: HttpClient,
-    private config: ConfigStorageService
+    private http: HttpClient
   ) {
   };
 
   public authorize = async (token: TokenPayload): Promise<UserDetails> => {
     this.user = (await this.http.post<any>(
-      this.config.config.endpoints.api + 'auth/login',
+      ConfigStorage.config.endpoints.api + 'auth/login',
       token).toPromise()).user;
     return this.user;
   };
@@ -103,14 +102,14 @@ export class AuthService {
 
   public register = async (newUser: TokenPayload): Promise<UserDetails> => {
     return (await this.http.post<any>(
-      this.config.config.endpoints.api + 'auth/register',
+      ConfigStorage.config.endpoints.api + 'auth/register',
       JSON.stringify(newUser)
     ).toPromise()).user;
   };
 
   public changePassoword = async (existingPassword: string, newPassword: string): Promise<void> => {
     return (await this.http.post<any>(
-      this.config.config.endpoints.api + 'auth/changePassword',
+      ConfigStorage.config.endpoints.api + 'auth/changePassword',
       {
         newPassword,
         existingPassword
@@ -121,14 +120,14 @@ export class AuthService {
 
   public getPresets = async (): Promise<PresetDetails[]> => {
     return (await this.http.get<any>(
-      this.config.config.endpoints.api + 'profile/getPresets',
+      ConfigStorage.config.endpoints.api + 'profile/getPresets',
       this.authOptions
     ).toPromise()).presets;
   };
 
   public createServer = async (newServer: ServerPayload): Promise<Server> => {
     return (await this.http.post<any>(
-      this.config.config.endpoints.api + 'server/create',
+      ConfigStorage.config.endpoints.api + 'server/create',
       newServer,
       this.authOptions
     ).toPromise()).server;
@@ -136,7 +135,7 @@ export class AuthService {
 
   public getUserProfile = async (): Promise<any> => {
     return (await this.http.get<any>(
-      this.config.config.endpoints.api + 'profile',
+      ConfigStorage.config.endpoints.api + 'profile',
       this.authOptions
     ).toPromise()).user;
   };
