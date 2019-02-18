@@ -1,26 +1,17 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ServerDetails} from '../../../../core/models/legacy/server-details';
-import {Subject} from 'rxjs';
-import {FileDetails} from '../../../../core/models/legacy/file-details';
-import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
-import {AuthenticationService} from '../../../../services/legacy/authentication.service';
 
 import * as path from 'path-browserify';
-import {NotifierService} from 'angular-notifier';
-import {ServerSocketManagerService} from '../../../../services/legacy/server-socket-manager.service';
-import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
+import {FileDetails, Server} from '../../../../models/server.model';
 
 @Component({
   selector: 'app-panel-files',
   templateUrl: './panel-files.component.html',
   styleUrls: ['./panel-files.component.scss']
 })
-export class PanelFilesComponent implements OnInit, OnDestroy {
+export class PanelFilesComponent extends ResponsiveServerPage {
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
-
-  currentServer: ServerDetails;
-  selectedServerEmitter: Subject<any>;
 
   filesList: any;
   currentPath: string;
@@ -33,58 +24,42 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
   addSubmitted = false;
   error: string;
 
-  constructor(private selectedServer: SelectedServerService,
-              private auth: AuthenticationService,
-              private notify: NotifierService,
-              public serverSocket: ServerSocketManagerService,
-              private router: Router,
-              private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder
+  ) {
+    super();
   }
 
-  ngOnInit() {
+  loadData = async (): Promise<void> => {
     this.addForm = this.formBuilder.group({
-      path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-    });
+          path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+        });
 
     this.currentPath = '/';
 
-    // We cannot view files while the server is blocked.
-    if (this.serverSocket.lastBlocked) {
+    // Make sure the server isn't blocked
+    if (this.serverSocket.blocked) {
       this.blocked = true;
       return;
     }
 
-    this.updateFiles();
+    await this.updateListing();
+  };
 
-    // On server update
-    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
-      this.updateFiles();
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.selectedServerEmitter !== undefined) {
-      this.selectedServerEmitter.unsubscribe();
-    }
-  }
-
-  updateFiles() {
-    this.currentServer = this.selectedServer.getCurrentServer();
-    this.updateListing();
-  }
-
-  updateListing() {
+  private updateListing = async (): Promise<void> => {
     this.loading = true;
 
-    this.auth.listDir(this.currentServer._id, this.currentPath).subscribe(data => {
-      this.loading = false;
-      this.filesList = data;
-    }, (err) => {
-      this.notify.notify('error', 'Failed to get server files; ' + err);
-    });
-  }
+    try {
+      const server: Server = await this.currentServer.getCurrentServer();
+      this.filesList = await server.listDir(this.currentPath);
+    } catch (e) {
+      this.notify.notify('error', 'Failed to get server files; ' + e);
+    }
 
-  onClick(file: FileDetails) {
+    this.loading = false;
+  };
+
+  private onClick = async (file: FileDetails): Promise<void> => {
     if (file.isDir) {
       this.currentPath = path.join(this.currentPath, file.name);
     } else if (file.edible && file.isFile) {
@@ -93,38 +68,41 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
     } else {
       return;
     }
-    this.updateListing();
-  }
 
-  goUp() {
+    await this.updateListing();
+  };
+
+  private goUp = async (): Promise<void> => {
     this.currentPath = path.join(this.currentPath, '../');
-    this.updateListing();
-  }
+    await this.updateListing();
+  };
 
-  goToRoot() {
+  private goToRoot = async (): Promise<void> => {
     this.currentPath = '/';
-    this.updateListing();
-  }
+    await this.updateListing();
+  };
 
-  remove(file: FileDetails) {
+  private remove = async (file: FileDetails): Promise<void> => {
+    const server: Server = await this.currentServer.getCurrentServer();
+
     if (file.isDir) {
-      this.auth.removeFolder(this.currentServer._id, path.join(this.currentPath, file.name)).subscribe(data => {
-        this.updateListing();
-      }, () => {
+      try {
+        await server.removeFolder(path.join(this.currentPath, file.name));
+        await this.updateListing();
+      } catch (e) {
         this.notify.notify('error', 'Failed to remove folder. (is it not empty?)');
-      });
+      }
     } else if (file.isFile) {
-      this.auth.removeFile(this.currentServer._id, path.join(this.currentPath, file.name)).subscribe(data => {
-        this.updateListing();
-      }, () => {
+      try {
+        await server.removeFile(path.join(this.currentPath, file.name));
+        await this.updateListing();
+      } catch (e) {
         this.notify.notify('error', 'Failed to remove file.');
-      });
-    } else {
-
+      }
     }
-  }
+  };
 
-  getSize(bytes: number) {
+  private getSize = (bytes: number): String => {
     const kb = bytes * 0.001;
     const mb = bytes * 0.000001;
 
@@ -135,9 +113,9 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
     } else {
       return Math.round(mb * 100) / 100 + 'MB';
     }
-  }
+  };
 
-  onAdd() {
+  private onAdd = async (): Promise<void> => {
     this.addSubmitted = true;
     if (this.addForm.invalid) {
       return;
@@ -145,19 +123,21 @@ export class PanelFilesComponent implements OnInit, OnDestroy {
     this.addLoading = true;
 
     const targetPath = path.join(this.currentPath, this.addForm.controls.path.value);
+    const server: Server = await this.currentServer.getCurrentServer();
 
-    this.auth.checkAllowed(this.currentServer._id, targetPath).subscribe(data => {
-      if (data) {
+    try {
+      const checkOk = await server.checkAllowed(targetPath);
+      if (checkOk) {
         this.addModal.nativeElement.click();
         this.router.navigateByUrl('/panel/files/edit?f=' + targetPath);
       } else {
         this.error = 'File path not supported.';
       }
-      this.addLoading = false;
-    }, (err) => {
-      this.error = err;
-      this.addLoading = false;
-    });
+    } catch (e) {
+      this.error = e;
+    }
+
+    this.addLoading = false;
   }
 
 }
