@@ -17,16 +17,15 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   error: string;
-
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
-              private router: Router, private auth: AuthenticationService) {
-  }
-
   newUser: TokenPayload = {
     email: '',
     password: '',
     username: ''
   };
+
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
+              private router: Router, private auth: AuthenticationService) {
+  }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({

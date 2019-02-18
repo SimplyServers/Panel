@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Router, RoutesRecognized} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 

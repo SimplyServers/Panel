@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 
 import * as path from 'path-browserify';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -32,8 +32,8 @@ export class PanelFilesComponent extends ResponsiveServerPage {
 
   loadData = async (): Promise<void> => {
     this.addForm = this.formBuilder.group({
-          path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-        });
+      path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+    });
 
     this.currentPath = '/';
 
@@ -138,6 +138,6 @@ export class PanelFilesComponent extends ResponsiveServerPage {
     }
 
     this.addLoading = false;
-  }
+  };
 
 }

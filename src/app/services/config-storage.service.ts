@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 export interface IConfig {
   endpoints: {
@@ -12,7 +12,8 @@ export interface IConfig {
 })
 export class ConfigStorage {
 
-  constructor() { }
+  constructor() {
+  }
 
   public static get config(): IConfig {
     return {
@@ -20,6 +21,6 @@ export class ConfigStorage {
         socket: 'http://10.1.1.238:8080/',
         api: 'http://10.1.1.238:8080/api/v1/'
       }
-    }
+    };
   }
 }

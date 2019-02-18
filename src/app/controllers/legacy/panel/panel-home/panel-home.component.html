@@ -6,13 +6,14 @@
           Server Console
         </div>
         <div class="card-block">
-          <textarea readonly class="form-control" rows="30" #textAreaElement >{{ consoleHistory }}</textarea>
+          <textarea #textAreaElement class="form-control" readonly rows="30">{{ consoleHistory }}</textarea>
         </div>
         <div class="card-footer text-muted">
-          <form [formGroup]="commandForm" (ngSubmit)="onCommand()">
+          <form (ngSubmit)="onCommand()" [formGroup]="commandForm">
             <div class="row">
               <div class="col-sm-10" id="commandField">
-                <input id="command" placeholder="Type command here..." formControlName="command" class="form-control" [ngClass]="{ 'is-invalid': commandSubmitted && commandForm.controls['command'].errors }" />
+                <input [ngClass]="{ 'is-invalid': commandSubmitted && commandForm.controls['command'].errors }" class="form-control" formControlName="command" id="command"
+                       placeholder="Type command here..."/>
               </div>
               <div class="col-sm-2" id="sendField">
                 <button [disabled]="commandLoading" class="btn btn-primary">Send</button>
@@ -28,13 +29,28 @@
           Server Controls
         </div>
         <div class="card-block">
-          <button [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" *ngIf="!serverSocket.lastInstalled" (click)="installServer()" type="button" class="btn btn-info btn-lg btn-block server-action" data-toggle="modal" data-target="#installModal">
+          <button (click)="installServer()"
+                  *ngIf="!serverSocket.lastInstalled" [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action"
+                  data-target="#installModal" data-toggle="modal" type="button">
             Install Server
           </button>
-          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" (click)="serverOn()" type="button" class="btn btn-success btn-lg btn-block server-action">Start Server</button>
-          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Running'" (click)="serverOff()" type="button" class="btn btn-danger btn-stop btn-lg btn-block server-action">Stop Server</button>
-          <button [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || (serverSocket.lastStatus !== 'Running' && serverSocket.lastStatus !== 'Stopping' && serverSocket.lastStatus !== 'Starting')" (click)="serverKill()" type="button" class="btn btn-warning btn-lg btn-block server-action">Force kill Server</button>
-          <button [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" *ngIf="serverSocket.lastInstalled" type="button" class="btn btn-info btn-lg btn-block server-action" data-toggle="modal" data-target="#reinstallModal">
+          <button
+            (click)="serverOn()"
+            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-success btn-lg btn-block server-action" type="button">Start Server
+          </button>
+          <button
+            (click)="serverOff()"
+            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Running'" class="btn btn-danger btn-stop btn-lg btn-block server-action" type="button">Stop
+            Server
+          </button>
+          <button
+            (click)="serverKill()"
+            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || (serverSocket.lastStatus !== 'Running' && serverSocket.lastStatus !== 'Stopping' && serverSocket.lastStatus !== 'Starting')" class="btn btn-warning btn-lg btn-block server-action" type="button">Force kill
+            Server
+          </button>
+          <button *ngIf="serverSocket.lastInstalled"
+                  [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action" data-target="#reinstallModal"
+                  data-toggle="modal" type="button">
             Reinstall Server
           </button>
         </div>
@@ -52,22 +68,27 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="reinstallModal" tabindex="-1" role="dialog" aria-labelledby="installModalLabel" aria-hidden="true">
+  <div aria-hidden="true" aria-labelledby="installModalLabel" class="modal fade" id="reinstallModal" role="dialog"
+       tabindex="-1">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="reinstallModalLabel">Are you sure?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <p>If you have an issue (or need help) with your server, contact our support team before performing a reinstall.</p>
-          <p>This action will permanently remove all server data; we cannot recover server data if a reinstall is performed.</p>
+          <p>If you have an issue (or need help) with your server, contact our support team before performing a
+            reinstall.</p>
+          <p>This action will permanently remove all server data; we cannot recover server data if a reinstall is
+            performed.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button [disabled]="serverSocket.lastBlocked || !serverSocket.lastInstalled" (click)="reinstallServer()" type="button" data-dismiss="modal" class="btn btn-primary">Reinstall</button>
+          <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+          <button (click)="reinstallServer()" [disabled]="serverSocket.lastBlocked || !serverSocket.lastInstalled"
+                  class="btn btn-primary" data-dismiss="modal" type="button">Reinstall
+          </button>
         </div>
       </div>
     </div>

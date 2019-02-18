@@ -6,51 +6,57 @@
           Manage sub-users
         </div>
         <div class="card-block">
-          <ul class="list-group" *ngIf="subUsers.length > 0">
-            <li class="list-group-item justify-content-between" *ngFor="let subuser of subUsers">
+          <ul *ngIf="subUsers.length > 0" class="list-group">
+            <li *ngFor="let subuser of subUsers" class="list-group-item justify-content-between">
               {{ subuser.account_info.username }}
-              <span (click)="removeUser(subuser._id)" class="badge badge-default badge-pill remove-user"><i class="material-icons">clear</i></span>
+              <span (click)="removeUser(subuser._id)" class="badge badge-default badge-pill remove-user"><i
+                class="material-icons">clear</i></span>
             </li>
           </ul>
-          <p id="empty-list" *ngIf="subUsers.length < 1">There seems to be nothing here...</p>
+          <p *ngIf="subUsers.length < 1" id="empty-list">There seems to be nothing here...</p>
         </div>
         <div class="card-footer text-muted">
-          <button type="button" class="btn btn-success btn-lg btn-block add-user" data-toggle="modal"
-                  data-target="#addModal">
+          <button class="btn btn-success btn-lg btn-block add-user" data-target="#addModal" data-toggle="modal"
+                  type="button">
             Add user
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true" #addModal>
-    <form [formGroup]="addForm" (ngSubmit)="addUser()">
+  <div #addModal aria-hidden="true" aria-labelledby="addModal" class="modal fade" id="addModal" role="dialog"
+       tabindex="-1">
+    <form (ngSubmit)="addUser()" [formGroup]="addForm">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addModalLabel">Add sub-user to server</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
               <label for="email">User email address:</label>
-              <input id="email" type="email" formControlName="email" class="form-control"/>
+              <input class="form-control" formControlName="email" id="email" type="email"/>
               <div *ngIf="addSubmitted && addForm.controls['email'].errors" class="invalid-feedback">
-                <div class="invalid" *ngIf="addForm.controls['email'].errors.required">Email is required</div>
-                <div class="invalid" *ngIf="!addForm.controls['email'].errors.required && addForm.controls['email'].errors.email">Email must be a valid email.</div>
+                <div *ngIf="addForm.controls['email'].errors.required" class="invalid">Email is required</div>
+                <div *ngIf="!addForm.controls['email'].errors.required && addForm.controls['email'].errors.email"
+                     class="invalid">Email
+                  must be a valid email.
+                </div>
               </div>
             </div>
-            <p><b>Be careful!</b> Users that are added to your server may access sensitive server files and execute console commands.</p>
+            <p><b>Be careful!</b> Users that are added to your server may access sensitive server files and execute
+              console commands.</p>
             <p>Only add trusted friends as sub-users. Support will not be able to fix damage done by sub-users.</p>
             <div *ngIf="error" class="invalid-feedback">
               <div class="invalid bigerror">Failed to add subuser; {{ error }}</div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-primary" type="submit">Add</button>
           </div>
         </div>
       </div>

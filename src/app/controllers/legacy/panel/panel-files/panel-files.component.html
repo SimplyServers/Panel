@@ -1,37 +1,37 @@
 <app-panel-frame>
-  <div id="blocked" *ngIf="blocked">
+  <div *ngIf="blocked" id="blocked">
     <p>Server files are not currently available. Try reloading the page.</p>
   </div>
-  <div class="row" id="files" *ngIf="!blocked">
+  <div *ngIf="!blocked" class="row" id="files">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
           <span>Server files</span>
-          <span id="reload" data-toggle="modal" data-target="#addModal"
-                class="badge badge-default badge-pill float-right"><i class="material-icons">note_add</i></span>
-          <span id="root" (click)="goToRoot()" class="badge badge-default badge-pill float-right"><i
+          <span class="badge badge-default badge-pill float-right" data-target="#addModal" data-toggle="modal"
+                id="reload"><i class="material-icons">note_add</i></span>
+          <span (click)="goToRoot()" class="badge badge-default badge-pill float-right" id="root"><i
             class="material-icons">keyboard_capslock</i></span>
-          <span id="add" (click)="updateListing()" class="badge badge-default badge-pill float-right"><i
+          <span (click)="updateListing()" class="badge badge-default badge-pill float-right" id="add"><i
             class="material-icons">refresh</i></span>
         </div>
         <div class="card-block">
           <ul class="list-group">
             <li class="list-group-item" id="cwd"><b>Current directory: </b><span id="cwd-path">{{currentPath}}</span>
             </li>
-            <div class="progress" *ngIf="loading">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1"
-                   aria-valuemin="1" aria-valuemax="1"></div>
+            <div *ngIf="loading" class="progress">
+              <div aria-valuemax="1" aria-valuemin="1" aria-valuenow="1"
+                   class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"></div>
             </div>
-            <li class="list-group-item flex-column align-items-start file-item" *ngIf="currentPath !== '/'">
+            <li *ngIf="currentPath !== '/'" class="list-group-item flex-column align-items-start file-item">
               <div class="d-flex w-100 justify-content-between">
                 <a (click)="goUp()"><h5 class="mb-1">../</h5></a>
               </div>
               <small class="text-muted">Go to parent...</small>
             </li>
-            <li class="list-group-item flex-column align-items-start file-item" *ngFor="let file of filesList">
+            <li *ngFor="let file of filesList" class="list-group-item flex-column align-items-start file-item">
               <div class="d-flex w-100 justify-content-between">
                 <a (click)="onClick(file)"><h5 class="mb-1">{{file.name}}{{file.isDir ? '/' : ''}}</h5></a>
-                <span *ngIf="file.edible || file.isDir" (click)="remove(file)" class="badge badge-default badge-pill"><i
+                <span (click)="remove(file)" *ngIf="file.edible || file.isDir" class="badge badge-default badge-pill"><i
                   class="material-icons">clear</i></span>
               </div>
               <small class="text-muted"><b>Modified: </b> {{file.modified}}</small>
@@ -45,35 +45,35 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true"
-       #addModal>
+  <div #addModal aria-hidden="true" aria-labelledby="addModalLabel" class="modal fade" id="addModal" role="dialog"
+       tabindex="-1">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addModalLabel">Create new file</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form [formGroup]="addForm" (ngSubmit)="onAdd()">
+        <form (ngSubmit)="onAdd()" [formGroup]="addForm">
           <div class="modal-body">
             <div class="form-group">
               <div *ngIf="error" class="invalid-feedback">
                 <div class="invalid bigerror">Failed to create file; {{ error }}</div>
               </div>
               <label for="path">File name:</label>
-              <input id="path" formControlName="path" class="form-control"/>
+              <input class="form-control" formControlName="path" id="path"/>
               <div *ngIf="addSubmitted && addForm.controls['path'].errors" class="invalid-feedback">
-                <div class="invalid" *ngIf="addForm.controls['path'].errors.required">Path is required</div>
+                <div *ngIf="addForm.controls['path'].errors.required" class="invalid">Path is required</div>
               </div>
             </div>
             <p>We currently support the following file formats: <b>.properties</b>, <b>.nbt</b>, <b>.yaml</b>,
               <b>.json</b>, <b>.yml</b>, <b>.log</b></p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button [disabled]="serverSocket.lastBlocked" type="submit"
-                    class="btn btn-primary">Create
+            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            <button [disabled]="serverSocket.lastBlocked" class="btn btn-primary"
+                    type="submit">Create
             </button>
           </div>
         </form>

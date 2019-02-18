@@ -28,47 +28,9 @@ export interface ConsoleLog {
 })
 
 export class ServerSocketIOService {
-  get serverStatus(): ServerStatus {
-    return this._serverStatus;
-  }
-
-  set serverStatus(value: ServerStatus) {
-    this._serverStatus = value;
-  }
-
-  get installed(): boolean {
-    return this._installed;
-  }
-
-  set installed(value: boolean) {
-    this._installed = value;
-  }
-
-  get blocked(): boolean {
-    return this._blocked;
-  }
-
-  set blocked(value: boolean) {
-    this._blocked = value;
-  }
-
-  get cachedConsole(): string {
-    return this._cachedConsole;
-  }
-
-  set cachedConsole(value: string) {
-    this._cachedConsole = value;
-  }
-
-  private _serverStatus: ServerStatus;
-  private _installed: boolean;
-  private _blocked: boolean;
-  private _cachedConsole: string;
-
   statusEmitter = new EventEmitter();
   consoleEmitter = new EventEmitter();
   announceEmitter = new EventEmitter();
-
   private ioSocket;
 
   constructor(
@@ -92,6 +54,46 @@ export class ServerSocketIOService {
         console.debug('Connected to socket.');
       });
     });
+  }
+
+  private _serverStatus: ServerStatus;
+
+  get serverStatus(): ServerStatus {
+    return this._serverStatus;
+  }
+
+  set serverStatus(value: ServerStatus) {
+    this._serverStatus = value;
+  }
+
+  private _installed: boolean;
+
+  get installed(): boolean {
+    return this._installed;
+  }
+
+  set installed(value: boolean) {
+    this._installed = value;
+  }
+
+  private _blocked: boolean;
+
+  get blocked(): boolean {
+    return this._blocked;
+  }
+
+  set blocked(value: boolean) {
+    this._blocked = value;
+  }
+
+  private _cachedConsole: string;
+
+  get cachedConsole(): string {
+    return this._cachedConsole;
+  }
+
+  set cachedConsole(value: string) {
+    this._cachedConsole = value;
   }
 
   private handleAnnounce = (data: string) => {

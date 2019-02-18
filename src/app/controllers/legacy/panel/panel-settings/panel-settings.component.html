@@ -4,22 +4,22 @@
     <p>Loading server data...</p>
   </div>
 
-  <div class="row" id="settings" *ngIf="!changeLoading">
+  <div *ngIf="!changeLoading" class="row" id="settings">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
           <span>General Settings</span>
         </div>
         <div class="card-block">
-          <div id="empty-change" *ngIf="nothingToChange">
+          <div *ngIf="nothingToChange" id="empty-change">
             <p>There seems to be nothing here...</p>
           </div>
           <div *ngIf="!nothingToChange">
             <p><b>Please note:</b> Changing your server plan may have unintended side-effects such as plugin removal.
               This change may be irreversible, due to certain technical limitations of certain games.</p>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" data-toggle="modal"
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" class="btn btn-secondary btn-block server-action"
                     data-target="#changeModal"
-                    type="button" class="btn btn-secondary btn-block server-action">Change Plan
+                    data-toggle="modal" type="button">Change Plan
             </button>
           </div>
         </div>
@@ -35,20 +35,20 @@
             your server files on a daily basis and backing up your data. We are not able to recover your server after
             deletion.</p>
           <div>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" data-toggle="modal" data-target="#removeModal"
-                    type="button" class="btn btn-danger btn-block server-action">Remove My Server
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" class="btn btn-danger btn-block server-action" data-target="#removeModal"
+                    data-toggle="modal" type="button">Remove My Server
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+  <div aria-hidden="true" aria-labelledby="removeModal" class="modal fade" id="removeModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="reinstallModalLabel">Are you sure?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -57,22 +57,22 @@
             issues, our support team would be happy to assist you.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind</button>
-          <button [disabled]="serverSocket.lastStatus !== 'Stopped'" type="button" data-dismiss="modal"
-                  (click)="removeServer()" class="btn btn-primary">I'm sure
+          <button class="btn btn-secondary" data-dismiss="modal" type="button">Nevermind</button>
+          <button (click)="removeServer()" [disabled]="serverSocket.lastStatus !== 'Stopped'" class="btn btn-primary"
+                  data-dismiss="modal" type="button">I'm sure
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModal" aria-hidden="true"
-       #changeModal>
+  <div #changeModal aria-hidden="true" aria-labelledby="changeModal" class="modal fade" id="changeModal" role="dialog"
+       tabindex="-1">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form [formGroup]="changeForm" (ngSubmit)="updatePlan()">
+        <form (ngSubmit)="updatePlan()" [formGroup]="changeForm">
           <div class="modal-header">
             <h5 class="modal-title" id="changeModalLabel">Update server plan</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -80,13 +80,13 @@
             <p><b>Warning:</b> Changing your server plan may be irreversible.</p>
             <div class="form-group">
               <label for="preset">Server plan</label>
-              <select id="preset" formControlName="preset" class="form-control"
-                      [ngClass]="{ 'is-invalid': changeSubmitted && changeForm.controls['preset'].errors }">
+              <select [ngClass]="{ 'is-invalid': changeSubmitted && changeForm.controls['preset'].errors }" class="form-control" formControlName="preset"
+                      id="preset">
                 <option *ngFor="let preset of presetList" [ngValue]="preset._id">{{ preset.name }}</option>
               </select>
 
               <div *ngIf="changeSubmitted && changeForm.controls['preset'].errors" class="invalid-feedback">
-                <div class="invalid" *ngIf="changeForm.controls['preset'].errors.required">Type is required</div>
+                <div *ngIf="changeForm.controls['preset'].errors.required" class="invalid">Type is required</div>
               </div>
             </div>
             <div *ngIf="error" class="invalid-feedback">
@@ -94,9 +94,9 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" type="submit"
-                    class="btn btn-primary">Update plan
+            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" class="btn btn-primary"
+                    type="submit">Update plan
             </button>
           </div>
         </form>

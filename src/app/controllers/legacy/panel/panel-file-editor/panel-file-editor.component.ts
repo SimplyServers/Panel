@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-panel-file-editor',
@@ -27,7 +27,7 @@ export class PanelFileEditorComponent extends ResponsiveServerPage {
     super();
   }
 
-   loadData = async (): Promise<void> => {
+  loadData = async (): Promise<void> => {
     this.editForm = this.formBuilder.group({
       content: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
     });
@@ -73,6 +73,6 @@ export class PanelFileEditorComponent extends ResponsiveServerPage {
       this.error = e;
       this.editLoading = false;
     }
-  }
+  };
 
 }

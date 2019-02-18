@@ -9,7 +9,8 @@ import {AuthService} from '../auth.service';
 export class AdminGuardService implements CanActivate {
 
   constructor(private auth: AuthService,
-    private router: Router) {}
+              private router: Router) {
+  }
 
   canActivate() {
     if (!this.auth.checkLoggedIn() || (this.auth.user.group && this.auth.user.group.isAdmin)) {

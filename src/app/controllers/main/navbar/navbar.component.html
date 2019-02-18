@@ -1,13 +1,13 @@
 <nav class="navbar navbar-toggleable-md navbar-inverse">
-  <a routerLink="/" class="navbar-brand text-primary">Simply Servers Alpha</a>
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
+  <a class="navbar-brand text-primary" routerLink="/">Simply Servers Alpha</a>
+  <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+          class="navbar-toggler navbar-toggler-right" data-target="#navbarSupportedContent" data-toggle="collapse"
+          type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
     <ul class="navbar-nav">
-      <li class="nav-item" *ngIf="login">
+      <li *ngIf="login" class="nav-item">
         <a class="nav-link text-primary" routerLink="/panel">Panel</a>
       </li>
       <li class="nav-item">
@@ -19,18 +19,18 @@
       <li class="nav-item">
         <a class="nav-link text-primary" routerLink="/list">Server List</a>
       </li>
-      <li class="nav-item" *ngIf="!login">
+      <li *ngIf="!login" class="nav-item">
         <a class="nav-link text-primary" routerLink="/login">Login</a>
       </li>
-      <li class="nav-item" *ngIf="!login">
+      <li *ngIf="!login" class="nav-item">
         <a class="nav-link text-primary" routerLink="/register">Register</a>
       </li>
-      <li class="nav-item dropdown" *ngIf="login">
-        <a class="nav-link dropdown-toggle text-primary" href="#" id="navbarAccountDropdown" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
+      <li *ngIf="login" class="nav-item dropdown">
+        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle text-primary" data-toggle="dropdown"
+           href="#" id="navbarAccountDropdown">
           {{username}}
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+        <div aria-labelledby="navbarAccountDropdown" class="dropdown-menu">
           <span class="dropdown-item dropdown-nohover">Shards: {{ shards }}</span>
           <a class="dropdown-item" routerLink="/shop">Buy Shards</a>
           <div class="dropdown-divider"></div>

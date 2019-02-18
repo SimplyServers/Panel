@@ -84,7 +84,7 @@ const customNotifierOptions: NotifierOptions = {
   }
 };
 
-export const services: {[key: string]: {provide: any, deps: any[], useClass?: any}} = {
+export const services: { [key: string]: { provide: any, deps: any[], useClass?: any } } = {
   'auth': {
     provide: AuthService,
     deps: []

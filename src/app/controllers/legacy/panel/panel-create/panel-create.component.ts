@@ -64,11 +64,11 @@ export class PanelCreateComponent implements OnInit {
     this.auth.createServer(this.server).then(() => {
       this.currentServer.updateCache().then(() => {
         this.router.navigateByUrl('/panel');
-      })
+      });
     }).catch((err) => {
       this.error = err;
       this.loading = false;
-    })
+    });
 
   }
 }

@@ -10,9 +10,12 @@ export class AppLoadService {
   constructor(
     private currentServer: CurrentServerService,
     private auth: AuthService
-  ) {}
+  ) {
+  }
 
   public initializeApp = async (): Promise<any> => {
-      if (this.auth.checkLoggedIn()) { await this.currentServer.updateCache() }
+    if (this.auth.checkLoggedIn()) {
+      await this.currentServer.updateCache();
+    }
   };
 }

@@ -13,7 +13,7 @@ export interface UserTokenDetails {
 }
 
 export interface GroupDetails {
-   _id: string;
+  _id: string;
   color: string;
   name: string;
   displayName: string;
@@ -49,6 +49,13 @@ export interface TokenPayload {
   providedIn: 'root'
 })
 export class AuthService {
+  constructor(
+    private http: HttpClient
+  ) {
+  };
+
+  private _user: UserDetails;
+
   get user(): UserDetails {
     if (!this._user) {
       this._user = JSON.parse(localStorage.getItem('session'));
@@ -60,12 +67,12 @@ export class AuthService {
     this._user = value;
   }
 
-  private _user: UserDetails;
-
-  constructor(
-    private http: HttpClient
-  ) {
-  };
+  public get authOptions() {
+    if (!this.user || !this.user.token) {
+      return {};
+    }
+    return {headers: {Authorization: 'Token ' + this.user.token}};
+  }
 
   public authorize = async (token: TokenPayload): Promise<UserDetails> => {
     this.user = (await this.http.post<any>(
@@ -90,13 +97,6 @@ export class AuthService {
       return false;
     }
   };
-
-  public get authOptions() {
-    if (!this.user || !this.user.token) {
-      return {};
-    }
-    return {headers: {Authorization: 'Token ' + this.user.token}};
-  }
 
   // ---------------*
 

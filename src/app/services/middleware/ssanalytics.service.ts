@@ -11,7 +11,8 @@ export class SSAnalyticsService {
 
   constructor(
     private http: HttpClient,
-  ) {}
+  ) {
+  }
 
   onLoad() {
     this.http.get<any>(ConfigStorage.config.endpoints.api + 'analytics/load').subscribe(data => {
