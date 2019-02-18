@@ -13,14 +13,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LogoutComponent} from './controllers/main/logout/logout.component';
 import {APIInterceptor} from './interceptors/apiinterceptor';
-import {AuthenticationService} from './services/legacy/authentication.service';
-import {SSAnalyticsService} from './services/legacy/ssanalytics.service';
 import {PanelHomeComponent} from './controllers/legacy/panel/panel-home/panel-home.component';
 import {PanelCreateComponent} from './controllers/legacy/panel/panel-create/panel-create.component';
 import {PanelMinecraftPluginsComponent} from './controllers/legacy/panel/panel-minecraft-plugins/panel-minecraft-plugins.component';
 import {NotifierModule, NotifierOptions, NotifierService} from 'angular-notifier';
 import {PanelFrameComponent} from './controllers/legacy/panel/panel-frame/panel-frame.component';
-import {AppLoadService} from './services/legacy/app-load.service';
 import {PanelSettingsComponent} from './controllers/legacy/panel/panel-settings/panel-settings.component';
 import {PanelPluginsComponent} from './controllers/legacy/panel/panel-plugins/panel-plugins.component';
 import {PanelSubownersComponent} from './controllers/legacy/panel/panel-subowners/panel-subowners.component';
@@ -34,6 +31,9 @@ import {ServiceLocator} from './service.injector';
 import {AuthService} from './services/auth.service';
 import {CurrentServerService} from './services/current-server.service';
 import {Router} from '@angular/router';
+import {ServerSocketIOService} from './services/server-socket-io.service';
+import {SSAnalyticsService} from './services/middleware/ssanalytics.service';
+import {AppLoadService} from './services/middleware/app-load.service';
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -100,6 +100,10 @@ export const services: {[key: string]: {provide: any, deps: any[], useClass?: an
   'router': {
     provide: Router,
     deps: []
+  },
+  'serverSocket': {
+    provide: ServerSocketIOService,
+    deps: []
   }
 };
 
@@ -136,7 +140,7 @@ export const services: {[key: string]: {provide: any, deps: any[], useClass?: an
     RecaptchaFormsModule,
     HttpClientModule
   ],
-  providers: [AuthenticationService, {
+  providers: [AuthService, {
     provide: HTTP_INTERCEPTORS,
     useClass: APIInterceptor,
     multi: true
