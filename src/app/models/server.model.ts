@@ -44,6 +44,51 @@ export class Server {
     return this.serverDetails;
   }
 
+  public submitCommand = async (command: String): Promise<void> => {
+    return (await this.http.post<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/control/command',
+      {
+        command
+      },
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public install = async (): Promise<void> => {
+    return (await this.http.get<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/control/install',
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public reinstall = async (): Promise<void> => {
+    return (await this.http.get<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/control/reinstall',
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public killPower = async (): Promise<void> => {
+    return (await this.http.get<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/power/kill',
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public startPower = async (): Promise<void> => {
+    return (await this.http.get<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/power/on',
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public offPower = async (): Promise<void> => {
+    return (await this.http.get<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/power/off',
+      this.auth.authOptions
+    ).toPromise());
+  };
+
   public addSubuser = async (email: String): Promise<void> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/addSubuser',

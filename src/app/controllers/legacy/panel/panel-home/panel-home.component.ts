@@ -1,22 +1,19 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {interval, Subject} from 'rxjs';
-import {ServerSocketManagerService} from '../../../../services/legacy/server-socket-manager.service';
-import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../../services/legacy/authentication.service';
-import {NotifierService} from 'angular-notifier';
-import {ServerDetails} from '../../../../core/models/legacy/server-details';
+import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
+import {ServerStatus} from '../../../../services/server-socket-io.service';
+import {Server} from '../../../../models/server.model';
 
 @Component({
   selector: 'app-panel-home',
   templateUrl: './panel-home.component.html',
   styleUrls: ['./panel-home.component.scss']
 })
-export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PanelHomeComponent extends ResponsiveServerPage implements AfterViewInit {
   @ViewChild('textAreaElement', {read: ElementRef}) textAreaElement: ElementRef;
 
-  currentServer: ServerDetails;
-  consoleHistory = '';
+  serverDetails: any;
 
   commandForm: FormGroup;
   commandLoading = false;
@@ -28,35 +25,23 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
   consoleEmitter: Subject<any>;
   statusEmitter: Subject<any>;
 
-  selectedServerEmitter: Subject<any>;
-
-  constructor(public serverSocket: ServerSocketManagerService,
-              private selectedServer: SelectedServerService,
-              private formBuilder: FormBuilder,
-              private auth: AuthenticationService,
-              private notify: NotifierService) {
+  constructor(private formBuilder: FormBuilder) {
+    super();
   }
 
-  ngOnInit() {
-    this.updateServer();
+  onFirstInit = async (): Promise<void> => {
     this.consoleEmitter = this.serverSocket.consoleEmitter.subscribe(data => {
-      this.consoleHistory = this.consoleHistory + data;
-      this.scroll();
+      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + data;
+      this.update = true;
     });
     this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
-      this.consoleHistory = this.consoleHistory + '➤ [Manager daemon] ' + data + '\n';
-      this.scroll();
+      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + '➤ [Manager daemon] ' + data + '\n';
+      this.update = true;
     });
     this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {
-      this.consoleHistory = this.consoleHistory + '➤ [Status update] Status updated to ' + data + '\n';
-      this.scroll();
+      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + '➤ [Status update] Status updated to ' + data + '\n';
+      this.update = true;
     });
-
-    // On server update
-    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
-      this.updateServer();
-    });
-
 
     // Read scroll() todo.
     interval(500).subscribe(() => {
@@ -65,118 +50,123 @@ export class PanelHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
       }
     });
-  }
-
-  scroll() {
-    // TODO: this could be better. Basically instead of doing this every time the console is updated, constantly check every .5 seconds to see if there is new text, if there is, scroll down.
-    // this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
-    // console.log(this.textAreaElement.nativeElement.scrollHeight);
-    this.update = true;
-  }
+  };
 
   ngAfterViewInit() {
     if (this.textAreaElement) {
-      this.scroll(); // This is so the console will scroll
+      this.update = false; // This is so the console will scroll
     }
   }
 
-  ngOnDestroy() {
-    this.serverSocket.cacheConsole(this.consoleHistory);
+  onUnload = async (): Promise<void> => {
     if (this.announceEmitter !== undefined) {
       this.announceEmitter.unsubscribe();
     }
     if (this.consoleEmitter !== undefined) {
       this.consoleEmitter.unsubscribe();
     }
-    if (this.selectedServerEmitter !== undefined) {
-      this.selectedServerEmitter.unsubscribe();
-    }
     if (this.statusEmitter !== undefined) {
       this.statusEmitter.unsubscribe();
     }
-  }
+  };
 
-  updateServer() {
+  loadData = async (): Promise<void> => {
     this.commandForm = this.formBuilder.group({
       command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
     });
+    const server: Server = await this.currentServer.getCurrentServer();
+    this.serverDetails = server.details;
+  };
 
-    this.currentServer = this.selectedServer.getCurrentServer();
-    this.consoleHistory = this.serverSocket.getConsole();
-  }
-
-  serverOn() {
-    if (this.serverSocket.lastStatus !== 'Stopped') {
+  private serverOn = async (): Promise<void> => {
+    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
       return;
     }
-    this.auth.startServer(this.currentServer._id).subscribe(() => {
 
-    }, (err) => {
-      this.notify.notify('error', 'Failed to turn the server on; ' + err);
-    });
-  }
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.startPower();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to turn the server on; ' + e);
+    }
+  };
 
-  serverOff() {
-    if (this.serverSocket.lastStatus !== 'Running') {
+  private serverOff = async (): Promise<void> => {
+    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING) {
       return;
     }
-    this.auth.stopServer(this.currentServer._id).subscribe(() => {
 
-    }, (err) => {
-      this.notify.notify('error', 'Failed to turn the server off; ' + err);
-    });
-  }
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.offPower();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to turn the server off; ' + e);
+    }
+  };
 
-  serverKill() {
-    if (this.serverSocket.lastStatus !== 'Running' && this.serverSocket.lastStatus !== 'Starting' && this.serverSocket.lastStatus !== 'Stopping') {
+  private serverKill = async (): Promise<void> => {
+    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING &&
+      this.serverSocket.serverStatus !== ServerStatus.STARTING &&
+      this.serverSocket.serverStatus !== ServerStatus.STOPPING) {
       return;
     }
-    this.auth.killServer(this.currentServer._id).subscribe(() => {
 
-    }, (err) => {
-      this.notify.notify('error', 'Failed to kill server; ' + err);
-    });
-  }
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.killPower();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to kill the server; ' + e);
+    }
+  };
 
-  installServer() {
-    if (this.serverSocket.lastStatus !== 'Stopped') {
+  private installServer = async (): Promise<void> => {
+    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
       return;
     }
-    this.auth.installServer(this.currentServer._id).subscribe(() => {
 
-    }, (err) => {
-      this.notify.notify('error', 'Failed to install server; ' + err);
-    });
-  }
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.install();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to install server; ' + e);
+    }
+  };
 
-  reinstallServer() {
-    if (this.serverSocket.lastStatus !== 'Stopped') {
+  private reinstallServer = async (): Promise<void> => {
+    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
       return;
     }
-    this.auth.reinstallServer(this.currentServer._id).subscribe(() => {
 
-    }, (err) => {
-      this.notify.notify('error', 'Failed to reinstall server; ' + err);
-    });
-  }
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.reinstall();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to reinstall server; ' + e);
+    }
+  };
 
-  onCommand() {
+  private onCommand = async (): Promise<void> => {
     this.commandSubmitted = true;
+
     if (this.commandForm.invalid) {
       return;
     }
-    if (this.serverSocket.lastStatus !== 'Running') {
+
+    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING) {
       return;
     }
+
     this.commandLoading = true;
 
-    this.auth.submitCommand(this.currentServer._id, this.commandForm.controls.command.value).subscribe(() => {
-      this.commandForm.controls.command.setValue('');
-      this.commandLoading = false;
-    }, (err) => {
-      this.commandLoading = false;
-      this.notify.notify('error', 'Failed to submit command; ' + err);
-    });
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.submitCommand(this.commandForm.controls.command.value);
+    } catch (e) {
+      this.notify.notify('error', 'Failed to reinstall server; ' + e);
+    }
+
+    this.commandForm.controls.command.setValue('');
+    this.commandLoading = false;
   }
 
 }

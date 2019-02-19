@@ -6,7 +6,7 @@
           Server Console
         </div>
         <div class="card-block">
-          <textarea #textAreaElement class="form-control" readonly rows="30">{{ consoleHistory }}</textarea>
+          <textarea #textAreaElement class="form-control" readonly rows="30">{{ serverSocket.cachedConsole }}</textarea>
         </div>
         <div class="card-footer text-muted">
           <form (ngSubmit)="onCommand()" [formGroup]="commandForm">
@@ -30,26 +30,26 @@
         </div>
         <div class="card-block">
           <button (click)="installServer()"
-                  *ngIf="!serverSocket.lastInstalled" [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action"
+                  *ngIf="!serverSocket.installed" [disabled]="serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action"
                   data-target="#installModal" data-toggle="modal" type="button">
             Install Server
           </button>
           <button
             (click)="serverOn()"
-            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-success btn-lg btn-block server-action" type="button">Start Server
+            [disabled]="!serverSocket.installed || serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'" class="btn btn-success btn-lg btn-block server-action" type="button">Start Server
           </button>
           <button
             (click)="serverOff()"
-            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || serverSocket.lastStatus !== 'Running'" class="btn btn-danger btn-stop btn-lg btn-block server-action" type="button">Stop
+            [disabled]="!serverSocket.installed || serverSocket.blocked || serverSocket.serverStatus !== 'Running'" class="btn btn-danger btn-stop btn-lg btn-block server-action" type="button">Stop
             Server
           </button>
           <button
             (click)="serverKill()"
-            [disabled]="!serverSocket.lastInstalled || serverSocket.lastBlocked || (serverSocket.lastStatus !== 'Running' && serverSocket.lastStatus !== 'Stopping' && serverSocket.lastStatus !== 'Starting')" class="btn btn-warning btn-lg btn-block server-action" type="button">Force kill
+            [disabled]="!serverSocket.installed || serverSocket.blocked || (serverSocket.serverStatus !== 'Running' && serverSocket.serverStatus !== 'Stopping' && serverSocket.serverStatus !== 'Starting')" class="btn btn-warning btn-lg btn-block server-action" type="button">Force kill
             Server
           </button>
-          <button *ngIf="serverSocket.lastInstalled"
-                  [disabled]="serverSocket.lastBlocked || serverSocket.lastStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action" data-target="#reinstallModal"
+          <button *ngIf="serverSocket.installed"
+                  [disabled]="serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'" class="btn btn-info btn-lg btn-block server-action" data-target="#reinstallModal"
                   data-toggle="modal" type="button">
             Reinstall Server
           </button>
@@ -60,10 +60,10 @@
           Server Details
         </div>
         <div class="card-block">
-          <p><span class="value">Credits/day: </span>{{ currentServer.preset.creditsPerDay }}</p>
-          <p><span class="value">Plan name: </span>{{ currentServer.preset.name }}</p>
-          <p><span class="value">Max Players: </span>{{ currentServer.preset.maxPlayers }}</p>
-          <p><span class="value">Memory: </span>{{ currentServer.preset.build.mem }}MB</p>
+          <p><span class="value">Credits/day: </span>{{ serverDetails.preset.creditsPerDay }}</p>
+          <p><span class="value">Plan name: </span>{{ serverDetails.preset.name }}</p>
+          <p><span class="value">Max Players: </span>{{ serverDetails.preset.maxPlayers }}</p>
+          <p><span class="value">Memory: </span>{{ serverDetails.preset.build.mem }}MB</p>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-          <button (click)="reinstallServer()" [disabled]="serverSocket.lastBlocked || !serverSocket.lastInstalled"
+          <button (click)="reinstallServer()" [disabled]="serverSocket.blocked || !serverSocket.installed"
                   class="btn btn-primary" data-dismiss="modal" type="button">Reinstall
           </button>
         </div>
