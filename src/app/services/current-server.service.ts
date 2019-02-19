@@ -59,6 +59,12 @@ export class CurrentServerService {
     return this.currentServer;
   };
 
+  public updateCurrentServerData = async (): Promise<void> => {
+    const oldServer: Server = await this.getCurrentServer();
+    await this.updateCache();
+    this.currentServer = this.servers.find(server => server.details._id === oldServer.details._id);
+  };
+
   public getServers = async (): Promise<void> => {
     if (!this._servers) {
       await this.updateCache(true);

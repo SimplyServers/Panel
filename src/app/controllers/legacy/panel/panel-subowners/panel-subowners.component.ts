@@ -1,21 +1,16 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../../services/legacy/authentication.service';
-import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
-import {ServerDetails} from '../../../../core/models/legacy/server-details';
-import {NotifierService} from 'angular-notifier';
-import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
+import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
+import {Server} from '../../../../models/server.model';
 
 @Component({
   selector: 'app-panel-subowners',
   templateUrl: './panel-subowners.component.html',
   styleUrls: ['./panel-subowners.component.scss']
 })
-export class PanelSubownersComponent implements OnInit, OnDestroy {
+export class PanelSubownersComponent extends ResponsiveServerPage {
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
 
-  currentServer: ServerDetails;
   subUsers: any;
 
   error: string;
@@ -23,66 +18,44 @@ export class PanelSubownersComponent implements OnInit, OnDestroy {
   addSubmitted = false;
   addForm: FormGroup;
 
-  selectedServerEmitter: Subject<any>;
-
-  constructor(private formBuilder: FormBuilder, private auth: AuthenticationService, private selectedServer: SelectedServerService, private notify: NotifierService, private router: Router) {
+  constructor(private formBuilder: FormBuilder) {
+    super();
   }
 
-  ngOnInit() {
+  loadData = async (): Promise<void> => {
     this.addForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
-    this.loadSubusers();
-    // On server update
-    this.selectedServerEmitter = this.selectedServer.serverUpdateEmitter.subscribe(() => {
-      this.loadSubusers();
-    });
 
-  }
-
-  ngOnDestroy() {
-    if (this.selectedServerEmitter !== undefined) {
-      this.selectedServerEmitter.unsubscribe();
-    }
-  }
-
-  loadSubusers() {
-    this.currentServer = this.selectedServer.getCurrentServer();
-
-    if (!this.currentServer.isOwner) {
+    if (!this.currentServer.currentServer.details.isOwner) {
       this.router.navigateByUrl('/panel');
     }
 
-    this.subUsers = this.currentServer.sub_owners;
-  }
+    this.subUsers = (await this.currentServer.getCurrentServer()).details.sub_owners;
+  };
 
-  removeUser(id) {
-    this.auth.removeSubuser(this.currentServer._id, id).subscribe(() => {
-      this.selectedServer.updateCache(true, () => {
-        this.selectedServer.reloadCurrentServer();
-      });
-    }, (err) => {
-      this.notify.notify('error', 'Failed to remove subuser; ' + err);
-    });
-  }
+  private removeUser = async (id: String): Promise<void> => {
 
-  addUser() {
-    this.addSubmitted = true;
-    if (this.addForm.invalid) {
-      return;
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.removeSubuser(id);
+      await this.currentServer.updateCurrentServerData();
+    } catch (e) {
+      this.notify.notify('error', 'Failed to remove subuser; ' + e);
     }
-    this.addLoading = true;
-    this.auth.addSubuser(this.currentServer._id, this.addForm.controls.email.value).subscribe(() => {
-      this.selectedServer.updateCache(true, () => {
-        this.selectedServer.reloadCurrentServer();
-        this.addSubmitted = false;
-        this.addLoading = false;
-        this.addModal.nativeElement.click();
-      });
+  };
 
-    }, (err) => {
-      this.error = err;
-      this.addLoading = false;
-    });
-  }
+  private addUser = async (email: String): Promise<void> => {
+
+    const server: Server = await this.currentServer.getCurrentServer();
+    try {
+      await server.addSubuser(email);
+      await this.currentServer.updateCurrentServerData();
+    } catch (e) {
+      this.error = e;
+    }
+    this.addSubmitted = false;
+    this.addLoading = false;
+    this.addModal.nativeElement.click();
+  };
 }

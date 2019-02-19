@@ -46,7 +46,7 @@ export class PanelFilesComponent extends ResponsiveServerPage {
     await this.updateListing();
   };
 
-  private updateListing = async (): Promise<void> => {
+  updateListing = async (): Promise<void> => {
     this.loading = true;
 
     try {

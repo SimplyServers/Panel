@@ -25,7 +25,6 @@ export class ResponsiveServerPage implements OnInit, OnDestroy {
   };
 
   onFirstInit = async (): Promise<void> => {
-
   };
   updateListing = async (): Promise<void> => {
   };
@@ -44,18 +43,19 @@ export class ResponsiveServerPage implements OnInit, OnDestroy {
     this.onUnload();
   };
 
-  public ngOnInit = (): void => {
-    if (!this.currentServer.ownsOne) {
-      this.router.navigateByUrl('/panel/create');
-      return;
-    }
+  public ngOnInit = async (): Promise<void> => {
+    // First init
+    await this.onFirstInit();
 
-    this.onFirstInit();
+    // Load data initially
+    await this.loadData();
 
+    // When the server list is updated, refire updateListing
     this.serverCacheUpdateEmitter = this.currentServer.serverCacheEmitter.subscribe(() => {
       this.updateListing();
     });
 
+    // When the server is changed, refire loadData
     this.selectedServerEmitter = this.currentServer.serverUpdateEmitter.subscribe(() => {
       this.loadData();
     });
