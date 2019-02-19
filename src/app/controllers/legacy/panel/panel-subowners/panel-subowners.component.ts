@@ -51,11 +51,11 @@ export class PanelSubownersComponent extends ResponsiveServerPage {
     try {
       await server.addSubuser(email);
       await this.currentServer.updateCurrentServerData();
+      this.addModal.nativeElement.click();
     } catch (e) {
       this.error = e;
     }
     this.addSubmitted = false;
     this.addLoading = false;
-    this.addModal.nativeElement.click();
   };
 }

@@ -64,6 +64,16 @@ export class Server {
     ).toPromise());
   };
 
+  public changePreset = async (preset: string): Promise<void> => {
+    return (await this.http.post<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/changePreset',
+      {
+        preset
+      },
+      this.auth.authOptions
+    ).toPromise());
+  };
+
   public listDir = async (path: string): Promise<FileDetails[]> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/directory',
