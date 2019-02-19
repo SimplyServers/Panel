@@ -4,8 +4,6 @@ import {NotfoundComponent} from './controllers/main/notfound/notfound.component'
 import {HomeComponent} from './controllers/main/home/home.component';
 import {LoginComponent} from './controllers/main/login/login.component';
 import {RegisterComponent} from './controllers/main/register/register.component';
-import {DeauthGuardService} from './services/legacy/deauth-guard.service';
-import {AuthGuardService} from './services/legacy/auth-guard.service';
 import {LogoutComponent} from './controllers/main/logout/logout.component';
 import {PanelHomeComponent} from './controllers/legacy/panel/panel-home/panel-home.component';
 import {PanelCreateComponent} from './controllers/legacy/panel/panel-create/panel-create.component';
@@ -16,8 +14,10 @@ import {PanelSettingsComponent} from './controllers/legacy/panel/panel-settings/
 import {ProfileComponent} from './controllers/main/profile/profile.component';
 import {ChangePasswordComponent} from './controllers/main/change-password/change-password.component';
 import {PanelFilesComponent} from './controllers/legacy/panel/panel-files/panel-files.component';
-import {ServerGuardService} from './services/legacy/server-guard.service';
 import {PanelFileEditorComponent} from './controllers/legacy/panel/panel-file-editor/panel-file-editor.component';
+import {DeauthGuardService} from './services/middleware/deauth-guard.service';
+import {AuthGuardService} from './services/middleware/auth-guard.service';
+import {ServerGuardService} from './services/middleware/server-guard.service';
 
 const routes: Routes = [
   {
