@@ -44,6 +44,26 @@ export class Server {
     return this.serverDetails;
   }
 
+  public addSubuser = async (email: String): Promise<void> => {
+    return (await this.http.post<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/addSubuser',
+      {
+        email
+      },
+      this.auth.authOptions
+    ).toPromise());
+  };
+
+  public removeSubuser = async (id: String): Promise<void> => {
+    return (await this.http.post<any>(
+      ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/removeSubuser',
+      {
+        id
+      },
+      this.auth.authOptions
+    ).toPromise());
+  };
+
   public listDir = async (path: string): Promise<FileDetails[]> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.serverDetails._id + '/fs/directory',
