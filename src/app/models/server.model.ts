@@ -1,7 +1,7 @@
-import {PresetDetails} from './legacy/preset-details';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../services/auth.service';
 import {ConfigStorage} from '../services/config-storage.service';
+import {PresetDetails} from './preset.modal';
 
 export interface FileDetails {
   name: string;
