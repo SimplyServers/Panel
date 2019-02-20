@@ -19,7 +19,8 @@
               <div *ngIf="error" class="invalid-feedback">
                 <div class="invalid bigerror">Failed to save file contents; {{ error }}</div>
               </div>
-              <textarea [ngClass]="{ 'is-invalid': editSubmitted && editForm.controls['content'].errors }" class="form-control" class="form-control" formControlName="content"
+              <textarea [ngClass]="{ 'is-invalid': editSubmitted && editForm.controls['content'].errors }"
+                        class="form-control" class="form-control" formControlName="content"
                         id="content"
                         rows="30"></textarea>
               <div *ngIf="editSubmitted && editForm.controls['content'].errors" class="invalid-feedback">

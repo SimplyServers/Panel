@@ -17,7 +17,8 @@
           <div *ngIf="!nothingToChange">
             <p><b>Please note:</b> Changing your server plan may have unintended side-effects such as plugin removal.
               This change may be irreversible, due to certain technical limitations of certain games.</p>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading" class="btn btn-secondary btn-block server-action"
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped' || changeLoading"
+                    class="btn btn-secondary btn-block server-action"
                     data-target="#changeModal"
                     data-toggle="modal" type="button">Change Plan
             </button>
@@ -35,7 +36,8 @@
             your server files on a daily basis and backing up your data. We are not able to recover your server after
             deletion.</p>
           <div>
-            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" class="btn btn-danger btn-block server-action" data-target="#removeModal"
+            <button [disabled]="serverSocket.lastStatus !== 'Stopped'" class="btn btn-danger btn-block server-action"
+                    data-target="#removeModal"
                     data-toggle="modal" type="button">Remove My Server
             </button>
           </div>
@@ -80,7 +82,8 @@
             <p><b>Warning:</b> Changing your server plan may be irreversible.</p>
             <div class="form-group">
               <label for="preset">Server plan</label>
-              <select [ngClass]="{ 'is-invalid': changeSubmitted && changeForm.controls['preset'].errors }" class="form-control" formControlName="preset"
+              <select [ngClass]="{ 'is-invalid': changeSubmitted && changeForm.controls['preset'].errors }"
+                      class="form-control" formControlName="preset"
                       id="preset">
                 <option *ngFor="let preset of presetList" [ngValue]="preset._id">{{ preset.name }}</option>
               </select>

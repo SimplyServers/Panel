@@ -2,8 +2,8 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 
 import * as path from 'path-browserify';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
-import {FileDetails, Server} from '../../../../models/server.model';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
+import {FileDetails, Server} from '../../../models/server.model';
 
 @Component({
   selector: 'app-panel-files',

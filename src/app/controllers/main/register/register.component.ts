@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PasswordValidation} from '../../../password-validation';
-import {TokenPayload} from '../../../../core/models/legacy/token-payload';
-import {AuthenticationService} from '../../../services/legacy/authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService, TokenPayload} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -23,8 +22,10 @@ export class RegisterComponent implements OnInit {
     username: ''
   };
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
-              private router: Router, private auth: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
+              private router: Router,
+              private auth: AuthService) {
   }
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class RegisterComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || undefined;
   }
 
-  onSubmit() {
+  onSubmit = async (): Promise<void> => {
     this.submitted = true;
     if (this.registerForm.invalid) {
       return;
@@ -48,16 +49,17 @@ export class RegisterComponent implements OnInit {
     this.newUser.username = this.registerForm.controls.username.value;
     this.newUser.email = this.registerForm.controls.email.value;
     this.newUser.password = this.registerForm.controls.password.value;
-    this.auth.register(this.newUser).subscribe((data) => {
-      if (this.returnUrl === undefined) {
-        this.router.navigateByUrl('/login'); // Good login! Return to dash w/o returnUrl
-      } else {
-        this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); // Good login! Return to dash /w returnUrl
-      }
-    }, (err) => {
-      this.error = err;
-      this.loading = false;
-    });
-  }
 
+    try {
+      await this.auth.register(this.newUser);
+      if (this.returnUrl === undefined) {
+        await this.router.navigateByUrl('/login'); // Good login! Return to dash w/o returnUrl
+      } else {
+        await this.router.navigateByUrl('/login?returnUrl=' + this.returnUrl); // Good login! Return to dash /w returnUrl
+      }
+    } catch (e) {
+      this.error = e;
+    }
+    this.loading = false;
+  };
 }

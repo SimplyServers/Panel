@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({

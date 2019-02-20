@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../../services/legacy/authentication.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,11 +11,12 @@ export class ProfileComponent implements OnInit {
   data: any;
   loading = true;
 
-  constructor(private auth: AuthenticationService) {
+  constructor(private auth: AuthService) {
   }
 
   ngOnInit() {
-    this.auth.getUserData().subscribe(data => {
+    this.loading = false;
+    this.auth.getUserProfile().then(data => {
       this.loading = false;
       this.data = data;
     });

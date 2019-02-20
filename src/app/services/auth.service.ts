@@ -107,7 +107,7 @@ export class AuthService {
     ).toPromise()).user;
   };
 
-  public changePassoword = async (existingPassword: string, newPassword: string): Promise<void> => {
+  public changePassword = async (existingPassword: string, newPassword: string): Promise<void> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'auth/changePassword',
       {

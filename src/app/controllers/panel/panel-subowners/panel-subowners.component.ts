@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
-import {Server} from '../../../../models/server.model';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
+import {Server} from '../../../models/server.model';
 
 @Component({
   selector: 'app-panel-subowners',

@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {interval, Subject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
-import {ServerStatus} from '../../../../services/server-socket-io.service';
-import {Server} from '../../../../models/server.model';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
+import {ServerStatus} from '../../../services/server-socket-io.service';
+import {Server} from '../../../models/server.model';
 
 @Component({
   selector: 'app-panel-home',
@@ -167,6 +167,6 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
 
     this.commandForm.controls.command.setValue('');
     this.commandLoading = false;
-  }
+  };
 
 }

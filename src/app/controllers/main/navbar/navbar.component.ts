@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../core/services/authentication.service';
 import {NavigationEnd, Router} from '@angular/router';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,14 +14,15 @@ export class NavbarComponent implements OnInit {
   currentUrl: string;
   shards: number;
 
-  constructor(private auth: AuthenticationService, private router: Router) {
+  constructor(private auth: AuthService,
+              private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.currentUrl = e.url;
-        this.login = this.auth.isLoggedIn();
+        this.login = this.auth.checkLoggedIn();
         if (this.login) {
-          this.username = this.auth.getUser().username;
-          this.shards = this.auth.getUser().credits;
+          this.username = this.auth.user.username;
+          this.shards = this.auth.user.credits;
         }
       }
     });

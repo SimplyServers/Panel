@@ -1,8 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
-import {Server} from '../../../../models/server.model';
-import {ServerStatus} from '../../../../services/server-socket-io.service';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
+import {Server} from '../../../models/server.model';
+import {ServerStatus} from '../../../services/server-socket-io.service';
 
 @Component({
   selector: 'app-panel-settings',
@@ -10,7 +10,7 @@ import {ServerStatus} from '../../../../services/server-socket-io.service';
   styleUrls: ['./panel-settings.component.scss']
 })
 export class PanelSettingsComponent extends ResponsiveServerPage {
-  @ViewChild('changeModal', { read: ElementRef }) changeModal: ElementRef;
+  @ViewChild('changeModal', {read: ElementRef}) changeModal: ElementRef;
 
   error: string;
 
@@ -25,7 +25,7 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
     super();
   }
 
-  loadData = async (): Promise<void> =>  {
+  loadData = async (): Promise<void> => {
     this.changeForm = this.formBuilder.group({
       preset: ['', Validators.compose([Validators.required, Validators.maxLength(30)])]
     });
@@ -87,6 +87,6 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
 
     this.changeLoading = false;
     this.changeForm.controls.preset.setValue(undefined);
-  }
+  };
 
 }

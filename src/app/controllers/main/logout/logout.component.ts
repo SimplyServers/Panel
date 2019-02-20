@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../../../services/legacy/authentication.service';
 import {Router} from '@angular/router';
-import {SelectedServerService} from '../../../../services/legacy/selected-server.service';
+import {AuthService} from '../../../services/auth.service';
+import {CurrentServerService} from '../../../services/current-server.service';
 
 @Component({
   selector: 'app-logout',
@@ -10,20 +10,20 @@ import {SelectedServerService} from '../../../../services/legacy/selected-server
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private auth: AuthenticationService, private router: Router, private selectedServer: SelectedServerService) {
+  constructor(private auth: AuthService,
+              private router: Router,
+              private currentServer: CurrentServerService) {
   }
 
   ngOnInit() {
-
     this.router.navigateByUrl('/login').then(() => {
       // remove user from local storage to log user out
       localStorage.removeItem('session');
-      this.auth.clearUser();
+      this.auth.user = undefined;
 
       // Make sure we clear the server on logout
-      this.selectedServer.servers = undefined;
-      this.selectedServer.setCurrentServer(undefined, false);
+      this.currentServer.servers = undefined;
+      this.currentServer.currentServer = undefined;
     });
   }
-
 }

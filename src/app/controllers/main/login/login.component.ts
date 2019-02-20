@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {TokenPayload} from '../../../../core/models/legacy/token-payload';
-import {AuthenticationService} from '../../../services/legacy/authentication.service';
-import {SelectedServerService} from '../../../services/legacy/selected-server.service';
+import {AuthService, TokenPayload} from '../../../services/auth.service';
+import {CurrentServerService} from '../../../services/current-server.service';
 
 @Component({
   selector: 'app-login',
@@ -24,8 +23,11 @@ export class LoginComponent implements OnInit {
   error: string;
   returnUrlSet = false;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
-              private router: Router, private auth: AuthenticationService, private selectedServer: SelectedServerService) {
+  constructor(private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
+              private router: Router,
+              private auth: AuthService,
+              private currentServer: CurrentServerService) {
   }
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit = async (): Promise<void> => {
     this.submitted = true;
     if (this.loginForm.invalid) {
       return;
@@ -55,15 +57,15 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.credentials.email = this.loginForm.controls.email.value;
     this.credentials.password = this.loginForm.controls.password.value;
-    this.auth.login(this.credentials).subscribe(() => {
-      this.selectedServer.updateCache(false, () => {
-        this.router.navigateByUrl(this.returnUrl); // Good login! Return to dash.
-      });
-    }, (err) => {
-      this.loading = false;
-      this.submitted = false;
-      this.error = err;
-    });
-  }
 
+    try {
+      await this.auth.authorize(this.credentials);
+      await this.currentServer.updateCache(true);
+      await this.router.navigateByUrl(this.returnUrl);
+    } catch (e) {
+      this.error = e;
+    }
+    this.loading = false;
+    this.submitted = false;
+  };
 }

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {NavigationEnd} from '@angular/router';
-import {Subject} from 'rxjs';
-import {ResponsiveServerPage} from '../../../panel-controller.serverpage';
+import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 
 @Component({
   selector: 'app-panel-frame',
