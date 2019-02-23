@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   error: string;
+
   newUser: TokenPayload = {
     email: '',
     password: '',

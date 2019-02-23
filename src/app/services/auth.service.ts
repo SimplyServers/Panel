@@ -106,7 +106,7 @@ export class AuthService {
   public register = async (newUser: TokenPayload): Promise<UserDetails> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'auth/register',
-      JSON.stringify(newUser)
+      newUser
     ).toPromise()).user;
   };
 

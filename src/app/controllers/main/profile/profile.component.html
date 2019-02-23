@@ -15,7 +15,7 @@
   <p><b>Username: </b> {{data.account_info.username}}</p>
   <p><b>Balance: </b> {{data.balance}} shards</p>
   <p><b>Account verified: </b> {{data.account_info.accountVerify.accountVerified}}</p>
-  <div *ngIf="data.game_info.minecraft">
+  <div *ngIf="data.game_info && data.game_info.minecraft">
     <p><b>Minecraft: </b></p>
     <div class="shift" *ngIf="data.game_info.minecraft.boughtPlugins"><p><b>Plugins
       Bought: </b> {{data.game_info.minecraft.boughtPlugins}}</p></div>
@@ -24,7 +24,7 @@
     <div class="shift" *ngIf="data.game_info.minecraft.username"><p>
       <b>Username: </b> {{data.game_info.minecraft.username}}</p></div>
   </div>
-  <div *ngIf="data.game_info.steam">
+  <div *ngIf="data.game_info && data.game_info.steam">
     <p><b>Steam: </b></p>
     <div class="shift" *ngIf="data.game_info.steam.steamID"><p><b>Steam ID: </b> {{data.game_info.steam.steamID}}</p>
     </div>

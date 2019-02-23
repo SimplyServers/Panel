@@ -15,10 +15,11 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = false;
+    this.loading = true;
     this.auth.getUserProfile().then(data => {
+      console.log("got user!" + JSON.stringify(data));
+      this.data = data.user;
       this.loading = false;
-      this.data = data;
     });
   }
 
