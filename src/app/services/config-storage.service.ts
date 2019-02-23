@@ -18,8 +18,8 @@ export class ConfigStorage {
   public static get config(): IConfig {
     return {
       endpoints: {
-        socket: 'http://10.1.1.238:8080/',
-        api: 'http://10.1.1.238:8080/api/v1/'
+        socket: 'http://localhost:8080/',
+        api: 'http://localhost:8080/api/v1/'
       }
     };
   }

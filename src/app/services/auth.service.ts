@@ -60,11 +60,12 @@ export class AuthService {
     if (!this._user) {
       this._user = JSON.parse(localStorage.getItem('session'));
     }
-    return;
+    return this._user;
   }
 
   set user(value: UserDetails) {
     this._user = value;
+    localStorage.setItem('session', JSON.stringify(value));
   }
 
   public get authOptions() {
@@ -75,9 +76,11 @@ export class AuthService {
   }
 
   public authorize = async (token: TokenPayload): Promise<UserDetails> => {
+    console.log("authorize here... posting to: " + ConfigStorage.config.endpoints.api + 'auth/login');
     this.user = (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'auth/login',
       token).toPromise()).user;
+    console.log("got user (" + JSON.stringify(this.user) + ")!");
     return this.user;
   };
 

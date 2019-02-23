@@ -29,8 +29,8 @@ export class CurrentServerService {
   private _servers: any;
 
   set servers(value: any) {
-    this.serverCacheEmitter.emit();
     this._servers = value;
+    this.serverCacheEmitter.emit();
   }
 
   private _ownsOne = false;
@@ -65,8 +65,9 @@ export class CurrentServerService {
     this.currentServer = this.servers.find(server => server.details._id === oldServer.details._id);
   };
 
-  public getServers = async (): Promise<void> => {
+  public getServers = async (): Promise<Server[]> => {
     if (!this._servers) {
+      console.log("no servers found, pulling from api");
       await this.updateCache(true);
     } // TODO: decide if hiding the change is a good idea or not
     return this._servers;
@@ -74,20 +75,24 @@ export class CurrentServerService {
 
   public updateCache = async (hideChange?: boolean): Promise<void> => {
     const serverList = (await this.http.get<any>(
-      ConfigStorage.config.endpoints.api + 'user/getServers',
+      ConfigStorage.config.endpoints.api + 'profile/servers',
       {headers: {Authorization: 'Token ' + this.auth.user.token}}).toPromise()).servers;
+
+    console.log("pulled server list: " + JSON.stringify(serverList));
 
     // If we want to hide the change, simply bypass the getter/setter functions
     if (hideChange) {
+      console.log("hiding change")
       this._servers = serverList;
     } else {
+      console.log("not hiding change")
       this.servers = serverList;
     }
 
     // Check to see if the person owns a server
     this.ownsOne = false;
-    this.servers.forEach(server => {
-      if (server.isOwner) {
+    (await this.getServers()).forEach(server => {
+      if (server.details.isOwner) {
         this.ownsOne = true;
       }
     });

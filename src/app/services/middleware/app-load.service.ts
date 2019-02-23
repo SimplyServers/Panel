@@ -15,7 +15,7 @@ export class AppLoadService {
 
   public initializeApp = async (): Promise<any> => {
     if (this.auth.checkLoggedIn()) {
-      await this.currentServer.updateCache();
+      await this.currentServer.updateCache(true);
     }
   };
 }

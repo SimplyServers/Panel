@@ -12,8 +12,8 @@ export class ServerGuardService implements CanActivate {
               private router: Router) {
   }
 
-  canActivate() {
-    if (Object.keys(this.currentServer.servers).length < 1) {
+  async canActivate() {
+    if (Object.keys(await this.currentServer.getServers()).length < 1) {
       this.router.navigateByUrl('/panel/create');
       return false;
     }
