@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService, UserProfile} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,19 +8,20 @@ import {AuthService} from '../../../services/auth.service';
 })
 export class ProfileComponent implements OnInit {
 
-  data: any;
+  data: UserProfile;
   loading = true;
 
   constructor(private auth: AuthService) {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.auth.getUserProfile().then(data => {
-      console.log("got user!" + JSON.stringify(data));
-      this.data = data.user;
-      this.loading = false;
-    });
+    this.loadProfile();
   }
 
+  private loadProfile = async () => {
+    this.loading = true;
+    this.data = await this.auth.getUserProfile();
+    this.loading = false;
+
+  }
 }

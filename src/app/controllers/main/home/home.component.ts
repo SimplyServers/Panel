@@ -26,5 +26,4 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.notify.notify('info', 'Hello there! We\'re currently in closed alpha. Bugs may occur.');
   }
-
 }

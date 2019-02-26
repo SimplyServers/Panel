@@ -31,15 +31,15 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
     });
 
     const server: Server = await this.currentServer.getCurrentServer();
-    if (Object.keys(server.details.preset.allowSwitchingTo).length < 1) {
+    if (Object.keys(server.details._preset.allowSwitchingTo).length < 1) {
       this.nothingToChange = true;
     }
 
-    if (!server.details.isOwner) {
+    if (server.details._owner._id !== this.auth.user.id) {
       this.router.navigateByUrl('/panel');
     }
 
-    this.presetList = server.details.preset.allowSwitchingTo;
+    this.presetList = server.details._preset.allowSwitchingTo;
   };
 
   private removeServer = async (): Promise<void> => {

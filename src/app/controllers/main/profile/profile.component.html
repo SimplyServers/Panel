@@ -15,16 +15,20 @@
   <p><b>Username: </b> {{data.account_info.username}}</p>
   <p><b>Balance: </b> {{data.balance}} shards</p>
   <p><b>Account verified: </b> {{data.account_info.accountVerify.accountVerified}}</p>
-  <div *ngIf="data.game_info && data.game_info.minecraft">
+  <div *ngIf="data.game_info &&
+  data.game_info.minecraft">
+
     <p><b>Minecraft: </b></p>
-    <div class="shift" *ngIf="data.game_info.minecraft.boughtPlugins"><p><b>Plugins
+    <div class="shift" *ngIf="data.game_info.minecraft.boughtPlugins "><p><b>Plugins
       Bought: </b> {{data.game_info.minecraft.boughtPlugins}}</p></div>
     <div class="shift" *ngIf="data.game_info.minecraft.uuid"><p><b>UUID: </b> {{data.game_info.minecraft.uuid}}</p>
     </div>
     <div class="shift" *ngIf="data.game_info.minecraft.username"><p>
       <b>Username: </b> {{data.game_info.minecraft.username}}</p></div>
   </div>
-  <div *ngIf="data.game_info && data.game_info.steam">
+  <div *ngIf="data.game_info &&
+  data.game_info.steam">
+
     <p><b>Steam: </b></p>
     <div class="shift" *ngIf="data.game_info.steam.steamID"><p><b>Steam ID: </b> {{data.game_info.steam.steamID}}</p>
     </div>
@@ -38,11 +42,17 @@
       </a>
     </div>
     <div class="col-md-6 col-sm-12">
-      <button *ngIf="!data.game_info.minecraft.uuid" type="button" class="btn btn-primary btn-block server-action">Link
-        Minecraft account
+      <button *ngIf="!data.game_info ||
+      !data.game_info.minecraft ||
+      !data.game_info.minecraft.uuid" type="button" class="btn btn-primary btn-block server-action">
+
+        Link Minecraft account
       </button>
-      <button *ngIf="data.game_info.minecraft.uuid" type="button" class="btn btn-primary btn-block server-action">Unlink
-        Minecraft account
+      <button *ngIf="data.game_info &&
+      data.game_info.minecraft &&
+      data.game_info.minecraft.uuid" type="button" class="btn btn-primary btn-block server-action">
+
+        Unlink Minecraft account
       </button>
     </div>
   </div>

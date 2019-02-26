@@ -45,6 +45,35 @@ export interface TokenPayload {
   username?: string;
 }
 
+export interface UserProfile {
+  _id: string;
+
+  account_info: {
+    username: string;
+    email: string;
+    _group?: GroupDetails;
+    primaryName?: string;
+    accountVerify: {
+      accountVerified?: boolean;
+      verifyKey?: string;
+    };
+  };
+
+  game_info?: {
+    minecraft?: {
+      uuid?: string;
+      username?: string;
+      boughtPlugins?: string[];
+    };
+    steam?: {
+      steamID?: string;
+      username?: string;
+    };
+  }
+
+  balance: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -123,20 +152,20 @@ export class AuthService {
 
   public getPresets = async (): Promise<PresetDetails[]> => {
     return (await this.http.get<any>(
-      ConfigStorage.config.endpoints.api + 'profile/getPresets',
+      ConfigStorage.config.endpoints.api + 'profile/presets',
       this.authOptions
     ).toPromise()).presets;
   };
 
   public createServer = async (newServer: ServerPayload): Promise<Server> => {
     return (await this.http.post<any>(
-      ConfigStorage.config.endpoints.api + 'server/create',
+      ConfigStorage.config.endpoints.api + 'server/add',
       newServer,
       this.authOptions
     ).toPromise()).server;
   };
 
-  public getUserProfile = async (): Promise<any> => {
+  public getUserProfile = async (): Promise<UserProfile> => {
     return (await this.http.get<any>(
       ConfigStorage.config.endpoints.api + 'profile',
       this.authOptions

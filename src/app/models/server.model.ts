@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {AuthService} from '../services/auth.service';
+import {AuthService, UserProfile} from '../services/auth.service';
 import {ConfigStorage} from '../services/config-storage.service';
 import {PresetDetails} from './preset.modal';
 
@@ -15,19 +15,18 @@ export interface FileDetails {
 }
 
 export interface ServerDetails {
-  owner: string;
+  _owner: UserProfile;
   sub_owners: object;
-  preset: PresetDetails;
+  _preset: PresetDetails;
   timeOnline?: number;
   motd: string;
-  nodeInstalled: string;
+  _nodeInstalled: string;
   online?: boolean;
   name: string;
   port: number;
   special: {
     minecraftPlugins: object;
   };
-  isOwner?: boolean;
   _id: string;
 }
 
