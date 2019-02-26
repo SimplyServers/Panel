@@ -27,7 +27,7 @@ export class PanelSubownersComponent extends ResponsiveServerPage {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
     });
 
-    if (!this.currentServer.currentServer.details.isOwner) {
+    if (!(this.currentServer.currentServer.details._owner._id === this.auth.user.id)) {
       this.router.navigateByUrl('/panel');
     }
 

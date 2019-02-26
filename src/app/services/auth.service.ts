@@ -48,10 +48,10 @@ export interface TokenPayload {
 export interface UserProfile {
   _id: string;
 
+  _group?: GroupDetails;
   account_info: {
     username: string;
     email: string;
-    _group?: GroupDetails;
     primaryName?: string;
     accountVerify: {
       accountVerified?: boolean;

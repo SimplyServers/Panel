@@ -14,19 +14,26 @@ export interface FileDetails {
   edible: boolean;
 }
 
+export interface MinecraftPlugin {
+  _id: string;
+  name: string;
+  games: any;
+  credits: number;
+  reloadRequired: boolean;
+  description: string;
+}
+
 export interface ServerDetails {
   _owner: UserProfile;
   sub_owners: object;
   _preset: PresetDetails;
   timeOnline?: number;
   motd: string;
-  _nodeInstalled: string;
+  _nodeInstalled: string; //TODO: This isn't populated in our case (hopefully!)
   online?: boolean;
   name: string;
   port: number;
-  special: {
-    minecraftPlugins: object;
-  };
+  _minecraftPlugins: Array<MinecraftPlugin>
   _id: string;
 }
 
