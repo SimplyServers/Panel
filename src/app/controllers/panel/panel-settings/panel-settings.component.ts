@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {Server} from '../../../models/server.model';
@@ -10,21 +10,20 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-settings.component.html',
   styleUrls: ['./panel-settings.component.scss']
 })
-export class PanelSettingsComponent extends ResponsiveServerPage {
+export class PanelSettingsComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
   @ViewChild('changeModal', {read: ElementRef}) changeModal: ElementRef;
-
   error: string;
-
   changeLoading = false;
   changeSubmitted = false;
   nothingToChange = false;
   presetList: any;
-
   changeForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
-              private router: Router) {
-    super();
+  ngOnInit(): void {
+    super.ngInit();
+  }
+  ngOnDestroy(): void {
+    super.ngUnload();
   }
 
   loadData = async (): Promise<void> => {
@@ -32,33 +31,31 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
       preset: ['', Validators.compose([Validators.required, Validators.maxLength(30)])]
     });
 
-    const server: Server = await this.currentServer.getCurrentServer();
-    if (Object.keys(server.details._preset._allowSwitchingTo).length < 1) {
+    if (Object.keys(this.currentServer.selectedServer.value.details._preset._allowSwitchingTo).length < 1) {
       this.nothingToChange = true;
     }
 
-    if (server.details._owner._id !== this.auth.user.id) {
+    if (this.currentServer.selectedServer.value.details._owner._id !== this.auth.user.id) {
       this.router.navigateByUrl('/panel');
     }
 
-    this.presetList = server.details._preset._allowSwitchingTo;
+    this.presetList = this.currentServer.selectedServer.value.details._preset._allowSwitchingTo;
   };
 
   private removeServer = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.STOPPED) {
       return;
     }
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.remove();
-      await this.currentServer.updateCache(false);
+      await this.currentServer.selectedServer.value.remove();
+      await this.currentServer.updateCache();
 
-      if (Object.keys(this.currentServer.servers).length >= 1) {
-        await this.currentServer.updateCurrentServerData();
+      if (Object.keys(this.currentServer.serverList.value).length >= 1) {
+        await this.currentServer.reloadCurrentServer();
       } else {
-        this.currentServer.currentServer = undefined;
-        this.serverSocket.cachedConsole = '';
+        this.currentServer.updateServer(undefined);
+        this.serverSocket.consoleSource.next('');
         this.router.navigateByUrl('/panel/create');
       }
     } catch (e) {
@@ -73,15 +70,13 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
     }
     this.changeLoading = true;
 
-    const server: Server = await this.currentServer.getCurrentServer();
-
     // WTF BROWSERS ARE LITERALLY HORRIBLE
     // This needs to set to a empty array to actually sync the actual value of the option dropdown with the one that is displayed
     this.presetList = [];
 
     try {
-      await server.changePreset(this.changeForm.controls.preset.value);
-      await this.currentServer.updateCurrentServerData();
+      await this.currentServer.selectedServer.value.changePreset(this.changeForm.controls.preset.value);
+      await this.currentServer.reloadCurrentServer();
       this.changeModal.nativeElement.click();
     } catch (e) {
       this.error = e;

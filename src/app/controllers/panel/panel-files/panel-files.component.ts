@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import * as path from 'path-browserify';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -11,37 +11,29 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-files.component.html',
   styleUrls: ['./panel-files.component.scss']
 })
-export class PanelFilesComponent extends ResponsiveServerPage {
+export class PanelFilesComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
-
   filesList: any;
   currentPath: string;
-
   loading = false;
-  blocked = false;
-
-  addForm: FormGroup;
+  addForm: FormGroup = this.formBuilder.group({
+    path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+  });
   addLoading = false;
   addSubmitted = false;
   error: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
-    super();
+  ngOnInit(): void {
+    super.ngInit();
   }
-
+  ngOnDestroy(): void {
+    super.ngUnload();
+  }
   loadData = async (): Promise<void> => {
-    this.addForm = this.formBuilder.group({
-      path: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-    });
-
     this.currentPath = '/';
 
     // Make sure the server isn't blocked
-    if (this.serverSocket.blocked) {
-      this.blocked = true;
+    if (this.serverSocket.blockedSource.value) {
       return;
     }
 
@@ -52,8 +44,7 @@ export class PanelFilesComponent extends ResponsiveServerPage {
     this.loading = true;
 
     try {
-      const server: Server = await this.currentServer.getCurrentServer();
-      this.filesList = await server.listDir(this.currentPath);
+      this.filesList = await this.currentServer.selectedServer.value.listDir(this.currentPath);
     } catch (e) {
       this.notify.notify('error', 'Failed to get server files; ' + e);
     }
@@ -85,18 +76,16 @@ export class PanelFilesComponent extends ResponsiveServerPage {
   };
 
   private remove = async (file: FileDetails): Promise<void> => {
-    const server: Server = await this.currentServer.getCurrentServer();
-
     if (file.isDir) {
       try {
-        await server.removeFolder(path.join(this.currentPath, file.name));
+        await this.currentServer.selectedServer.value.removeFolder(path.join(this.currentPath, file.name));
         await this.updateListing();
       } catch (e) {
         this.notify.notify('error', 'Failed to remove folder. (is it not empty?)');
       }
     } else if (file.isFile) {
       try {
-        await server.removeFile(path.join(this.currentPath, file.name));
+        await this.currentServer.selectedServer.value.removeFile(path.join(this.currentPath, file.name));
         await this.updateListing();
       } catch (e) {
         this.notify.notify('error', 'Failed to remove file.');
@@ -125,10 +114,9 @@ export class PanelFilesComponent extends ResponsiveServerPage {
     this.addLoading = true;
 
     const targetPath = path.join(this.currentPath, this.addForm.controls.path.value);
-    const server: Server = await this.currentServer.getCurrentServer();
 
     try {
-      const checkOk = await server.checkAllowed(targetPath);
+      const checkOk = await this.currentServer.selectedServer.value.checkAllowed(targetPath);
       if (checkOk) {
         this.addModal.nativeElement.click();
         this.router.navigateByUrl('/panel/files/edit?f=' + targetPath);

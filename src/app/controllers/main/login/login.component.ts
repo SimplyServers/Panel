@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
     try {
       await this.auth.authorize(this.credentials);
       console.log("authed! cache is being updated");
-      await this.currentServer.updateCache(true);
+      await this.currentServer.updateCache();
       console.log("redir...");
       await this.router.navigateByUrl(this.returnUrl);
     } catch (e) {

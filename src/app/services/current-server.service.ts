@@ -47,8 +47,16 @@ export class CurrentServerService {
     const serverList = (await this.http.get<any>(
       ConfigStorage.config.endpoints.api + 'profile/servers',
       {headers: {Authorization: 'Token ' + this.auth.user.token}}).toPromise()).servers;
-    this.ownsOne = serverList.find(server => server.details._owner._id === this.auth.user.id) !== undefined;
+
+    console.log("pulled list: " + JSON.stringify(serverList));
+
+    this.ownsOne = serverList.find(server => server._owner._id === this.auth.user.id) !== undefined;
     this._serverCacheSource.next(serverList)
+
+    if (this.selectedServer.value === undefined){
+      console.log("fixing current server... updating value to " + JSON.stringify(this.serverList.value[0]))
+      this.selectedServer.next(this.serverList.value[0]);
+    }
   };
 
   reloadCurrentServer = () => {

@@ -1,3 +1,4 @@
+<!--
 <app-panel-frame>
   <div class="row" id="console">
     <div class="col-md-9 col-sm-12">
@@ -6,7 +7,7 @@
           Server Console
         </div>
         <div class="card-block">
-          <textarea #textAreaElement class="form-control" readonly rows="30">{{ serverSocket.cachedConsole }}</textarea>
+          <textarea #textAreaElement class="form-control" readonly rows="30">{{ serverSocket.consoleSource.value }}</textarea>
         </div>
         <div class="card-footer text-muted">
           <form (ngSubmit)="onCommand()" [formGroup]="commandForm">
@@ -32,30 +33,30 @@
         <div class="card-block">
           <button (click)="installServer()"
                   *ngIf="!serverSocket.installed"
-                  [disabled]="serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'"
+                  [disabled]="serverSocket.blockedSource.value || serverSocket.statusSource.value !== 'Stopped'"
                   class="btn btn-info btn-lg btn-block server-action"
                   data-target="#installModal" data-toggle="modal" type="button">
             Install Server
           </button>
           <button
             (click)="serverOn()"
-            [disabled]="!serverSocket.installed || serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'"
+            [disabled]="!serverSocket.installedSource.value || serverSocket.blockedSource.value || serverSocket.statusSource.value !== 'Stopped'"
             class="btn btn-success btn-lg btn-block server-action" type="button">Start Server
           </button>
           <button
             (click)="serverOff()"
-            [disabled]="!serverSocket.installed || serverSocket.blocked || serverSocket.serverStatus !== 'Running'"
+            [disabled]="!serverSocket.installedSource.value || serverSocket.blockedSource.value || serverSocket.statusSource.value !== 'Running'"
             class="btn btn-danger btn-stop btn-lg btn-block server-action" type="button">Stop
             Server
           </button>
           <button
             (click)="serverKill()"
-            [disabled]="!serverSocket.installed || serverSocket.blocked || (serverSocket.serverStatus !== 'Running' && serverSocket.serverStatus !== 'Stopping' && serverSocket.serverStatus !== 'Starting')"
+            [disabled]="!serverSocket.installedSource.value || serverSocket.blockedSource.value || (serverSocket.statusSource.value !== 'Running' && serverSocket.statusSource.value !== 'Stopping' && serverSocket.statusSource.value !== 'Starting')"
             class="btn btn-warning btn-lg btn-block server-action" type="button">Force kill
             Server
           </button>
-          <button *ngIf="serverSocket.installed"
-                  [disabled]="serverSocket.blocked || serverSocket.serverStatus !== 'Stopped'"
+          <button *ngIf="serverSocket.installedSource.value"
+                  [disabled]="serverSocket.blockedSource.value || serverSocket.statusSource.value !== 'Stopped'"
                   class="btn btn-info btn-lg btn-block server-action" data-target="#reinstallModal"
                   data-toggle="modal" type="button">
             Reinstall Server
@@ -93,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-          <button (click)="reinstallServer()" [disabled]="serverSocket.blocked || !serverSocket.installed"
+          <button (click)="reinstallServer()" [disabled]="serverSocket.blockedSource.value || !serverSocket.installedSource.value"
                   class="btn btn-primary" data-dismiss="modal" type="button">Reinstall
           </button>
         </div>
@@ -101,3 +102,4 @@
     </div>
   </div>
 </app-panel-frame>
+-->

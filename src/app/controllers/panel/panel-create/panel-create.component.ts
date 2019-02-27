@@ -63,7 +63,7 @@ export class PanelCreateComponent implements OnInit {
 
     this.auth.createServer(this.server).then(() => {
       this.currentServer.updateCache().then(() => {
-        console.log("redirect to panel");
+        console.log('redirect to panel');
         this.router.navigateByUrl('/panel');
       });
     }).catch((err) => {

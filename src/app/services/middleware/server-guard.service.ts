@@ -13,7 +13,7 @@ export class ServerGuardService implements CanActivate {
   }
 
   async canActivate() {
-    if (Object.keys(await this.currentServer.getServers()).length < 1) {
+    if (Object.keys(await this.currentServer.serverList.value).length < 1) {
       this.router.navigateByUrl('/panel/create');
       return false;
     }

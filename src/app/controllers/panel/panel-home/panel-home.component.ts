@@ -1,48 +1,34 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {interval, Subject} from 'rxjs';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {interval, Subject, Subscription} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {ServerStatus} from '../../../services/server-socket-io.service';
-import {Server} from '../../../models/server.model';
 
 @Component({
   selector: 'app-panel-home',
   templateUrl: './panel-home.component.html',
   styleUrls: ['./panel-home.component.scss']
 })
-export class PanelHomeComponent extends ResponsiveServerPage implements AfterViewInit {
+export class PanelHomeComponent extends ResponsiveServerPage implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('textAreaElement', {read: ElementRef}) textAreaElement: ElementRef;
-
   serverDetails: any;
-
-  commandForm: FormGroup;
+  commandForm: FormGroup = this.formBuilder.group({
+    command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+  });
   commandLoading = false;
   commandSubmitted = false;
-
   update = false;
+  consoleEmitter: Subscription;
 
-  announceEmitter: Subject<any>;
-  consoleEmitter: Subject<any>;
-  statusEmitter: Subject<any>;
-
-  constructor(private formBuilder: FormBuilder) {
-    super();
+  ngOnInit(): void {
+    super.ngInit();
+  }
+  ngOnDestroy(): void {
+    super.ngUnload();
   }
 
   onFirstInit = async (): Promise<void> => {
-    this.consoleEmitter = this.serverSocket.consoleEmitter.subscribe(data => {
-      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + data;
-      this.update = true;
-    });
-    this.announceEmitter = this.serverSocket.announceEmitter.subscribe(data => {
-      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + '➤ [Manager daemon] ' + data + '\n';
-      this.update = true;
-    });
-    this.statusEmitter = this.serverSocket.statusEmitter.subscribe(data => {
-      this.serverSocket.cachedConsole = this.serverSocket.cachedConsole + '➤ [Status update] Status updated to ' + data + '\n';
-      this.update = true;
-    });
-
+    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value);
     // Read scroll() todo.
     interval(500).subscribe(() => {
       if (this.update) {
@@ -59,87 +45,73 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
   }
 
   onUnload = async (): Promise<void> => {
-    if (this.announceEmitter !== undefined) {
-      this.announceEmitter.unsubscribe();
-    }
     if (this.consoleEmitter !== undefined) {
       this.consoleEmitter.unsubscribe();
-    }
-    if (this.statusEmitter !== undefined) {
-      this.statusEmitter.unsubscribe();
     }
   };
 
   loadData = async (): Promise<void> => {
-    this.commandForm = this.formBuilder.group({
-      command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-    });
-    const server: Server = await this.currentServer.getCurrentServer();
-    this.serverDetails = server.details;
+    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value);
+
+    this.serverDetails = this.currentServer.selectedServer.value.details;
   };
 
   private serverOn = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.STOPPED) {
       return;
     }
-
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.startPower();
+      await this.currentServer.selectedServer.value.startPower();
     } catch (e) {
       this.notify.notify('error', 'Failed to turn the server on; ' + e);
     }
   };
 
   private serverOff = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.RUNNING) {
       return;
     }
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.offPower();
+      await this.currentServer.selectedServer.value.offPower();
     } catch (e) {
       this.notify.notify('error', 'Failed to turn the server off; ' + e);
     }
   };
 
   private serverKill = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING &&
-      this.serverSocket.serverStatus !== ServerStatus.STARTING &&
-      this.serverSocket.serverStatus !== ServerStatus.STOPPING) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.RUNNING &&
+      this.serverSocket.statusSource.value !== ServerStatus.STARTING &&
+      this.serverSocket.statusSource.value !== ServerStatus.STOPPING) {
       return;
     }
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.killPower();
+      await this.currentServer.selectedServer.value.killPower();
     } catch (e) {
       this.notify.notify('error', 'Failed to kill the server; ' + e);
     }
   };
 
   private installServer = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.STOPPED) {
       return;
     }
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.install();
+      await this.currentServer.selectedServer.value.install();
     } catch (e) {
       this.notify.notify('error', 'Failed to install server; ' + e);
     }
   };
 
   private reinstallServer = async (): Promise<void> => {
-    if (this.serverSocket.serverStatus !== ServerStatus.STOPPED) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.STOPPED) {
       return;
     }
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.reinstall();
+      await this.currentServer.selectedServer.value.reinstall();
     } catch (e) {
       this.notify.notify('error', 'Failed to reinstall server; ' + e);
     }
@@ -152,15 +124,14 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
       return;
     }
 
-    if (this.serverSocket.serverStatus !== ServerStatus.RUNNING) {
+    if (this.serverSocket.statusSource.value !== ServerStatus.RUNNING) {
       return;
     }
 
     this.commandLoading = true;
 
-    const server: Server = await this.currentServer.getCurrentServer();
     try {
-      await server.submitCommand(this.commandForm.controls.command.value);
+      await this.currentServer.selectedServer.value.submitCommand(this.commandForm.controls.command.value);
     } catch (e) {
       this.notify.notify('error', 'Failed to reinstall server; ' + e);
     }

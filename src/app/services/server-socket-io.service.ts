@@ -4,6 +4,7 @@ import * as io from 'socket.io-client';
 import {ConfigStorage} from './config-storage.service';
 import {AuthService} from './auth.service';
 import {BehaviorSubject, Subject} from 'rxjs';
+import {ServiceLocator} from '../service.injector';
 
 export enum ServerStatus {
   RUNNING = 'Running',
@@ -69,6 +70,9 @@ export class ServerSocketIOService {
     this._announceSource = value;
   }
 
+  private auth: AuthService;
+  private currentServer: CurrentServerService;
+
   private _statusSource: BehaviorSubject<ServerStatus> = new BehaviorSubject(ServerStatus.LOADING);
   private _consoleSource: BehaviorSubject<string> = new BehaviorSubject('');
   private _blockedSource: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -78,9 +82,11 @@ export class ServerSocketIOService {
   private ioSocket;
 
   constructor(
-    private currentServer: CurrentServerService,
-    private auth: AuthService
   ) {
+    // The fuck?
+    this.auth = ServiceLocator.injector.get(AuthService);
+    this.currentServer = ServiceLocator.injector.get(CurrentServerService);
+
     this.loadSocket().then(() => {
       console.debug('Connected to ss socket');
     })
@@ -162,5 +168,8 @@ export class ServerSocketIOService {
         this.statusSource.next(ServerStatus.LOADING);
         break;
     }
+    this.consoleSource.next(this.consoleSource.value +
+      '\n➤ [Status update] Status updated to ' +
+      this.statusSource.value.toString().toLocaleUpperCase())
   };
 }

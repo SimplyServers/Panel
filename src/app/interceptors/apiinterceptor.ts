@@ -25,8 +25,8 @@ export class APIInterceptor implements HttpInterceptor {
         this.auth.user = undefined;
 
         // Make sure we clear the server on logout
-        this.currentServer.servers = undefined;
-        this.currentServer.currentServer = undefined;
+        this.currentServer.serverList.next(undefined);
+        this.currentServer.updateServer(undefined);
         location.reload(true);
       }
 

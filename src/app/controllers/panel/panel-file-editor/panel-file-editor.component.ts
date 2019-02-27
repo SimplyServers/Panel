@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -8,26 +8,22 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-file-editor.component.html',
   styleUrls: ['./panel-file-editor.component.scss']
 })
-export class PanelFileEditorComponent extends ResponsiveServerPage {
-
+export class PanelFileEditorComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
   loading = false;
   blocked = false;
-
   editName: string;
   newFile: boolean;
-
   editForm: FormGroup;
   editLoading = false;
   editSubmitted = false;
-
   error: string;
 
-  constructor(private formBuilder: FormBuilder,
-              private activatedRoute: ActivatedRoute,
-              private router: Router) {
-    super();
+  ngOnInit(): void {
+    super.ngInit();
   }
-
+  ngOnDestroy(): void {
+    super.ngUnload();
+  }
   loadData = async (): Promise<void> => {
     this.editForm = this.formBuilder.group({
       content: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
@@ -41,9 +37,8 @@ export class PanelFileEditorComponent extends ResponsiveServerPage {
     const filePath = await this.activatedRoute.queryParams.toPromise()['f'];
     this.editName = filePath;
 
-    const server = await this.currentServer.getCurrentServer();
     try {
-      this.editForm.controls.content.setValue(await server.getFileContents(filePath));
+      this.editForm.controls.content.setValue(await this.currentServer.selectedServer.value.getFileContents(filePath));
     } catch (e) {
       if (e === 'File not found.') {
         this.newFile = true;
@@ -66,9 +61,8 @@ export class PanelFileEditorComponent extends ResponsiveServerPage {
     }
     this.editLoading = true;
 
-    const server = await this.currentServer.getCurrentServer();
     try {
-      await server.writeContents(this.editName, this.editForm.controls.content.value);
+      await this.currentServer.selectedServer.value.writeContents(this.editName, this.editForm.controls.content.value);
       this.router.navigateByUrl('/panel/files');
     } catch (e) {
       this.error = e;

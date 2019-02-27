@@ -1,8 +1,8 @@
 <app-panel-frame>
-  <div *ngIf="blocked" id="blocked">
+  <div *ngIf="serverSocket.blockedSource.value" id="blocked">
     <p>Server files are not currently available. Try reloading the page.</p>
   </div>
-  <div *ngIf="!blocked" class="row" id="files">
+  <div *ngIf="!serverSocket.blockedSource.value" class="row" id="files">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
@@ -72,7 +72,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-            <button [disabled]="serverSocket.blocked" class="btn btn-primary"
+            <button [disabled]="serverSocket.blockedSource.value" class="btn btn-primary"
                     type="submit">Create
             </button>
           </div>
