@@ -3,6 +3,7 @@ import {CurrentServerService} from './current-server.service';
 import * as io from 'socket.io-client';
 import {ConfigStorage} from './config-storage.service';
 import {AuthService} from './auth.service';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 export enum ServerStatus {
   RUNNING = 'Running',
@@ -28,149 +29,138 @@ export interface ConsoleLog {
 })
 
 export class ServerSocketIOService {
-  statusEmitter = new EventEmitter();
-  consoleEmitter = new EventEmitter();
-  announceEmitter = new EventEmitter();
+  get statusSource(): BehaviorSubject<ServerStatus> {
+    return this._statusSource;
+  }
+
+  set statusSource(value: BehaviorSubject<ServerStatus>) {
+    this._statusSource = value;
+  }
+
+  get consoleSource(): BehaviorSubject<string> {
+    return this._consoleSource;
+  }
+
+  set consoleSource(value: BehaviorSubject<string>) {
+    this._consoleSource = value;
+  }
+
+  get blockedSource(): BehaviorSubject<boolean> {
+    return this._blockedSource;
+  }
+
+  set blockedSource(value: BehaviorSubject<boolean>) {
+    this._blockedSource = value;
+  }
+
+  get installedSource(): BehaviorSubject<boolean> {
+    return this._installedSource;
+  }
+
+  set installedSource(value: BehaviorSubject<boolean>) {
+    this._installedSource = value;
+  }
+
+  get announceSource(): Subject<string> {
+    return this._announceSource;
+  }
+
+  set announceSource(value: Subject<string>) {
+    this._announceSource = value;
+  }
+
+  private _statusSource: BehaviorSubject<ServerStatus> = new BehaviorSubject(ServerStatus.LOADING);
+  private _consoleSource: BehaviorSubject<string> = new BehaviorSubject('');
+  private _blockedSource: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private _installedSource: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _announceSource: Subject<string> = new Subject();
+
   private ioSocket;
 
   constructor(
     private currentServer: CurrentServerService,
     private auth: AuthService
   ) {
-    this._serverStatus = ServerStatus.LOADING;
-    this._installed = false;
-    this._blocked = true;
-    this._cachedConsole = '';
-
-
-    // Load the socket on init (so its not undefined)
     this.loadSocket().then(() => {
-      console.debug('Connected to initial socket.');
-    });
+      console.debug('Connected to ss socket');
+    })
+  }
 
-    // Reload the socket when the server is updated
-    this.currentServer.serverUpdateEmitter.subscribe(() => {
-      this.loadSocket().then(() => {
-        console.debug('Connected to socket.');
+  private loadSocket = async () => {
+      // Disconnect from the socket if we're connected
+      if (this.ioSocket) {
+        this.ioSocket.disconnect();
+      }
+
+      this.ioSocket = io(ConfigStorage.config.endpoints.socket + 'console', {
+        path: '/s/',
+        query: {
+          server: this.currentServer.selectedServer.value
+        }
       });
-    });
-  }
 
-  private _serverStatus: ServerStatus;
+      await new Promise((resolve) => {
+        this.ioSocket.on('connect', () => {
+          this.ioSocket.emit('authenticate', {
+            token: this.auth.user.token
+          }, () => {
+            this.ioSocket.on('initialStatus', this.handleInitial);
+            this.ioSocket.on('statusUpdate', this.handleStatus);
+            this.ioSocket.on('console', this.handleConsole);
+            this.ioSocket.on('announcement', this.handleAnnounce);
+            this.ioSocket.on('block', this.handleBlock);
+            this.ioSocket.on('installed', this.handleInstalled);
 
-  get serverStatus(): ServerStatus {
-    return this._serverStatus;
-  }
-
-  set serverStatus(value: ServerStatus) {
-    this._serverStatus = value;
-  }
-
-  private _installed: boolean;
-
-  get installed(): boolean {
-    return this._installed;
-  }
-
-  set installed(value: boolean) {
-    this._installed = value;
-  }
-
-  private _blocked: boolean;
-
-  get blocked(): boolean {
-    return this._blocked;
-  }
-
-  set blocked(value: boolean) {
-    this._blocked = value;
-  }
-
-  private _cachedConsole: string;
-
-  get cachedConsole(): string {
-    return this._cachedConsole;
-  }
-
-  set cachedConsole(value: string) {
-    this._cachedConsole = value;
-  }
+            // We've authenticated, resolve!
+            return resolve();
+          });
+        });
+      });
+  };
 
   private handleAnnounce = (data: string) => {
-    this.announceEmitter.emit(data);
+    this.announceSource.next(data);
+    this.consoleSource.next(this.consoleSource.value + '\n➤ [Manager daemon] ' + data)
   };
 
   private handleBlock = (data: boolean) => {
-    this._blocked = data;
+    this.blockedSource.next(data);
   };
 
   private handleInstalled = (data: boolean) => {
-    this._installed = data;
+    this.installedSource.next(data);
   };
 
   private handleConsole = (data: ConsoleLog): void => {
-    this.consoleEmitter.emit(data);
+    this.consoleSource.next(this.consoleSource.value + '\n' + data)
   };
+
+  private handleInitial = (data: InitialStatus) => {
+      this.handleStatus(data.status);
+      this.handleBlock(data.blocked);
+      this.handleInstalled(data.installed);
+    };
 
   private handleStatus = (data: string): void => {
     switch (data) {
       case 'Starting':
-        this._serverStatus = ServerStatus.STARTING;
+        this.statusSource.next(ServerStatus.STARTING);
         break;
       case 'Stopping':
-        this._serverStatus = ServerStatus.STOPPING;
+        this.statusSource.next(ServerStatus.STOPPING);
         break;
       case 'Running':
-        this._serverStatus = ServerStatus.RUNNING;
+        this.statusSource.next(ServerStatus.RUNNING);
         break;
       case 'Off':
-        this._serverStatus = ServerStatus.STOPPED;
+        this.statusSource.next(ServerStatus.STOPPED);
         break;
       case 'Crashed':
-        this._serverStatus = ServerStatus.CRASHED;
+        this.statusSource.next(ServerStatus.CRASHED);
         break;
       default:
-        this._serverStatus = ServerStatus.LOADING;
+        this.statusSource.next(ServerStatus.LOADING);
         break;
     }
-    this.statusEmitter.emit(this._serverStatus);
-  };
-
-  private handleInitial = (data: InitialStatus) => {
-    this.handleStatus(data.status);
-    this.blocked = data.blocked;
-    this.installed = data.installed;
-  };
-
-  private loadSocket = async (): Promise<void> => {
-    // Disconnect from the socket if we're connected
-    if (this.ioSocket) {
-      this.ioSocket.disconnect();
-    }
-
-    this.ioSocket = io(ConfigStorage.config.endpoints.socket + 'console', {
-      path: '/s/',
-      query: {
-        server: this.currentServer.currentServer.details._id
-      }
-    });
-
-    await new Promise((resolve) => {
-      this.ioSocket.on('connect', () => {
-        this.ioSocket.emit('authenticate', {
-          token: this.auth.user.token
-        }, () => {
-          this.ioSocket.on('initialStatus', this.handleInitial);
-          this.ioSocket.on('statusUpdate', this.handleStatus);
-          this.ioSocket.on('console', this.handleConsole);
-          this.ioSocket.on('announcement', this.handleAnnounce);
-          this.ioSocket.on('block', this.handleBlock);
-          this.ioSocket.on('installed', this.handleInstalled);
-
-          // We've authenticated, resolve!
-          return resolve();
-        });
-      });
-    });
   };
 }

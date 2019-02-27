@@ -4,35 +4,14 @@ import {HttpClient} from '@angular/common/http';
 import {Server} from '../models/server.model';
 import {AuthService} from './auth.service';
 import {ConfigStorage} from './config-storage.service';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentServerService {
-
-  public serverCacheEmitter = new EventEmitter();
-  public serverUpdateEmitter = new EventEmitter();
-
-  constructor(
-    private auth: AuthService,
-    private http: HttpClient
-  ) {
-  }
-
-  private _currentServer: Server;
-
-  set currentServer(value: Server) {
-    this.serverUpdateEmitter.emit();
-    this._currentServer = value;
-  }
-
-  private _servers: any;
-
-  set servers(value: any) {
-    this._servers = value;
-    this.serverCacheEmitter.emit();
-  }
-
+  private _selectedServerSource: BehaviorSubject<Server> = new BehaviorSubject(undefined);
+  private _serverCacheSource: BehaviorSubject<Array<Server>> = new BehaviorSubject([]);
   private _ownsOne = false;
 
   get ownsOne(): boolean {
@@ -43,59 +22,47 @@ export class CurrentServerService {
     this._ownsOne = value;
   }
 
-  // OOF https://github.com/Microsoft/TypeScript/issues/14982
-  public getCurrentServer = async (useCache?: boolean): Promise<Server> => {
-    if ((!this.currentServer && !this.servers) || useCache) {
-      await this.updateCache();
+  set selectedServer(src: BehaviorSubject<Server>) {
+    this._selectedServerSource = src;
+  }
 
-      // Check to see if the server list is empty. If it is return not found
-      if (Object.keys(this.servers < 1)) {
-        throw new ServerNotFoundError();
-      }
+  get selectedServer(): BehaviorSubject<Server> {
+    return this._selectedServerSource;
+  }
 
-      // Update the current server
-      this.currentServer = this.servers[0];
-    }
-    return this.currentServer;
-  };
+  set serverList(src: BehaviorSubject<Array<Server>>) {
+    this._serverCacheSource = src;
+  }
 
-  public updateCurrentServerData = async (): Promise<void> => {
-    const oldServer: Server = await this.getCurrentServer();
-    await this.updateCache();
-    this.currentServer = this.servers.find(server => server.details._id === oldServer.details._id);
-  };
+  get serverList(): BehaviorSubject<Array<Server>> {
+    return this._serverCacheSource;
+  }
 
-  public getServers = async (): Promise<Server[]> => {
-    if (!this._servers) {
-      console.log("no servers found, pulling from api");
-      await this.updateCache(true);
-    } // TODO: decide if hiding the change is a good idea or not
-    return this._servers;
-  };
+  constructor(
+    private auth: AuthService,
+    private http: HttpClient
+  ) {}
 
-  public updateCache = async (hideChange?: boolean): Promise<void> => {
+  updateCache = async () => {
     const serverList = (await this.http.get<any>(
       ConfigStorage.config.endpoints.api + 'profile/servers',
       {headers: {Authorization: 'Token ' + this.auth.user.token}}).toPromise()).servers;
-
-    console.log("pulled server list: " + JSON.stringify(serverList));
-
-    // If we want to hide the change, simply bypass the getter/setter functions
-    if (hideChange) {
-      console.log("hiding change")
-      this._servers = serverList;
-    } else {
-      console.log("not hiding change")
-      this.servers = serverList;
-    }
-
-    // Check to see if the person owns a server
-    this.ownsOne = false;
-    this._servers.forEach(server => {
-      console.log("wtf: " + JSON.stringify(server));
-      if (server._owner._id === this.auth.user.id) {
-        this.ownsOne = true;
-      }
-    });
+    this.ownsOne = serverList.find(server => server.details._owner._id === this.auth.user.id) !== undefined;
+    this._serverCacheSource.next(serverList)
   };
+
+  reloadCurrentServer = () => {
+    if (this.selectedServer.value === undefined) {
+      this.selectedServer.next(this.serverList.value[0]);
+      return;
+    }
+    const oldServer: Server = this.selectedServer.value;
+    let newServer = this.serverList.value.find(serverInList => serverInList.details._id === oldServer.details._id);
+    if (!newServer) { newServer = this.serverList.value[0]; }
+    this.selectedServer.next(newServer);
+  };
+
+  updateServer = (server: Server) => {
+    this._selectedServerSource.next(server);
+  }
 }
