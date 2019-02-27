@@ -4,6 +4,7 @@ import * as path from 'path-browserify';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {FileDetails, Server} from '../../../models/server.model';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-panel-files',
@@ -25,7 +26,8 @@ export class PanelFilesComponent extends ResponsiveServerPage {
   error: string;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     super();
   }

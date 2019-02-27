@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {Server} from '../../../models/server.model';
 import {ServerStatus} from '../../../services/server-socket-io.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-panel-settings',
@@ -21,7 +22,8 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
 
   changeForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private router: Router) {
     super();
   }
 
@@ -31,7 +33,7 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
     });
 
     const server: Server = await this.currentServer.getCurrentServer();
-    if (Object.keys(server.details._preset.allowSwitchingTo).length < 1) {
+    if (Object.keys(server.details._preset._allowSwitchingTo).length < 1) {
       this.nothingToChange = true;
     }
 
@@ -39,7 +41,7 @@ export class PanelSettingsComponent extends ResponsiveServerPage {
       this.router.navigateByUrl('/panel');
     }
 
-    this.presetList = server.details._preset.allowSwitchingTo;
+    this.presetList = server.details._preset._allowSwitchingTo;
   };
 
   private removeServer = async (): Promise<void> => {

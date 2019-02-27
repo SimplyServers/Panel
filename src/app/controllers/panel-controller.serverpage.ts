@@ -11,7 +11,6 @@ export class ResponsiveServerPage implements OnInit, OnDestroy {
   public auth: AuthService;
   public currentServer: CurrentServerService;
   public notify: NotifierService;
-  public router: Router;
   public serverSocket: ServerSocketIOService;
   private selectedServerEmitter: Subject<any>;
   private serverCacheUpdateEmitter: Subject<any>;
@@ -20,7 +19,6 @@ export class ResponsiveServerPage implements OnInit, OnDestroy {
     this.auth = ServiceLocator.injector.get(AuthService);
     this.currentServer = ServiceLocator.injector.get(CurrentServerService);
     this.notify = ServiceLocator.injector.get(NotifierService);
-    this.router = ServiceLocator.injector.get(Router);
     this.serverSocket = ServiceLocator.injector.get(ServerSocketIOService);
   };
 

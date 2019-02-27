@@ -13,7 +13,7 @@ export interface PresetDetails {
     views?: object
   };
   preinstalledPlugins: object;
-  allowSwitchingTo: Array<PresetDetails>;
+  _allowSwitchingTo: Array<PresetDetails>;
   creditsPerDay: number;
   maxPlugins: number;
   _id: string;

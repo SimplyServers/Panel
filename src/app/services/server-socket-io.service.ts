@@ -144,7 +144,7 @@ export class ServerSocketIOService {
 
   private loadSocket = async (): Promise<void> => {
     // Disconnect from the socket if we're connected
-    if (!this.ioSocket) {
+    if (this.ioSocket) {
       this.ioSocket.disconnect();
     }
 

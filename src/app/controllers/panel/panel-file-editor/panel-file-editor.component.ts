@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-panel-file-editor',
@@ -23,7 +23,8 @@ export class PanelFileEditorComponent extends ResponsiveServerPage {
   error: string;
 
   constructor(private formBuilder: FormBuilder,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
     super();
   }
 

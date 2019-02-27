@@ -30,7 +30,6 @@ import {PanelFileEditorComponent} from './controllers/panel/panel-file-editor/pa
 import {ServiceLocator} from './service.injector';
 import {AuthService} from './services/auth.service';
 import {CurrentServerService} from './services/current-server.service';
-import {Router} from '@angular/router';
 import {ServerSocketIOService} from './services/server-socket-io.service';
 import {SSAnalyticsService} from './services/middleware/ssanalytics.service';
 import {AppLoadService} from './services/middleware/app-load.service';
@@ -85,25 +84,21 @@ const customNotifierOptions: NotifierOptions = {
 };
 
 export const services: { [key: string]: { provide: any, deps: any[], useClass?: any } } = {
-  'auth': {
+  'AuthService': {
     provide: AuthService,
     deps: []
   },
-  'currentServer': {
+  'CurrentServerService': {
     provide: CurrentServerService,
     deps: []
   },
-  'notifier': {
+  'NotifierService': {
     provide: NotifierService,
     deps: []
   },
-  'router': {
-    provide: Router,
-    deps: []
-  },
-  'serverSocket': {
+  'ServerSocketIOService': {
     provide: ServerSocketIOService,
-    deps: []
+    deps: [CurrentServerService]
   }
 };
 

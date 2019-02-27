@@ -2,6 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 import {Server} from '../../../models/server.model';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-panel-subowners',
@@ -18,7 +19,8 @@ export class PanelSubownersComponent extends ResponsiveServerPage {
   addSubmitted = false;
   addForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private router: Router) {
     super();
   }
 

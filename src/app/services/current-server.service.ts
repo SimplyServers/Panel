@@ -91,10 +91,11 @@ export class CurrentServerService {
 
     // Check to see if the person owns a server
     this.ownsOne = false;
-    // (await this.getServers()).forEach(server => {
-    //   if (server.details._owner._id === this.auth.user.id) {
-    //     this.ownsOne = true;
-    //   }
-    // });
+    this._servers.forEach(server => {
+      console.log("wtf: " + JSON.stringify(server));
+      if (server._owner._id === this.auth.user.id) {
+        this.ownsOne = true;
+      }
+    });
   };
 }

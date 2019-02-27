@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavigationEnd} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {ResponsiveServerPage} from '../../panel-controller.serverpage';
 
 @Component({
@@ -18,7 +18,7 @@ export class PanelFrameComponent extends ResponsiveServerPage {
   hidePlugins = false;
   motd = '';
 
-  constructor() {
+  constructor(private router: Router) {
     super();
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
