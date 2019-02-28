@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, Injector, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './controllers/app.component';
@@ -10,7 +10,7 @@ import {LoginComponent} from './controllers/main/login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegisterComponent} from './controllers/main/register/register.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {LogoutComponent} from './controllers/main/logout/logout.component';
 import {APIInterceptor} from './interceptors/apiinterceptor';
 import {PanelHomeComponent} from './controllers/panel/panel-home/panel-home.component';
@@ -33,6 +33,21 @@ import {CurrentServerService} from './services/current-server.service';
 import {ServerSocketIOService} from './services/server-socket-io.service';
 import {SSAnalyticsService} from './services/middleware/ssanalytics.service';
 import {AppLoadService} from './services/middleware/app-load.service';
+import {environment} from '../environments/environment';
+import * as Raven from 'raven-js';
+
+Raven
+  .config('https://ccd58a56175d473291a057a8576e2f65@sentry.simplyservers.io/1')
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    Raven.captureException(err.originalError || err);
+    if (!environment.production) {
+      this.handleError(err);
+    }
+  }
+}
 
 export function init_any(ssAny: SSAnalyticsService) {
   return () => ssAny.onLoad();
@@ -99,6 +114,10 @@ export const services: { [key: string]: { provide: any, deps: any[], useClass?: 
   'ServerSocketIOService': {
     provide: ServerSocketIOService,
     deps: [CurrentServerService]
+  },
+  'HttpClient': {
+    provide: HttpClient,
+    deps: []
   }
 };
 
@@ -135,7 +154,9 @@ export const services: { [key: string]: { provide: any, deps: any[], useClass?: 
     RecaptchaFormsModule,
     HttpClientModule
   ],
-  providers: [AuthService, {
+  providers: [
+    { provide: ErrorHandler, useClass: RavenErrorHandler },
+    AuthService, {
     provide: HTTP_INTERCEPTORS,
     useClass: APIInterceptor,
     multi: true
