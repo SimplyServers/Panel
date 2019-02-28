@@ -37,7 +37,7 @@ import {environment} from '../environments/environment';
 import * as Raven from 'raven-js';
 
 Raven
-  .config('https://ccd58a56175d473291a057a8576e2f65@sentry.simplyservers.io/1')
+  .config('https://30d1aea4060844ccb2bac143fb78adab@sentry.simplyservers.io/3')
   .install();
 
 export class RavenErrorHandler implements ErrorHandler {
