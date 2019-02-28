@@ -11,7 +11,6 @@ import {ServerStatus} from '../../../services/server-socket-io.service';
 })
 export class PanelHomeComponent extends ResponsiveServerPage implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('textAreaElement', {read: ElementRef}) textAreaElement: ElementRef;
-  serverDetails: any;
   commandForm: FormGroup = this.formBuilder.group({
     command: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
   });
@@ -28,7 +27,8 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
   }
 
   onFirstInit = async (): Promise<void> => {
-    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value);
+    console.log("current server via selectedServer @ home: " + JSON.stringify(this.currentServer.selectedServer.value));
+    console.log("fdswij9:" + JSON.stringify(this.currentServer.selectedServer.value.details));
     // Read scroll() todo.
     interval(500).subscribe(() => {
       if (this.update) {
@@ -51,9 +51,7 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
   };
 
   loadData = async (): Promise<void> => {
-    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value);
-
-    this.serverDetails = this.currentServer.selectedServer.value.details;
+    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value.details);
   };
 
   private serverOn = async (): Promise<void> => {

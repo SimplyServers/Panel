@@ -2,6 +2,9 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService, UserProfile} from '../services/auth.service';
 import {ConfigStorage} from '../services/config-storage.service';
 import {PresetDetails} from './preset.modal';
+import {Http} from '@angular/http';
+import {StaticInjector} from '@angular/core/src/di/injector';
+import {ServiceLocator} from '../service.injector';
 
 export interface FileDetails {
   name: string;
@@ -40,10 +43,17 @@ export interface ServerDetails {
 export class Server {
   private serverDetails: ServerDetails;
 
+  private http: HttpClient;
+  private auth: AuthService;
+
   constructor(
-    private auth: AuthService,
-    private http: HttpClient
+    server: ServerDetails
   ) {
+    console.log("server instianted")
+    this.serverDetails = server;
+    console.log("details: " + JSON.stringify(server));
+    this.http = ServiceLocator.injector.get(HttpClient);
+    this.auth = ServiceLocator.injector.get(AuthService);
   }
 
   get details(): ServerDetails {

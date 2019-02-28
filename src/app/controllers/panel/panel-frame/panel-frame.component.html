@@ -1,14 +1,14 @@
 <app-navbar></app-navbar>
-<div id="panel" class="" [class.sidebarHidden]="!sidebarDisplayed">
+<div id="panel" class="" [class.sidebarHidden]="!sidebarDisplayed" *ngIf="loaded">
   <div id="sidebar">
     <div class="dropdown">
       <select #server id="preset" type="preset" class="form-control" (change)="update(server.value)">
-        <option class="dropdown-item" *ngFor="let server of servers" value="{{server._id}}"
-                [selected]="server._id === currentServer._id">{{ server.isOwner ? server.name : server.name + " (sub-user)" }}</option>
+        <option class="dropdown-item" *ngFor="let server of currentServer.serverList.value" value="{{server.details._id}}"
+                [selected]="server.details._id === currentServer.selectedServer.value.details._id">{{ server.details._owner._id === auth.user.id ? server.details.name : server.details.name + " (sub-user)" }}</option>
       </select>
     </div>
     <ul class="sidebar-content">
-      <div *ngIf="!selectedServer.ownsOne">
+      <div *ngIf="!currentServer.ownsOne">
         <li class="title">
           <span>Account:</span>
         </li>
@@ -61,7 +61,7 @@
       <button *ngIf="sidebarDisplayed" (click)="toggleSidebar()" type="button" class="btn btn-primary"><i
         class="material-icons switch-arrow">arrow_left</i></button>
       <div id="server">
-        <span id="status"><span class="bold">Status: </span>{{status}}  <span class='dot'
+        <span id="status"><span class="bold">Status: </span>{{serverSocket.statusSource.value}}  <span class='dot'
                                                                               [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[status]"></span> </span>
       </div>
     </div>

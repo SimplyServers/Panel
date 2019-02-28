@@ -29,6 +29,7 @@
     "jquery": "^3.3.1",
     "ng-recaptcha": "^4.2.1",
     "path-browserify": "^1.0.0",
+    "raven-js": "^3.27.0",
     "rxjs": "~6.2.0",
     "socket.io-client": "^2.2.0",
     "tether": "^1.4.5",

@@ -1,4 +1,3 @@
-<!--
 <app-panel-frame>
   <div class="row" id="console">
     <div class="col-md-9 col-sm-12">
@@ -68,10 +67,10 @@
           Server Details
         </div>
         <div class="card-block">
-          <p><span class="value">Credits/day: </span>{{ serverDetails.preset.creditsPerDay }}</p>
-          <p><span class="value">Plan name: </span>{{ serverDetails.preset.name }}</p>
-          <p><span class="value">Max Players: </span>{{ serverDetails.preset.maxPlayers }}</p>
-          <p><span class="value">Memory: </span>{{ serverDetails.preset.build.mem }}MB</p>
+          <p><span class="value">Credits/day: </span>{{ currentServer.selectedServer.value.details._preset.creditsPerDay }}</p>
+          <p><span class="value">Plan name: </span>{{ currentServer.selectedServer.value.details._preset.name }}</p>
+          <p><span class="value">Max Players: </span>{{ currentServer.selectedServer.value.details._preset.maxPlayers }}</p>
+          <p><span class="value">Memory: </span>{{ currentServer.selectedServer.value.details._preset.build.mem }} MB</p>
         </div>
       </div>
     </div>
@@ -102,4 +101,4 @@
     </div>
   </div>
 </app-panel-frame>
--->
+

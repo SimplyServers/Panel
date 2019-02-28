@@ -46,16 +46,15 @@ export abstract class ResponsiveServerPage {
     // First init
     await this.onFirstInit();
 
-    // Load data initially
-    await this.loadData();
-
     // When the server list is updated, refire updateListing
     this.serverCacheUpdateEmitter = this.currentServer.serverList.subscribe(() => {
+      if (!this.currentServer.serverList.value) { return; }
       this.updateListing();
     });
 
     // When the server is changed, refire loadData
     this.selectedServerEmitter = this.currentServer.selectedServer.subscribe(() => {
+      if (!this.currentServer.selectedServer.value) { return; }
       this.loadData();
     });
   }

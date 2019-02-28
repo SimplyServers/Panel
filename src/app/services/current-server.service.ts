@@ -48,10 +48,16 @@ export class CurrentServerService {
       ConfigStorage.config.endpoints.api + 'profile/servers',
       {headers: {Authorization: 'Token ' + this.auth.user.token}}).toPromise()).servers;
 
+    const serverArr = [];
+    serverList.forEach(serverRaw => {
+      serverArr.push(new Server(serverRaw));
+    });
+
     console.log("pulled list: " + JSON.stringify(serverList));
 
     this.ownsOne = serverList.find(server => server._owner._id === this.auth.user.id) !== undefined;
-    this._serverCacheSource.next(serverList)
+    console.log("owns one: " + this.ownsOne);
+    this._serverCacheSource.next(serverArr);
 
     if (this.selectedServer.value === undefined){
       console.log("fixing current server... updating value to " + JSON.stringify(this.serverList.value[0]))

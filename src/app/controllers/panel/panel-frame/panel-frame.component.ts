@@ -9,6 +9,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./panel-frame.component.scss']
 })
 export class PanelFrameComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+  loaded = false;
   sidebarDisplayed = true;
   currentUrl: string;
   servers: any;
@@ -40,6 +41,7 @@ export class PanelFrameComponent extends ResponsiveServerPage implements OnInit,
   };
 
   loadData = async (): Promise<void> => {
+    this.loaded = true;
     // Typescript can be super dumb sometimes
     const views = <any>this.currentServer.selectedServer.value.details._preset.special.views;
     this.isMinecraft = views.indexOf('minecraft') > -1;
