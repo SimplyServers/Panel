@@ -70,9 +70,6 @@ export class ServerSocketIOService {
     this._announceSource = value;
   }
 
-  private auth: AuthService;
-  private currentServer: CurrentServerService;
-
   private _statusSource: BehaviorSubject<ServerStatus> = new BehaviorSubject(ServerStatus.LOADING);
   private _consoleSource: BehaviorSubject<string> = new BehaviorSubject('');
   private _blockedSource: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -82,17 +79,24 @@ export class ServerSocketIOService {
   private ioSocket;
 
   constructor(
+    private auth: AuthService,
+    private currentServer: CurrentServerService
   ) {
+    console.log('server socket fired');
     // The fuck?
-    this.auth = ServiceLocator.injector.get(AuthService);
-    this.currentServer = ServiceLocator.injector.get(CurrentServerService);
 
-    this.loadSocket().then(() => {
-      console.debug('Connected to ss socket');
-    })
+    this.currentServer.selectedServer.subscribe(() => {
+      console.log('detected update in current server (val: ' + this.currentServer.selectedServer.value + ')')
+      if (!this.currentServer.selectedServer.value) { return; }
+      this.consoleSource.next('');
+      console.log('fired loadSocket')
+      this.loadSocket();
+    });
+
   }
 
   private loadSocket = async () => {
+    console.log('preparing socket connection')
       // Disconnect from the socket if we're connected
       if (this.ioSocket) {
         this.ioSocket.disconnect();
@@ -101,22 +105,38 @@ export class ServerSocketIOService {
       this.ioSocket = io(ConfigStorage.config.endpoints.socket + 'console', {
         path: '/s/',
         query: {
-          server: this.currentServer.selectedServer.value
+          server: this.currentServer.selectedServer.value.details._id
         }
       });
 
+      console.log('configured socket with endpoint: ' + ConfigStorage.config.endpoints.socket + 'console' + '\nQueryData: ' + JSON.stringify({query: {
+          server: this.currentServer.selectedServer.value.details._id.toString()
+        }}));
+
       await new Promise((resolve) => {
         this.ioSocket.on('connect', () => {
+          console.log('connected... auth')
           this.ioSocket.emit('authenticate', {
             token: this.auth.user.token
-          }, () => {
+          }).on('authenticated', () => {
+            console.log('socket server has authenticated me!');
             this.ioSocket.on('initialStatus', this.handleInitial);
             this.ioSocket.on('statusUpdate', this.handleStatus);
             this.ioSocket.on('console', this.handleConsole);
             this.ioSocket.on('announcement', this.handleAnnounce);
             this.ioSocket.on('block', this.handleBlock);
             this.ioSocket.on('installed', this.handleInstalled);
+            this.ioSocket.on('disconnect', () => {
+              console.log("called disconnect");
+              // this.ioSocket.removeListener('initialStatus', this.handleInitial);
+              // this.ioSocket.removeListener('statusUpdate', this.handleStatus);
+              // this.ioSocket.removeListener('console', this.handleConsole);
+              // this.ioSocket.removeListener('announcement', this.handleAnnounce);
+              // this.ioSocket.removeListener('block', this.handleBlock);
+              // this.ioSocket.removeListener('installed', this.handleInstalled);
+              this.ioSocket.removeAllListeners(); // TODO: lmao wtf
 
+            });
             // We've authenticated, resolve!
             return resolve();
           });
@@ -138,7 +158,7 @@ export class ServerSocketIOService {
   };
 
   private handleConsole = (data: ConsoleLog): void => {
-    this.consoleSource.next(this.consoleSource.value + '\n' + data)
+    this.consoleSource.next(this.consoleSource.value + data.line)
   };
 
   private handleInitial = (data: InitialStatus) => {

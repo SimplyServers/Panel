@@ -87,6 +87,9 @@ export class AuthService {
 
   get user(): UserDetails {
     if (!this._user) {
+      console.log(localStorage.getItem('session'))
+      console.log(typeof localStorage.getItem('session') === undefined)
+      if (localStorage.getItem('session') === undefined) { return undefined; }
       this._user = JSON.parse(localStorage.getItem('session'));
     }
     return this._user;
@@ -94,7 +97,11 @@ export class AuthService {
 
   set user(value: UserDetails) {
     this._user = value;
-    localStorage.setItem('session', JSON.stringify(value));
+    if (value === undefined) { // We're logging out
+      localStorage.removeItem('session');
+    } else {
+      localStorage.setItem('session', JSON.stringify(value));
+    }
   }
 
   public get authOptions() {
@@ -105,11 +112,11 @@ export class AuthService {
   }
 
   public authorize = async (token: TokenPayload): Promise<UserDetails> => {
-    console.log("authorize here... posting to: " + ConfigStorage.config.endpoints.api + 'auth/login');
+    console.log('authorize here... posting to: ' + ConfigStorage.config.endpoints.api + 'auth/login');
     this.user = (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'auth/login',
       token).toPromise()).user;
-    console.log("got user (" + JSON.stringify(this.user) + ")!");
+    console.log('got user (' + JSON.stringify(this.user) + ')!');
     return this.user;
   };
 
@@ -128,6 +135,10 @@ export class AuthService {
     } else {
       return false;
     }
+  };
+
+  public logout = () => {
+    this.user = undefined;
   };
 
   // ---------------*
