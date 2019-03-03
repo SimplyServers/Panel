@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-settings.component.html',
   styleUrls: ['./panel-settings.component.scss']
 })
-export class PanelSettingsComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+export class PanelSettingsComponent extends ResponsiveServerPage implements OnInit, OnDestroy {
   @ViewChild('changeModal', {read: ElementRef}) changeModal: ElementRef;
   error: string;
   changeLoading = false;
@@ -48,7 +48,7 @@ export class PanelSettingsComponent extends ResponsiveServerPage implements OnIn
     }
 
     try {
-      await this.currentServer.selectedServer.value.remove();
+      await this.serverActions.remove();
       await this.currentServer.updateCache();
 
       if (Object.keys(this.currentServer.serverList.value).length >= 1) {
@@ -75,7 +75,7 @@ export class PanelSettingsComponent extends ResponsiveServerPage implements OnIn
     this.presetList = [];
 
     try {
-      await this.currentServer.selectedServer.value.changePreset(this.changeForm.controls.preset.value);
+      await this.serverActions.changePreset(this.changeForm.controls.preset.value);
       await this.currentServer.reloadCurrentServer();
       this.changeModal.nativeElement.click();
     } catch (e) {

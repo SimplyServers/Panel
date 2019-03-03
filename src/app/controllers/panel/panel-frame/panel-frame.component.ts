@@ -8,7 +8,7 @@ import {Subscription} from 'rxjs';
   templateUrl: './panel-frame.component.html',
   styleUrls: ['./panel-frame.component.scss']
 })
-export class PanelFrameComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+export class PanelFrameComponent extends ResponsiveServerPage implements OnInit, OnDestroy {
   loaded = false;
   sidebarDisplayed = true;
   currentUrl: string;

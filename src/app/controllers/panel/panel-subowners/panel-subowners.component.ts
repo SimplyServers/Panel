@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-subowners.component.html',
   styleUrls: ['./panel-subowners.component.scss']
 })
-export class PanelSubownersComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+export class PanelSubownersComponent extends ResponsiveServerPage implements OnInit, OnDestroy {
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
   subUsers: any;
   error: string;
@@ -39,7 +39,7 @@ export class PanelSubownersComponent extends ResponsiveServerPage implements OnI
   private removeUser = async (id: String): Promise<void> => {
 
     try {
-      await this.currentServer.selectedServer.value.removeSubuser(id);
+      await this.serverActions.removeSubuser(id);
       await this.currentServer.reloadCurrentServer();
     } catch (e) {
       this.notify.notify('error', 'Failed to remove subuser; ' + e);
@@ -49,7 +49,7 @@ export class PanelSubownersComponent extends ResponsiveServerPage implements OnI
   private addUser = async (email: String): Promise<void> => {
 
     try {
-      await this.currentServer.selectedServer.value.addSubuser(email);
+      await this.serverActions.addSubuser(email);
       await this.currentServer.reloadCurrentServer();
       this.addModal.nativeElement.click();
     } catch (e) {

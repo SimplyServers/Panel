@@ -58,12 +58,12 @@ export class LoginComponent implements OnInit {
     this.credentials.email = this.loginForm.controls.email.value;
     this.credentials.password = this.loginForm.controls.password.value;
 
-    console.log("doing login...");
+    console.log('doing login...');
     try {
       await this.auth.authorize(this.credentials);
-      console.log("authed! cache is being updated");
+      console.log('authed! cache is being updated');
       await this.currentServer.updateCache();
-      console.log("redir...");
+      console.log('redir...');
       await this.router.navigateByUrl(this.returnUrl);
     } catch (e) {
       this.error = e;

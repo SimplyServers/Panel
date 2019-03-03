@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-file-editor.component.html',
   styleUrls: ['./panel-file-editor.component.scss']
 })
-export class PanelFileEditorComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+export class PanelFileEditorComponent extends ResponsiveServerPage implements OnInit, OnDestroy {
   loading = false;
   blocked = false;
   editName: string;
@@ -38,7 +38,7 @@ export class PanelFileEditorComponent extends ResponsiveServerPage implements On
     this.editName = filePath;
 
     try {
-      this.editForm.controls.content.setValue(await this.currentServer.selectedServer.value.getFileContents(filePath));
+      this.editForm.controls.content.setValue(await this.serverActions.getFileContents(filePath));
     } catch (e) {
       if (e === 'File not found.') {
         this.newFile = true;
@@ -62,7 +62,7 @@ export class PanelFileEditorComponent extends ResponsiveServerPage implements On
     this.editLoading = true;
 
     try {
-      await this.currentServer.selectedServer.value.writeContents(this.editName, this.editForm.controls.content.value);
+      await this.serverActions.writeContents(this.editName, this.editForm.controls.content.value);
       this.router.navigateByUrl('/panel/files');
     } catch (e) {
       this.error = e;

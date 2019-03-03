@@ -62,7 +62,7 @@
         class="material-icons switch-arrow">arrow_left</i></button>
       <div id="server">
         <span id="status"><span class="bold">Status: </span>{{serverSocket.statusSource.value}}  <span class='dot'
-                                                                              [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[status]"></span> </span>
+                                                                              [ngClass]="{'Starting': 'dot-working', 'Running': 'dot-running', 'Stopping': 'dot-working', 'Stopped':'dot-stopped', 'Crashed':'dot-stopped', 'Loading':'dot-working' }[serverSocket.statusSource.value]"></span> </span>
       </div>
     </div>
     <notifier-container></notifier-container>

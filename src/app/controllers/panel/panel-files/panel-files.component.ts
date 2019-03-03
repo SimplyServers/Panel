@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './panel-files.component.html',
   styleUrls: ['./panel-files.component.scss']
 })
-export class PanelFilesComponent extends ResponsiveServerPage implements OnInit, OnDestroy{
+export class PanelFilesComponent extends ResponsiveServerPage implements OnInit, OnDestroy {
   @ViewChild('addModal', {read: ElementRef}) addModal: ElementRef;
   filesList: any;
   currentPath: string;
@@ -44,7 +44,7 @@ export class PanelFilesComponent extends ResponsiveServerPage implements OnInit,
     this.loading = true;
 
     try {
-      this.filesList = await this.currentServer.selectedServer.value.listDir(this.currentPath);
+      this.filesList = await this.serverActions.listDir(this.currentPath);
     } catch (e) {
       this.notify.notify('error', 'Failed to get server files; ' + e);
     }
@@ -78,14 +78,14 @@ export class PanelFilesComponent extends ResponsiveServerPage implements OnInit,
   private remove = async (file: FileDetails): Promise<void> => {
     if (file.isDir) {
       try {
-        await this.currentServer.selectedServer.value.removeFolder(path.join(this.currentPath, file.name));
+        await this.serverActions.removeFolder(path.join(this.currentPath, file.name));
         await this.updateListing();
       } catch (e) {
         this.notify.notify('error', 'Failed to remove folder. (is it not empty?)');
       }
     } else if (file.isFile) {
       try {
-        await this.currentServer.selectedServer.value.removeFile(path.join(this.currentPath, file.name));
+        await this.serverActions.removeFile(path.join(this.currentPath, file.name));
         await this.updateListing();
       } catch (e) {
         this.notify.notify('error', 'Failed to remove file.');
@@ -116,7 +116,7 @@ export class PanelFilesComponent extends ResponsiveServerPage implements OnInit,
     const targetPath = path.join(this.currentPath, this.addForm.controls.path.value);
 
     try {
-      const checkOk = await this.currentServer.selectedServer.value.checkAllowed(targetPath);
+      const checkOk = await this.serverActions.checkAllowed(targetPath);
       if (checkOk) {
         this.addModal.nativeElement.click();
         this.router.navigateByUrl('/panel/files/edit?f=' + targetPath);

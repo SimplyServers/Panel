@@ -6,6 +6,7 @@ import {AuthService} from '../services/auth.service';
 import {ServerSocketIOService} from '../services/server-socket-io.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder} from '@angular/forms';
+import {ServerActionsService} from '../services/server-actions.service';
 
 @Injectable()
 export abstract class ResponsiveServerPage {
@@ -20,6 +21,7 @@ export abstract class ResponsiveServerPage {
     public router: Router,
     public formBuilder: FormBuilder,
     public activatedRoute: ActivatedRoute,
+    public serverActions: ServerActionsService
   ) { };
 
   onFirstInit = async (): Promise<void> => {
@@ -42,7 +44,7 @@ export abstract class ResponsiveServerPage {
   };
 
   async ngInit (): Promise<void> {
-    console.log("works!");
+    console.log('works!');
     // First init
     await this.onFirstInit();
 
@@ -54,6 +56,7 @@ export abstract class ResponsiveServerPage {
 
     // When the server is changed, refire loadData
     this.selectedServerEmitter = this.currentServer.selectedServer.subscribe(() => {
+      console.log('reloading server data');
       if (!this.currentServer.selectedServer.value) { return; }
       this.loadData();
     });

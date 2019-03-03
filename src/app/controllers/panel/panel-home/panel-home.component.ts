@@ -27,14 +27,18 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
   }
 
   onFirstInit = async (): Promise<void> => {
-    console.log("current server via selectedServer @ home: " + JSON.stringify(this.currentServer.selectedServer.value));
-    console.log("fdswij9:" + JSON.stringify(this.currentServer.selectedServer.value.details));
+    console.log('current server via selectedServer @ home: ' + JSON.stringify(this.currentServer.selectedServer.value));
+    console.log('fdswij9:' + JSON.stringify(this.currentServer.selectedServer.value.details));
     // Read scroll() todo.
     interval(500).subscribe(() => {
       if (this.update) {
         this.update = false;
         this.textAreaElement.nativeElement.scrollTop = this.textAreaElement.nativeElement.scrollHeight + 2;
       }
+    });
+
+    this.consoleEmitter = this.serverSocket.consoleSource.subscribe(() => {
+      this.update = true;
     });
   };
 
@@ -51,7 +55,7 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
   };
 
   loadData = async (): Promise<void> => {
-    console.log("current server via selectedServer @ home: " + this.currentServer.selectedServer.value.details);
+    console.log('current server via selectedServer @ home: ' + this.currentServer.selectedServer.value.details);
   };
 
   private serverOn = async (): Promise<void> => {
@@ -59,8 +63,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
       return;
     }
     try {
-      await this.currentServer.selectedServer.value.startPower();
+      await this.serverActions.startPower();
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to turn the server on; ' + e);
     }
   };
@@ -71,8 +76,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
     }
 
     try {
-      await this.currentServer.selectedServer.value.offPower();
+      await this.serverActions.offPower();
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to turn the server off; ' + e);
     }
   };
@@ -85,8 +91,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
     }
 
     try {
-      await this.currentServer.selectedServer.value.killPower();
+      await this.serverActions.killPower();
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to kill the server; ' + e);
     }
   };
@@ -97,8 +104,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
     }
 
     try {
-      await this.currentServer.selectedServer.value.install();
+      await this.serverActions.install();
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to install server; ' + e);
     }
   };
@@ -109,8 +117,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
     }
 
     try {
-      await this.currentServer.selectedServer.value.reinstall();
+      await this.serverActions.reinstall();
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to reinstall server; ' + e);
     }
   };
@@ -129,8 +138,9 @@ export class PanelHomeComponent extends ResponsiveServerPage implements AfterVie
     this.commandLoading = true;
 
     try {
-      await this.currentServer.selectedServer.value.submitCommand(this.commandForm.controls.command.value);
+      await this.serverActions.submitCommand(this.commandForm.controls.command.value);
     } catch (e) {
+      console.error(e);
       this.notify.notify('error', 'Failed to reinstall server; ' + e);
     }
 
