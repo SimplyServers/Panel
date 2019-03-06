@@ -29,18 +29,22 @@ export class PanelFilesComponent extends ResponsiveServerPage implements OnInit,
   ngOnDestroy(): void {
     super.ngUnload();
   }
+
   loadData = async (): Promise<void> => {
     this.currentPath = '/';
-
     // Make sure the server isn't blocked
     if (this.serverSocket.blockedSource.value) {
+      console.log("blocked true");
       return;
     }
 
-    await this.updateListing();
+    console.log("load data called");
+
+    await this.updateFileListing();
   };
 
-  updateListing = async (): Promise<void> => {
+  updateFileListing = async (): Promise<void> => {
+    console.log("called")
     this.loading = true;
 
     try {

@@ -65,7 +65,7 @@ export class ServerActionsService {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/addSubuser',
       {
-        email
+        email: email
       },
       this.auth.authOptions
     ).toPromise());
@@ -75,7 +75,7 @@ export class ServerActionsService {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/removeSubuser',
       {
-        id
+        id: id
       },
       this.auth.authOptions
     ).toPromise());
@@ -85,7 +85,7 @@ export class ServerActionsService {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/changePreset',
       {
-        preset
+        preset: preset
       },
       this.auth.authOptions
     ).toPromise());
@@ -93,9 +93,9 @@ export class ServerActionsService {
 
   public listDir = async (path: string): Promise<FileDetails[]> => {
     return (await this.http.post<any>(
-      ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/directory',
+      ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/listDir',
       {
-        path
+        path: path
       },
       this.auth.authOptions
     ).toPromise()).files;
@@ -103,19 +103,19 @@ export class ServerActionsService {
 
   public getFileContents = async (path: string): Promise<string> => {
     return (await this.http.post<any>(
-      ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/contents',
+      ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/fileContents',
       {
-        path
+        path: path
       },
       this.auth.authOptions
-    ).toPromise()).content;
+    ).toPromise()).contents;
   };
 
   public checkAllowed = async (path: string): Promise<boolean> => {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/checkAllowed',
       {
-        path
+        path: path
       },
       this.auth.authOptions
     ).toPromise()).allowed;
@@ -136,7 +136,7 @@ export class ServerActionsService {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/removeFile',
       {
-        path,
+        path: path
       },
       this.auth.authOptions
     ).toPromise());
@@ -146,7 +146,7 @@ export class ServerActionsService {
     return (await this.http.post<any>(
       ConfigStorage.config.endpoints.api + 'server/' + this.currentServer.selectedServer.value.details._id + '/fs/removeFolder',
       {
-        path,
+        path: path
       },
       this.auth.authOptions
     ).toPromise());

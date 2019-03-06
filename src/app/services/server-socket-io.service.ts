@@ -72,8 +72,8 @@ export class ServerSocketIOService {
 
   private _statusSource: BehaviorSubject<ServerStatus> = new BehaviorSubject(ServerStatus.LOADING);
   private _consoleSource: BehaviorSubject<string> = new BehaviorSubject('');
-  private _blockedSource: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  private _installedSource: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _blockedSource: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _installedSource: BehaviorSubject<boolean> = new BehaviorSubject(true);
   private _announceSource: Subject<string> = new Subject();
 
   private ioSocket;
