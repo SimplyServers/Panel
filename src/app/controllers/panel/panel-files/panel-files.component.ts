@@ -34,17 +34,17 @@ export class PanelFilesComponent extends ResponsiveServerPage implements OnInit,
     this.currentPath = '/';
     // Make sure the server isn't blocked
     if (this.serverSocket.blockedSource.value) {
-      console.log("blocked true");
+      console.log('blocked true');
       return;
     }
 
-    console.log("load data called");
+    console.log('load data called');
 
     await this.updateFileListing();
   };
 
   updateFileListing = async (): Promise<void> => {
-    console.log("called")
+    console.log('called')
     this.loading = true;
 
     try {

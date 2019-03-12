@@ -127,7 +127,7 @@ export class ServerSocketIOService {
             this.ioSocket.on('block', this.handleBlock);
             this.ioSocket.on('installed', this.handleInstalled);
             this.ioSocket.on('disconnect', () => {
-              console.log("called disconnect");
+              console.log('called disconnect');
               // this.ioSocket.removeListener('initialStatus', this.handleInitial);
               // this.ioSocket.removeListener('statusUpdate', this.handleStatus);
               // this.ioSocket.removeListener('console', this.handleConsole);

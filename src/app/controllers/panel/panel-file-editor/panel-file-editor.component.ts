@@ -34,7 +34,7 @@ export class PanelFileEditorComponent extends ResponsiveServerPage implements On
   private getContents = async (): Promise<void> => {
     this.loading = true;
     this.editName = this.activatedRoute.snapshot.queryParams['f'];
-    console.log("edit name: " + this.editName);
+    console.log('edit name: ' + this.editName);
 
     try {
       this.editForm.controls.content.setValue(await this.serverActions.getFileContents(this.editName));
